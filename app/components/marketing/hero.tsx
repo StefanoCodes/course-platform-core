@@ -70,9 +70,9 @@ function ElegantShape({
 
 export default function Hero({
   badge = "Get Early Access",
-  title1 = "Elevate Your",
-  title2 = "Digital Vision",
-  description
+  title1 = "Transform Your Classroom into",
+  title2 = "a Digital Classroom",
+  description ="You're a passionate teacher with expertise to share. Now, expand your impact beyond the four walls of your classroom. Our platform empowers you to create, market, and deliver engaging online courses to a global audience."
 }: {
   badge?: string
   title1?: string
@@ -93,7 +93,7 @@ export default function Hero({
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#030303]">
+    <div className="relative min-h-[calc(100dvh-var(--navbar-height))] w-full flex items-center justify-center overflow-hidden bg-[#030303]">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
       <div className="absolute inset-0 overflow-hidden">
