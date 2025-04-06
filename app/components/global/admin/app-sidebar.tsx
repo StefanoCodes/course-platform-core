@@ -1,7 +1,8 @@
+import { type LucideIcon } from 'lucide-react'
 import * as React from 'react'
-  import { ChevronRight, type LucideIcon } from 'lucide-react'
+import { Link } from 'react-router'
 import { dashboardConfig } from '~/config/dashboard'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/collapsible'
+import { Collapsible } from '../../ui/collapsible'
 import {
   Sidebar,
   SidebarContent,
@@ -9,20 +10,17 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuItem
 } from '../../ui/sidebar'
 import { NavUser } from './nav-user'
+import { PrimaryLogo } from '../primary-logo'
   
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
       <Sidebar {...props}>
         <SidebarHeader className="p-4 text-xl flex flex-row items-center gap-2">
-          <img src={dashboardConfig.sidebar.logo.src} alt={dashboardConfig.sidebar.logo.alt} className="w-10 h-10 rounded-full" />
+          <PrimaryLogo />
           <span className="text-xl font-medium">Admin Panel</span>
         </SidebarHeader>
         <SidebarContent>
@@ -58,16 +56,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip={item.title} disabled={item.disabled}>
-                  <a
-                    href={item.disabled ? '#' : item.url}
+                  <Link
+                    to={item.disabled ? '#' : item.url}
                     data-disabled={item.disabled}
                     className="data-[disabled=true]:opacity-50"
                   >
                     <item.icon className="text-muted-foreground" />
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
-                {item.items?.length ? (
+                {/* {item.items?.length ? (
                   <>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuAction className="data-[state=open]:rotate-90">
@@ -89,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   </>
-                ) : null}
+                ) : null} */}
               </SidebarMenuItem>
             </Collapsible>
           ))}

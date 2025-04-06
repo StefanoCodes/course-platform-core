@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { cn } from "~/lib/utils"
 import { Button } from "../ui/button"
+import { PrimaryLogo } from "../global/primary-logo"
 
 function ElegantShape({
   className,
@@ -152,7 +153,7 @@ export default function Hero({
             animate="visible"
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
           >
-            <img src="https://kokonutui.com/logo.svg" alt="Kokonut UI" width={20} height={20} />
+            <PrimaryLogo classNames={{img:"w-4 h-4"}} />
             <span className="text-sm text-white/60 tracking-wide">{badge}</span>
           </motion.div>
 
