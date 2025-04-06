@@ -1,33 +1,34 @@
 
 
 import {
-    Bell,
-    CreditCard,
-    EllipsisVertical,
-    LogOut,
-    UserCircle,
+  Bell,
+  CreditCard,
+  EllipsisVertical,
+  LogOut,
+  UserCircle,
 } from "lucide-react"
 
 import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
 } from "~/components/ui/avatar"
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 import {
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
 } from "~/components/ui/sidebar"
+import { useDashboardLoaderData } from "~/routes/_dashboard"
 
 export function NavUser({
   user,
@@ -39,7 +40,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const { admin } = useDashboardLoaderData()
+  console.log(admin)
   return (
     <SidebarMenu>
       <SidebarMenuItem>
