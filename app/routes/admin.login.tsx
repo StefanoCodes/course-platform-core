@@ -6,7 +6,8 @@ import type { Route } from './+types/admin.login';
 import { redirect } from 'react-router';
 
 export async function loader({ request }: Route.LoaderArgs) {
-  if (await isAdminLoggedIn(request)) {
+  const { isLoggedIn } = await isAdminLoggedIn(request);
+  if (isLoggedIn) {
     return redirect('/dashboard');
   }
   return null;
