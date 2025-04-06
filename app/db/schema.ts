@@ -1,7 +1,7 @@
 
 
 
-import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { index, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 // students
 // admins
 export const adminsTable = pgTable('admins', {
@@ -12,7 +12,10 @@ export const adminsTable = pgTable('admins', {
     password: varchar('password', { length: 255 }).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
-});
+}, (t) => ({
+    emailIndex: index('email_index').on(t.email),
+    adminIdIndex: index('admin_admin_id_index').on(t.adminId),
+}));
 // roles
 
 // roles table will have a foreign key to the admins table id and if they match then they are an admin otherwise they are a student
@@ -21,7 +24,9 @@ export const rolesTable = pgTable('roles', {
     adminId: uuid('admin_id').references(() => adminsTable.adminId),
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
-});
+}, (t) => ({
+    adminIdIndex: index('role_admin_id_index').on(t.adminId),
+}));
 // courses
 // segments
 // messages

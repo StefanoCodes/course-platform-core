@@ -15,6 +15,13 @@
       "when": 1743941899002,
       "tag": "0001_fast_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743945360747,
+      "tag": "0002_worthless_power_man",
+      "breakpoints": true
     }
   ]
 }
