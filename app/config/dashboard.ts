@@ -1,4 +1,4 @@
-import { Book, ChartLine, Home, MessageCircle, Users } from "lucide-react";
+import { Book, Home, MessageCircle, Settings, Users } from "lucide-react";
 
 export const dashboardConfig = {
   sidebar: {
@@ -32,6 +32,11 @@ export const dashboardConfig = {
         title: "Messages",
         icon: MessageCircle,
         url: "/dashboard/messages",
+      },
+      {
+        title: "Settings",
+        icon: Settings,
+        url: "/dashboard/settings",
       },
     ],
     user: {
