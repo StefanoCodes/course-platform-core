@@ -1,8 +1,5 @@
 import { data } from "react-router";
-import bcrypt from "bcrypt";
 
-import db from "~/db/index.server";
-import { adminsTable, rolesTable } from "~/db/schema";
 import { createSupabaseServerClient } from '~/db/supabase/server';
 import { loginSchema } from "~/lib/zod-schemas/auth";
 
@@ -92,6 +89,7 @@ export async function handleSignIn(request: Request, formData: FormData) {
     if (!unvalidatedFields.success) return data({
         success: false,
         message: 'Invalid Fields',
+
     }, {
         status: 403,
     })
@@ -164,6 +162,7 @@ export async function handleSignIn(request: Request, formData: FormData) {
         return {
             success: false,
             message: error.message,
+
         };
     }
 
@@ -173,10 +172,12 @@ export async function handleSignIn(request: Request, formData: FormData) {
         return {
             success: false,
             message: "User not found",
+
         };
     return data({
         success: true,
-        message: 'Admin Logged In'
+        message: 'Admin Logged In',
+
     }, {
         headers: headers
     })
@@ -188,14 +189,16 @@ export async function handleSignOut(request: Request) {
     if (error) {
         return {
             success: false,
-            message: 'Something went wrong signing out, try again later'
+            message: 'Something went wrong signing out, try again later',
         }
     }
 
     return {
         success: true,
-        message: 'Logged out'
+        message: 'Logged out',
+
     }
+
 }
 
 // export async function handleProfileUpdates(request: Request, formData: FormData) {

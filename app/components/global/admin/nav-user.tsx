@@ -1,17 +1,14 @@
 
 
 import {
-  Bell,
-  CreditCard,
   EllipsisVertical,
   LogOut,
-  UserCircle,
+  UserCircle
 } from "lucide-react"
 
 import {
   Avatar,
-  AvatarFallback,
-  AvatarImage,
+  AvatarFallback
 } from "~/components/ui/avatar"
 import {
   DropdownMenu,
@@ -29,19 +26,13 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar"
 import { useDashboardLoaderData } from "~/routes/_dashboard"
+import { LogoutProvider } from "./logout"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar()
   const { admin } = useDashboardLoaderData()
-  console.log(admin)
+  const { name, email, } = admin
+  const displayName = name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -52,13 +43,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {/* <AvatarImage src alt={name} /> */}
+                <AvatarFallback className="rounded-lg">{displayName}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{name}</span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {email}
                 </span>
               </div>
               <EllipsisVertical className="ml-auto size-4" />
@@ -73,13 +64,15 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {/* <AvatarImage src={avatar} alt={name} /> */}
+                  <AvatarFallback className="rounded-lg">
+                    {displayName}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {email}
                   </span>
                 </div>
               </div>
@@ -90,20 +83,14 @@ export function NavUser({
                 <UserCircle />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
+            <LogoutProvider>
+              <DropdownMenuItem className="w-full">
+                <LogOut />
+                Log out
+              </DropdownMenuItem>
+            </LogoutProvider>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
