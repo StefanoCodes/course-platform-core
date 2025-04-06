@@ -101,58 +101,60 @@ export async function handleSignIn(request: Request, formData: FormData) {
 
     // just used to create the admin account for the first time
 
-    const { data: registerData, error: registerError } =
-        await client.auth.signUp({
-            email: validatedFields.email,
-            password: validatedFields.password,
-        });
+    // const { data: registerData, error: registerError } =
+    //     await client.auth.signUp({
+    //         email: validatedFields.email,
+    //         password: validatedFields.password,
+    // });
 
-    if (registerError) {
-        return {
-            success: false,
-            message: registerError.message,
-            inputs: loginData,
-        };
-    }
-    if (!registerData.user?.id) {
-        return {
-            success: false,
-            message: "Something went wrong",
-        };
-    }
+    // if (registerError) {
+    //     return {
+    //         success: false,
+    //         message: registerError.message,
+    //         inputs: loginData,
+    //     };
+    // }
 
-    const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
+    // if (!registerData.user?.id) {
+    //     return {
+    //         success: false,
+    //         message: "Something went wrong",
+    //     };
+    // }
 
-    // insert admin into admin table + roles table
-    const [insertedAdminResponse] = await db.insert(adminsTable).values({
-        email: validatedFields.email,
-        password: hashedPassword,
-        adminId: registerData.user.id,
-        name: "Admin",
-    }).returning({
-        id: adminsTable.id
-    })
+    // const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
 
-    if (!insertedAdminResponse.id) {
-        console.error(`🔴Error inserting admin into admins table`)
-        return {
-            success: false,
-            message: "Something Went Wrong"
-        }
-    }
+    // // insert admin into admin table + roles table
+    // const [insertedAdminResponse] = await db.insert(adminsTable).values({
+    //     email: validatedFields.email,
+    //     password: hashedPassword,
+    //     adminId: registerData.user.id,
+    //     name: "Admin",
+    // }).returning({
+    //     id: adminsTable.id
+    // })
 
-    const [insertedAdminIntoRoleTableResponse] = await db.insert(rolesTable).values({
-        adminId: registerData.user.id,
-    }).returning({
-        id: rolesTable.id
-    })
-    if (!insertedAdminIntoRoleTableResponse.id) {
-        console.error(`🔴Error inserting admin into roles table`)
-        return {
-            success: false,
-            message: "Something Went Wrong"
-        }
-    }
+    // if (!insertedAdminResponse.id) {
+    //     console.error(`🔴Error inserting admin into admins table`)
+    //     return {
+    //         success: false,
+    //         message: "Something Went Wrong"
+    //     }
+    // }
+
+    // const [insertedAdminIntoRoleTableResponse] = await db.insert(rolesTable).values({
+    //     adminId: registerData.user.id,
+    // }).returning({
+    //     id: rolesTable.id
+    // })
+
+    // if (!insertedAdminIntoRoleTableResponse.id) {
+    //     console.error(`🔴Error inserting admin into roles table`)
+    //     return {
+    //         success: false,
+    //         message: "Something Went Wrong"
+    //     }
+    // }
     const { data: LoginResponse, error } = await client.auth.signInWithPassword({
         email: validatedFields.email,
         password: validatedFields.password,
