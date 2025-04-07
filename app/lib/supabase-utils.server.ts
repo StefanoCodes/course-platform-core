@@ -15,9 +15,11 @@ export const isLoggedIn = async (request: Request) => {
 export const isAdminLoggedIn = async (request: Request) => {
     const { client } = createSupabaseServerClient(request);
     const { data } = await client.auth.getUser();
-    if (!data.user?.id) return {
-        isLoggedIn: false,
-        adminId: null
+    if (!data.user?.id) {
+        return {
+            isLoggedIn: false,
+            adminId: null
+        }
     };
     const [admin] = await db.select({
         adminId: rolesTable.adminId
