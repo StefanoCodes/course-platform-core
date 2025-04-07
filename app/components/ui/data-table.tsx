@@ -40,7 +40,7 @@ export function DataTable<T extends DataTableItem>({
     linkQueryParam,
 }: DataTableProps<T>) {
     return (
-        <div className='flex flex-col gap-8'>
+        <div className='flex flex-col gap-8 overflow-hidden'>
             <div className="flex  items-center gap-2 self-center rounded-full border border-input bg-background/50 px-3 py-2">
                 <h2 className="text-center text-muted-foreground">{title}</h2>
                 <span className="inline-flex h-5 items-center rounded border border-border px-1 font-medium text-[0.625rem] text-muted-foreground">
@@ -48,7 +48,7 @@ export function DataTable<T extends DataTableItem>({
                 </span>
             </div>
 
-            <div className="w-full rounded-lg  border border-border bg-background [&>div]:max-h-100 overflow-auto [scrollbar-width:thin]">
+            <div className="w-full rounded-lg border border-border bg-background relative overflow-auto [scrollbar-width:thin]">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/50">

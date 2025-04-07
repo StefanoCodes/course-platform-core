@@ -217,7 +217,9 @@ export async function handleSignOut(request: Request) {
 
 //     // get user info from db and compare to see what needs to change
 //     const { user } = await GetUserDetails(request)
-//     if (!user?.userId) throw redirect('/sign-up');
+//     if (!user?.userId)  {
+// throw redirect('/sign-up');
+// }
 //     const { name, email, userId } = user;
 //     const isNameSame = name === newName;
 //     const isEmailSame = email === newEmail;

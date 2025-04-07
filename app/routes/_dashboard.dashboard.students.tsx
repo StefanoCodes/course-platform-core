@@ -7,7 +7,9 @@ import { GetAllStudents } from "~/lib/data-access/students.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
-    if (!isLoggedIn) throw redirect('/admin/login')
+    if (!isLoggedIn) {
+        throw redirect('/admin/login')
+    }
 
     const { success, students } = await GetAllStudents(request)
     if (!success) {

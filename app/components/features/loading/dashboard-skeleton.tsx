@@ -3,9 +3,14 @@ import { Card, CardContent, CardHeader, CardFooter } from "~/components/ui/card"
 
 export function DashboardSkeleton() {
     return (
-        <div className="flex flex-col gap-8 divide-y divide-border animate-pulse">
-            <AnalyticsCardsSkeleton />
-            <AnalyticsCardsSkeleton />
+        <div className="flex flex-col gap-8 divide-y divide-border animate-pulse bg-gray-50 rounded-2xl h-full">
+            <Skeleton className="mb-4 h-12 w-3/4" />
+            <Skeleton className="mb-8 h-4 w-1/2" />
+            <div className="space-y-4">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+            </div>
         </div>
     );
 }

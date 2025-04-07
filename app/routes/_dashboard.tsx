@@ -10,11 +10,13 @@ import type { Route } from "./+types/_dashboard.dashboard";
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn, adminId } = await isAdminLoggedIn(request);
   if (!isLoggedIn || !adminId) {
-    return redirect('/admin/login')
+    throw redirect('/admin/login')
   }
   // load data about the admin
   const admin = await getAdminById(request);
-  if (!admin.success || !admin.admin) throw redirect('/admin/login')
+  if (!admin.success || !admin.admin) {
+    throw redirect('/admin/login')
+  }
 
   return data({
     admin: admin.admin,
@@ -39,6 +41,7 @@ export default function Page() {
           '--sidebar-width': '19rem',
         } as React.CSSProperties
       }
+      className="h-dvh"
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
@@ -50,7 +53,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <div className="container"><Outlet /></div>}
+          {isLoading ? <DashboardSkeleton /> : <div className="container h-full overflow-hidden"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>

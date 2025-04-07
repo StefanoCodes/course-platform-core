@@ -17,11 +17,17 @@ import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // admin auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
-    if (!isLoggedIn) throw redirect("/admin/login")
+    if (!isLoggedIn) {
+        throw redirect("/admin/login")
+    }
     const { studentId } = params;
-    if (!studentId) throw redirect("/dashboard/students")
+    if (!studentId) {
+        throw redirect("/dashboard/students")
+    }
     const { success, student } = await GetStudentById(request, studentId)
-    if (!success || !student) throw redirect("/dashboard/students")
+    if (!success || !student) {
+        throw redirect("/dashboard/students")
+    }
     return data({ success: true, student }, { status: 200 })
 }
 
