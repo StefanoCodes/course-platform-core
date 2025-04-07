@@ -29,7 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="font-satoshi min-h-dvh overflow-hidden">
+      <body className="font-satoshi min-h-dvh">
         {children}
         <Toaster position="top-center" richColors />
         <ScrollRestoration />
