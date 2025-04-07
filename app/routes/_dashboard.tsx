@@ -14,9 +14,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
   // load data about the admin
   const admin = await getAdminById(request);
-  if (!admin.success || !admin.admin) {
-    return redirect('/admin/login')
-  }
+  if (!admin.success || !admin.admin) throw redirect('/admin/login')
+
   return data({
     admin: admin.admin,
   })

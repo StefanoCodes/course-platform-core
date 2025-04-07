@@ -4,7 +4,7 @@ import { data } from "react-router";
 import db from "~/db/index.server";
 import { createSupabaseAdminClient, createSupabaseServerClient } from '~/db/supabase/server';
 import { isAdminLoggedIn } from '~/lib/supabase-utils.server';
-import { createStudentSchema, updateStudentSchema } from "~/lib/zod-schemas/student";
+import { createStudentSchema, updateStudentPasswordSchema, updateStudentSchema } from "~/lib/zod-schemas/student";
 import { studentsTable } from './../../../db/schema';
 
 export async function handleCreateStudent(request: Request, formData: FormData) {
@@ -51,8 +51,6 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
             }
 
             const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
-
-
             // create student in db
 
             const [insertedStudent] = await db.insert(studentsTable).values({
@@ -204,6 +202,53 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
             throw new Error("Failed to update student")
         }
         return data({ success: true, message: "Student updated successfully" }, { status: 200 })
+    } catch (error) {
+        return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
+    }
+}
+
+export async function handleUpdateStudentPassword(request: Request, formData: FormData) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+    const { studentId, password } = Object.fromEntries(formData);
+    if (!studentId || typeof studentId !== "string") {
+        return data({ success: false, message: "Student ID is required" }, { status: 400 })
+    }
+    const unvalidatedFields = updateStudentPasswordSchema.safeParse({ password })
+    if (!unvalidatedFields.success) {
+        return data({ success: false, message: "Invalid form data" }, { status: 400 })
+    }
+    const validatedFields = unvalidatedFields.data
+    const { client } = createSupabaseAdminClient(request);
+    try {
+        // update password in supabase admin client
+        await db.transaction(async (tx) => {
+            const { data: updatedUser, error } = await client.auth.admin.updateUserById(studentId, {
+                password: validatedFields.password,
+            });
+            if (error) {
+                throw new Error(error.message)
+            }
+            if (!updatedUser) {
+                throw new Error("Failed to update password")
+            }
+
+            // update password in the database
+            const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
+            const [updatedStudent] = await tx.update(studentsTable).set({
+                password: hashedPassword,
+            }).where(eq(studentsTable.studentId, studentId)).returning({
+                studentId: studentsTable.studentId
+            })
+            if (!updatedStudent.studentId) {
+                throw new Error("Failed to update password")
+            }
+            // TODO: check if we need to logout them out ?
+        })
+        return data({ success: true, message: "Password updated successfully" }, { status: 200 })
     } catch (error) {
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }
