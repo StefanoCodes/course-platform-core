@@ -47,7 +47,7 @@ export function DataTable<T extends { id: string }>({
                 </span>
             </div>
 
-            <div className="w-full rounded-lg  border border-border bg-background [&>div]:max-h-96 [scrollbar-width:thin]">
+            <div className="w-full rounded-lg  border border-border bg-background [&>div]:max-h-100 overflow-auto [scrollbar-width:thin]">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/50">

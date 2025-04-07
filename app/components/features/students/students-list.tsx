@@ -38,7 +38,7 @@ export function StudentsList() {
     );
 
     return (
-        <div className="w-full overflow-auto">
+        <div className="w-full overflow-auto flex-1">
             <DataTable
                 data={students}
                 columns={columns}

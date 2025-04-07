@@ -26,7 +26,7 @@ export function useStudentsLoaderData() {
 
 export default function Page() {
     return (
-        <div className="flex flex-col gap-4 overflow-hidden">
+        <div className="flex flex-col gap-4 h-full overflow-hidden">
             <div className="flex flex-row justify-between w-full ">
                 <h1>Students</h1>
                 <CreateStudent />

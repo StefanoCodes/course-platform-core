@@ -40,7 +40,7 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <div className="flex flex-1 flex-col p-4">
+        <div className="flex flex-1 flex-col p-4 h-full">
           {/* BreadCrumbs Component */}
           <div className="flex items-center gap-2 pb-4 md:pb-10">
             <SidebarTrigger className="-ml-1" />
