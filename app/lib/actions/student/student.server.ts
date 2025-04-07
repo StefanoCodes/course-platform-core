@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { createSupabaseServerClient } from '~/db/supabase/server';
+import { createSupabaseAdminClient, createSupabaseServerClient } from '~/db/supabase/server';
 import { isAdminLoggedIn } from '~/lib/supabase-utils.server';
 import { createStudentSchema, updateStudentSchema } from "~/lib/zod-schemas/student";
 import { studentsTable } from './../../../db/schema';
@@ -165,32 +165,73 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
     const validatedFields = unvalidatedFields.data
 
     // Check if email is already in use by another student
-    const [existingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.email, validatedFields.email)).limit(1)
+    const [alreadyExistingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.email, validatedFields.email)).limit(1)
 
-    if (existingStudent && existingStudent.id !== studentId) {
+    if (alreadyExistingStudent && alreadyExistingStudent.studentId !== studentId) {
         return data({ success: false, message: "Email already in use by another student" }, { status: 400 })
     }
+    // at this point it means we can change the email since there is not a student with it already
+    const [existingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.studentId, studentId as string)).limit(1)
+
+    const isEmailChanged = existingStudent.email !== validatedFields.email;
+
+
 
     try {
+
+        // Update email if it has changed since attahed to supabase auth 
+        if (isEmailChanged) {
+            console.log("🔴Updating email", validatedFields.email, studentId)
+            const { success } = await UpdateEmail(request, validatedFields.email, studentId as string)
+            if (!success) {
+                return data({ success: false, message: "Failed to update email" }, { status: 500 })
+            }
+        }
+
         // Update student in the database
         const [updatedStudent] = await db.update(studentsTable)
             .set({
                 name: validatedFields.name,
-                email: validatedFields.email,
                 phone: validatedFields.phoneNumber,
                 updated_at: new Date()
             })
-            .where(eq(studentsTable.id, studentId as string))
+            .where(eq(studentsTable.studentId, studentId as string))
             .returning({
-                id: studentsTable.id
+                studentId: studentsTable.studentId
             });
 
         if (!updatedStudent) {
             throw new Error("Failed to update student")
         }
-
         return data({ success: true, message: "Student updated successfully" }, { status: 200 })
     } catch (error) {
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
+    }
+}
+
+async function UpdateEmail(request: Request, email: string, studentId: string) {
+    const { client } = createSupabaseAdminClient(request);
+
+    const { data, error } = await client.auth.admin.updateUserById(studentId, {
+        email,
+    });
+    if (error) {
+        console.error(`Error updating email:`, error)
+        return {
+            success: false,
+        }
+    }
+    try {
+        await db.update(studentsTable).set({
+            email,
+        }).where(eq(studentsTable.studentId, studentId))
+        return {
+            success: true,
+        }
+    } catch (e) {
+        console.error(`Error updating user email:`, e)
+        return {
+            success: false
+        }
     }
 }

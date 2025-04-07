@@ -1,17 +1,14 @@
-import { GetStudentById } from "~/lib/data-access/students.server";
-import { data, Link, useNavigation } from "react-router";
-import { redirect } from "react-router";
-import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
+import { ArrowLeft, Calendar, Edit, Mail, Phone, User } from "lucide-react";
+import { data, Link, redirect } from "react-router";
 import { ActivateStudent } from "~/components/features/students/activate-student";
 import { DeactivateStudent } from "~/components/features/students/deactivate-student";
+import { StatusBadge } from "~/components/features/students/status-badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { Badge } from "~/components/ui/badge";
+import { GetStudentById } from "~/lib/data-access/students.server";
 import { formatDateToString } from "~/lib/utils";
-import { Edit, Mail, Phone, User, Calendar, ArrowLeft } from "lucide-react";
-import { ProfileSkeleton } from "~/components/features/loading/dashboard-skeleton";
-import { StatusBadge } from "~/components/features/students/status-badge";
+import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
     const { studentId } = params;
@@ -24,7 +21,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 // display data
 export default function StudentProfilePage({ loaderData }: Route.ComponentProps) {
     const { student } = loaderData
-
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">

@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { data, Link, redirect, useFetcher, useNavigation } from "react-router";
 import { toast } from "sonner";
-import { ProfileSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
@@ -22,53 +21,33 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     return data({ success: true, student }, { status: 200 })
 }
 
-export default function EditStudentPage() {
-    const fetcher = useFetcher<{ student: any }>();
-    const updateFetcher = useFetcher<FetcherResponse>();
-    const navigation = useNavigation();
-    const isLoading = navigation.state === 'loading' || fetcher.state === 'loading';
-    const isSubmitting = updateFetcher.state === "submitting";
-
-    useEffect(() => {
-        if (fetcher.state === 'idle' && !fetcher.data) {
-            fetcher.load(`/dashboard/students/${location.pathname.split('/')[3]}`);
-        }
-    }, [fetcher]);
-
-    const student = fetcher.data?.student;
-
+export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
+    const { student } = loaderData;
+    const fetcher = useFetcher<FetcherResponse>();
+    const isSubmitting = fetcher.state === "submitting";
     const form = useForm<UpdateStudentSchema>({
         resolver: zodResolver(updateStudentSchema),
         defaultValues: {
-            name: "",
-            email: "",
-            phoneNumber: "",
+            name: student.name,
+            email: student.email,
+            phoneNumber: student.phone ?? "",
         },
     });
 
-    useEffect(() => {
-        if (student) {
-            form.reset({
-                name: student.name,
-                email: student.email,
-                phoneNumber: student.phone || "",
-            });
-        }
-    }, [student, form]);
+    const isThereAnyChanges = form.formState.isDirty;
 
     useEffect(() => {
-        if (updateFetcher.data) {
-            if (updateFetcher.data.success) {
-                toast.success(updateFetcher.data.message);
-                // Redirect back to student profile after successful update
-                setTimeout(() => {
-                    window.location.href = `/dashboard/students/${student.id}`;
-                }, 1500);
-            } if (!updateFetcher.data.success) {
-                toast.error(updateFetcher.data.message);
+        if (fetcher.data) {
+            if (fetcher.data.success) {
+                toast.success("Student updated successfully");
+            }
+            if (!fetcher.data.success) {
+                toast.error(fetcher.data.message);
+                form.reset();
             }
         }
-    }, [updateFetcher.data, student]);
+    }, [fetcher.data]);
+
 
     return (
         <div className="flex flex-col gap-6">
@@ -88,14 +67,18 @@ export default function EditStudentPage() {
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <updateFetcher.Form
+                        <fetcher.Form
                             method="POST"
                             action="/resource/student"
                             className="flex flex-col gap-4"
                             onSubmit={form.handleSubmit((data) => {
-                                updateFetcher.submit({
+                                // if the data is the same just return
+                                if (JSON.stringify(data) === JSON.stringify({ name: student.name, email: student.email, phoneNumber: student.phone ?? "" })) {
+                                    return;
+                                }
+                                fetcher.submit({
                                     ...data,
-                                    studentId: student.id,
+                                    studentId: student.studentId,
                                     intent: "update-student"
                                 }, {
                                     action: "/resource/student",
@@ -106,6 +89,7 @@ export default function EditStudentPage() {
                             <FormField
                                 control={form.control}
                                 name="name"
+                                defaultValue={student.name}
                                 disabled={isSubmitting}
                                 render={({ field }) => (
                                     <FormItem>
@@ -120,6 +104,7 @@ export default function EditStudentPage() {
                             <FormField
                                 control={form.control}
                                 name="phoneNumber"
+                                defaultValue={student.phone ?? ""}
                                 disabled={isSubmitting}
                                 render={({ field }) => (
                                     <FormItem>
@@ -134,6 +119,7 @@ export default function EditStudentPage() {
                             <FormField
                                 control={form.control}
                                 name="email"
+                                defaultValue={student.email}
                                 disabled={isSubmitting}
                                 render={({ field }) => (
                                     <FormItem>
@@ -161,12 +147,12 @@ export default function EditStudentPage() {
                                 <Button
                                     type="submit"
                                     className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white"
-                                    disabled={isSubmitting}
+                                    disabled={isSubmitting || !isThereAnyChanges}
                                 >
                                     {isSubmitting ? "Saving Changes..." : "Save Changes"}
                                 </Button>
                             </div>
-                        </updateFetcher.Form>
+                        </fetcher.Form>
                     </Form>
                 </CardContent>
             </Card>
