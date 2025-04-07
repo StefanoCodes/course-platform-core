@@ -30,3 +30,34 @@ export function createSupabaseServerClient(request: Request) {
 
     return supabase;
 }
+
+export function createSupabaseAdminClient(request: Request) {
+    const cookies = parse(request.headers.get("Cookie") ?? "");
+    const supabase = {
+        headers: new Headers(),
+        client: createServerClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            {
+                cookies: {
+                    get(key) {
+                        return cookies[key];
+                    },
+                    set(key, value, options) {
+                        supabase.headers.append(
+                            "Set-Cookie",
+                            serialize(key, value, options)
+                        );
+                    },
+                    remove(key, options) {
+                        supabase.headers.append("Set-Cookie", serialize(key, "", options));
+                    },
+                },
+
+            },
+
+        ),
+    };
+
+    return supabase;
+}

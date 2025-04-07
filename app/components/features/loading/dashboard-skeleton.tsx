@@ -1,5 +1,5 @@
 import { Skeleton } from "~/components/ui/skeleton";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "~/components/ui/card";
 
 export function DashboardSkeleton() {
     return (
@@ -63,6 +63,69 @@ export function TableSkeleton() {
                         </div>
                     ))}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+export function ProfileSkeleton() {
+    return (
+        <div className="flex flex-col gap-6">
+            <Skeleton className="h-9 w-32" />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Main Info Card Skeleton */}
+                <Card className="md:col-span-2">
+                    <CardHeader>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <div>
+                                <Skeleton className="h-8 w-48 mb-2" />
+                                <Skeleton className="h-5 w-64" />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Skeleton className="h-5 w-16 rounded-full" />
+                                <Skeleton className="h-9 w-20 rounded-md" />
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <div key={i} className="flex items-start gap-3">
+                                    <Skeleton className="h-9 w-9 rounded-full" />
+                                    <div className="flex-1">
+                                        <Skeleton className="h-4 w-24 mb-2" />
+                                        <Skeleton className="h-5 w-32" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2">
+                        <Skeleton className="h-9 w-28 rounded-md" />
+                    </CardFooter>
+                </Card>
+
+                {/* Status Card Skeleton */}
+                <Card>
+                    <CardHeader>
+                        <Skeleton className="h-6 w-32 mb-2" />
+                        <Skeleton className="h-4 w-48" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-col gap-4">
+                            {Array.from({ length: 2 }).map((_, i) => (
+                                <div key={i} className="flex items-center justify-between">
+                                    <Skeleton className="h-4 w-24" />
+                                    <Skeleton className="h-5 w-16 rounded-full" />
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end">
+                        <Skeleton className="h-9 w-28 rounded-md" />
+                    </CardFooter>
+                </Card>
             </div>
         </div>
     );

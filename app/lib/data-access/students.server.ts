@@ -15,17 +15,29 @@ export async function GetAllStudents(request: Request) {
         return { success: false, students: [] }
     }
 }
-
-// analytics
-export async function getStudentsAnalytics(request: Request) {
+export async function GetStudentsAnalytics(request: Request) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) throw redirect("/admin/login")
     try {
         const [totalStudentsCount] = await db.select({ count: count() }).from(studentsTable)
         const [activeStudentsCount] = await db.select({ count: count() }).from(studentsTable).where(eq(studentsTable.isActivated, true))
-        return { success: true, totalStudentsCount: totalStudentsCount.count, activeStudentsCount: activeStudentsCount.count }
+        return { success: true, totalStudentsCount: totalStudentsCount.count, activeStudentsCount: activeStudentsCount.count, inactiveStudentsCount: totalStudentsCount.count - activeStudentsCount.count }
     } catch (e) {
         console.error("🔴Error fetching students from database:", e)
         return { success: false, totalStudentsCount: 0, activeStudentsCount: 0 }
     }
 }
+export async function GetStudentById(request: Request, studentId: string) {
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) throw redirect("/admin/login")
+    try {
+        const [student] = await db.select().from(studentsTable).where(eq(studentsTable.studentId, studentId)).limit(1)
+        return { success: true, student }
+    } catch (e) {
+        console.error("🔴Error fetching student from database:", e)
+        return { success: false, student: null }
+    }
+}
+
+
+

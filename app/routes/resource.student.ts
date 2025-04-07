@@ -1,8 +1,8 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent } from "~/lib/actions/student/student.server"
+import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent, handleUpdateStudent } from "~/lib/actions/student/student.server"
 
 
-const intents = ["create-student", "activate-student", "deactivate-student"]
+const intents = ["create-student", "activate-student", "deactivate-student", "update-student"]
 
 export async function loader() {
     return data('Not Allowed', { status: 405 })
@@ -21,6 +21,7 @@ export async function action({ request }: ActionFunctionArgs) {
             'create-student': handleCreateStudent,
             'activate-student': handleActivateStudent,
             'deactivate-student': handleDeactivateStudent,
+            'update-student': handleUpdateStudent,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]

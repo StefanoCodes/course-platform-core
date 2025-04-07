@@ -8,3 +8,11 @@ export const createStudentSchema = z.object({
 });
 
 export type CreateStudentSchema = z.infer<typeof createStudentSchema>;
+
+export const updateStudentSchema = z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    email: z.string().email({ message: "Invalid email address" }).min(1, { message: "Email is required" }),
+    phoneNumber: z.string().refine((val) => val === '' || val.length >= 10, { message: "Phone number must be at least 10 characters long" }).optional(),
+});
+
+export type UpdateStudentSchema = z.infer<typeof updateStudentSchema>;

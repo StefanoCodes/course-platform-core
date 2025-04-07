@@ -18,6 +18,7 @@ interface Column<T> {
 
 interface DataTableItem {
     id: string;
+    studentId: string;
     [key: string]: unknown;
 }
 
@@ -30,7 +31,7 @@ interface DataTableProps<T extends DataTableItem> {
     linkQueryParam?: string;
 }
 
-export function DataTable<T extends { id: string }>({
+export function DataTable<T extends DataTableItem>({
     data,
     columns,
     title,
@@ -83,7 +84,7 @@ export function DataTable<T extends { id: string }>({
                                             (column.accessorKey === 'studentName' && linkPath) ? (
                                             <Link
                                                 className="hover:underline"
-                                                to={`${linkPath}/${item.id}${linkQueryParam ? `?${linkQueryParam}` : ''}`}
+                                                to={`${linkPath}/${item.studentId}${linkQueryParam ? `?${linkQueryParam}` : ''}`}
                                             >
                                                 {String(item[column.accessorKey])}
                                             </Link>

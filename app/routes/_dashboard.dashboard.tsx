@@ -1,7 +1,7 @@
 import { Outlet, redirect, useRouteLoaderData } from "react-router";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
-import { getStudentsAnalytics } from "~/lib/data-access/students.server";
+import { GetStudentsAnalytics } from "~/lib/data-access/students.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -10,12 +10,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     return redirect('/admin/login');
   }
   // get analytics data
-  const { success, totalStudentsCount, activeStudentsCount } = await getStudentsAnalytics(request)
+  const { success, totalStudentsCount, activeStudentsCount, inactiveStudentsCount } = await GetStudentsAnalytics(request)
 
   if (!success) {
     return { totalStudentsCount: 0, activeStudentsCount: 0, inactiveStudentsCount: 0 }
   }
-  return { totalStudentsCount, activeStudentsCount, inactiveStudentsCount: totalStudentsCount - activeStudentsCount }
+  return { totalStudentsCount, activeStudentsCount, inactiveStudentsCount }
 }
 
 
