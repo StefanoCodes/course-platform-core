@@ -1,0 +1,167 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { redirect, useFetcher } from "react-router";
+import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
+import { createStudentSchema, type CreateStudentSchema } from "~/lib/zod-schemas/student";
+import type { FetcherResponse } from "~/lib/types";
+import { generateRandomPassword } from "~/lib/utils";
+
+export function CreateStudent() {
+
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [hasCopied, setHasCopied] = useState(false);
+    const fetcher = useFetcher<FetcherResponse>();
+    const isSubmitting = fetcher.state === "submitting";
+    const form = useForm<CreateStudentSchema>({
+        resolver: zodResolver(createStudentSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            phoneNumber: "",
+            password: "",
+        },
+    });
+
+    useEffect(() => {
+        if (fetcher.data) {
+            if (fetcher.data.success) {
+                toast.success(fetcher.data.message)
+                setIsSubmitted(true)
+            } if (!fetcher.data.success) {
+                toast.error(fetcher.data.message)
+            }
+        }
+    }, [fetcher.data])
+
+    useEffect(() => {
+        // when dialog closes reset the form
+        if (!isDialogOpen) {
+            form.reset()
+            setIsSubmitted(false)
+        }
+    }, [isDialogOpen])
+
+    // when hasCopied is true, show toast
+    useEffect(() => {
+        if (hasCopied) {
+            toast.success("Copied to clipboard");
+            setHasCopied(false);
+        }
+    }, [hasCopied]);
+    return (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Student</Button>
+            </DialogTrigger>
+            {isSubmitted ? (
+                <SubmittedState email={form.getValues("email")} password={form.getValues("password")} setHasCopied={setHasCopied} />
+            ) : (
+                <DialogContent className="flex flex-col gap-8">
+                    <DialogHeader>
+                        <DialogTitle>Create Student</DialogTitle>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <fetcher.Form method="POST" action="/resource/student" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
+                            fetcher.submit({ ...data, intent: "create-student" }, {
+                                action: "/resource/student",
+                                method: "POST"
+                            })
+                        })}>
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name <span className="text-xs text-red-500">*</span></FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter student name" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone Number <span className="text-xs text-gray-500">(optional)</span></FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter student phone number" type="tel" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email <span className="text-xs text-red-500">*</span></FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter student email" type="email" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field}
+                                                onBlur={() => {
+                                                    const password = generateRandomPassword();
+                                                    form.setValue("password", password);
+                                                }} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="flex flex-col w-full gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    disabled={isSubmitting}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password <span className="text-xs text-red-500">*</span></FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Enter student password" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            {/* Submit button */}
+                            <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
+                        </fetcher.Form>
+                    </Form>
+                </DialogContent>
+            )}
+        </Dialog>
+    )
+}
+
+// submitted state should show the email and pasword of the new student and ability to copy to clipboard
+function SubmittedState({ email, password, setHasCopied }: { email: string, password: string, setHasCopied: (hasCopied: boolean) => void }) {
+    return (
+        <DialogContent className="flex flex-col gap-8">
+            <DialogHeader>
+                <DialogTitle>Student Created</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-2">
+                <p>Email: {email}</p>
+                <p>Password: {password}</p>
+            </div>
+            <Button variant={"outline"} className="cursor-pointer" onClick={() => {
+                navigator.clipboard.writeText(`Email: ${email}\nPassword: ${password}`);
+                setHasCopied(true);
+            }}>Copy to Clipboard</Button>
+        </DialogContent>
+    )
+}

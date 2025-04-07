@@ -1,4 +1,4 @@
-import { data, Outlet, redirect, useLoaderData } from "react-router";
+import { data, Outlet, redirect, useLoaderData, useRouteLoaderData } from "react-router";
 import { AppSidebar } from "~/components/global/admin/app-sidebar";
 import { Breadcrumbs } from "~/components/global/admin/breadcrumbs";
 import { Separator } from "~/components/ui/separator";
@@ -22,7 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export function useDashboardLoaderData() {
-  const data = useLoaderData<typeof loader>()
+  const data = useRouteLoaderData<typeof loader>("routes/_dashboard")
   if (!data) {
     throw new Error('Dashboard Loader needs to be used within a DashboardLoader context, the route needs to be a child of the Dashboard route')
   }
@@ -40,7 +40,7 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <div className="flex flex-1 flex-col p-4">
+        <div className="flex flex-1 flex-col p-4 h-full">
           {/* BreadCrumbs Component */}
           <div className="flex items-center gap-2 pb-4 md:pb-10">
             <SidebarTrigger className="-ml-1" />

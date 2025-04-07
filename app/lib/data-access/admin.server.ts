@@ -2,6 +2,7 @@ import db from "~/db/index.server";
 import { adminsTable } from "~/db/schema";
 import { eq } from "drizzle-orm";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+
 export async function getAdminById(request: Request) {
     // protected action
     const { isLoggedIn, adminId } = await isAdminLoggedIn(request);

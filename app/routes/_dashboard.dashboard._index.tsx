@@ -5,7 +5,7 @@ import type { Route } from "./+types/_dashboard.dashboard";
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
-        return redirect('/admin/login')
+        throw redirect('/admin/login')
     }
     return null;
 }

@@ -36,3 +36,10 @@ export const rolesTable = pgTable('roles', {
 // courses
 // segments
 // messages
+
+// types
+
+export type Student = typeof studentsTable.$inferSelect;
+export type Admin = typeof adminsTable.$inferSelect;
+export type Role = typeof rolesTable.$inferSelect;
+
