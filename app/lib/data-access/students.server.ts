@@ -1,3 +1,4 @@
+import { desc } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { studentsTable } from "~/db/schema";
@@ -7,7 +8,7 @@ export async function GetAllStudents(request: Request) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) throw redirect("/admin/login")
     try {
-        const students = await db.select().from(studentsTable)
+        const students = await db.select().from(studentsTable).orderBy(desc(studentsTable.created_at))
         return { success: true, students }
     } catch (e) {
         console.error("🔴Error fetching students from database:", e)
