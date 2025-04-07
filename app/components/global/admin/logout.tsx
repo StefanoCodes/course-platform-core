@@ -1,11 +1,8 @@
 import { LogOut } from "lucide-react";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
+import type { FetcherResponse } from "~/lib/types";
 
-type FetcherResponse = {
-    success: boolean;
-    message: string;
-};
 
 export function LogoutProvider({ children }: { children?: React.ReactNode }) {
     const fetcher = useFetcher<FetcherResponse>({ key: "sign-out" });
