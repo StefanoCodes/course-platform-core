@@ -51,8 +51,6 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
             }
 
             const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
-
-
             // create student in db
 
             const [insertedStudent] = await db.insert(studentsTable).values({
@@ -207,6 +205,19 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
     } catch (error) {
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }
+}
+
+export async function handleUpdateStudentPassword(request: Request, formData: FormData) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+    const { studentId, password } = Object.fromEntries(formData);
+    console.log("🔴Updating password", password, studentId)
+
+    return data({ success: true, message: "Password updated successfully" }, { status: 200 })
+    // supabase admin client
 }
 
 async function UpdateEmail(request: Request, email: string, studentId: string) {

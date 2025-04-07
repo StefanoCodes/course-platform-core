@@ -6,9 +6,8 @@ import { GetStudentsAnalytics } from "~/lib/data-access/students.server";
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn } = await isAdminLoggedIn(request);
 
-  if (!isLoggedIn) {
-    return redirect('/admin/login');
-  }
+  if (!isLoggedIn) throw redirect('/admin/login');
+
   // get analytics data
   const { success, totalStudentsCount, activeStudentsCount, inactiveStudentsCount } = await GetStudentsAnalytics(request)
 

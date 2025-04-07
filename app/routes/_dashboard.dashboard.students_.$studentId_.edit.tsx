@@ -12,8 +12,12 @@ import { GetStudentById } from "~/lib/data-access/students.server";
 import type { FetcherResponse } from "~/lib/types";
 import { updateStudentSchema, type UpdateStudentSchema } from "~/lib/zod-schemas/student";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId_.edit";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) throw redirect("/admin/login")
     const { studentId } = params;
     if (!studentId) throw redirect("/dashboard/students")
     const { success, student } = await GetStudentById(request, studentId)
@@ -53,7 +57,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
         <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" asChild>
-                    <Link to={`/dashboard/students/${student.id}`}>
+                    <Link to={`/dashboard/students/${student.studentId}`}>
                         <ArrowLeft className="h-4 w-4 mr-1" />
                         Back to Student Profile
                     </Link>
@@ -154,6 +158,11 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
                             </div>
                         </fetcher.Form>
                     </Form>
+                    <Link to={`/dashboard/students/${student.studentId}/edit/password`}>
+                        <Button variant="link" size="sm">
+                            Edit Password
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
         </div>

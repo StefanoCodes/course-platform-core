@@ -14,5 +14,8 @@ export const updateStudentSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }).min(1, { message: "Email is required" }),
     phoneNumber: z.string().refine((val) => val === '' || val.length >= 10, { message: "Phone number must be at least 10 characters long" }).optional(),
 });
-
+export const updateStudentPasswordSchema = z.object({
+    password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+});
 export type UpdateStudentSchema = z.infer<typeof updateStudentSchema>;
+export type UpdateStudentPasswordSchema = z.infer<typeof updateStudentPasswordSchema>;
