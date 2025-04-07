@@ -17,9 +17,11 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
     const { name, email, phoneNumber, password } = Object.fromEntries(formData);
     // validate the data
     const unvalidatedFields = createStudentSchema.safeParse({ name, email, phoneNumber, password })
+
     if (!unvalidatedFields.success) {
         return data({ success: false, message: "Invalid form data" }, { status: 400 })
     }
+
     const validatedFields = unvalidatedFields.data
     // check if the email is already in use
     const [potentialStudent] = await db.select().from(studentsTable).where(eq(studentsTable.email, validatedFields.email)).limit(1)
@@ -48,9 +50,6 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
                 throw new Error("Something went wrong")
             }
 
-
-
-
             const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
 
 
@@ -69,6 +68,8 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
             if (!insertedStudent.id) {
                 throw new Error("Something went wrong")
             }
+
+            // TODO: assign student to all courses that are existing & are public
         })
 
         return data({ success: true, message: "Student created successfully" }, { status: 200 })

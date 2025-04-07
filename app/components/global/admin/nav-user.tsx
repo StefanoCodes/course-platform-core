@@ -27,8 +27,10 @@ import {
 } from "~/components/ui/sidebar"
 import { useDashboardLoaderData } from "~/routes/_dashboard"
 import { LogoutProvider } from "./logout"
+import { useMatches } from "react-router"
 
 export function NavUser() {
+
   const { isMobile } = useSidebar()
   const { admin } = useDashboardLoaderData()
   const { name, email, } = admin
