@@ -12,12 +12,9 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import type { FetcherResponse } from "~/lib/types";
 import { loginSchema, type LoginSchema } from "~/lib/zod-schemas/auth";
 
-type FetcherResponse = {
-	success: boolean;
-	message: string;
-};
 
 export default function LoginAuthForm() {
 	const fetcher = useFetcher<FetcherResponse>();
