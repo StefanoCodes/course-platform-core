@@ -31,8 +31,8 @@ export function StudentsList() {
 
     const renderActions = (student: Student) => (
         <div className="flex items-center gap-2">
-            {!student.isActivated && <ActivateStudent studentId={student.id} />}
-            {student.isActivated && <DeactivateStudent studentId={student.id} />}
+            {!student.isActivated && <ActivateStudent studentId={student.studentId} />}
+            {student.isActivated && <DeactivateStudent studentId={student.studentId} />}
         </div>
     );
 

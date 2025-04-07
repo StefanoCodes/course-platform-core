@@ -95,7 +95,7 @@ export async function handleActivateStudent(request: Request, formData: FormData
     try {
         const [updatedStudent] = await db.update(studentsTable).set({
             isActivated: true
-        }).where(eq(studentsTable.id, studentId as string)).returning({
+        }).where(eq(studentsTable.studentId, studentId as string)).returning({
             id: studentsTable.id
         })
 
@@ -125,13 +125,16 @@ export async function handleDeactivateStudent(request: Request, formData: FormDa
     try {
         const [updatedStudent] = await db.update(studentsTable).set({
             isActivated: false
-        }).where(eq(studentsTable.id, studentId as string)).returning({
+        }).where(eq(studentsTable.studentId, studentId as string)).returning({
             id: studentsTable.id
         })
 
         if (!updatedStudent.id) {
             throw new Error("Something went wrong")
         }
+
+        // TODO: Logout user out all existing sessions using supabase (sort of like banning them)
+
 
         return data({ success: true, message: "Student deactivated successfully" }, { status: 200 })
     } catch (error) {
