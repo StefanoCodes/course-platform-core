@@ -108,3 +108,33 @@ export async function handleActivateStudent(request: Request, formData: FormData
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }
 }
+
+export async function handleDeactivateStudent(request: Request, formData: FormData) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+
+    const { studentId } = Object.fromEntries(formData);
+
+    if (!studentId) {
+        return data({ success: false, message: "Student ID is required" }, { status: 400 })
+    }
+
+    try {
+        const [updatedStudent] = await db.update(studentsTable).set({
+            isActivated: false
+        }).where(eq(studentsTable.id, studentId as string)).returning({
+            id: studentsTable.id
+        })
+
+        if (!updatedStudent.id) {
+            throw new Error("Something went wrong")
+        }
+
+        return data({ success: true, message: "Student deactivated successfully" }, { status: 200 })
+    } catch (error) {
+        return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
+    }
+}

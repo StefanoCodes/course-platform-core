@@ -3,6 +3,7 @@ import type { Student } from "~/db/schema";
 import { formatDateToString } from "~/lib/utils";
 import { useStudentsLoaderData } from "~/routes/_dashboard.dashboard.students";
 import { ActivateStudent } from "./activate-student";
+import { DeactivateStudent } from "./deactivate-student";
 import { StatusBadge } from "./status-badge";
 
 export function StudentsList() {
@@ -31,6 +32,7 @@ export function StudentsList() {
     const renderActions = (student: Student) => (
         <div className="flex items-center gap-2">
             {!student.isActivated && <ActivateStudent studentId={student.id} />}
+            {student.isActivated && <DeactivateStudent studentId={student.id} />}
         </div>
     );
 
