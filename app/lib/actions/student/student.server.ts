@@ -1,11 +1,11 @@
+import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
-import { studentsTable } from './../../../db/schema';
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { createStudentSchema } from "~/lib/zod-schemas/student";
 import { createSupabaseServerClient } from '~/db/supabase/server';
-import bcrypt from 'bcrypt';
 import { isAdminLoggedIn } from '~/lib/supabase-utils.server';
+import { createStudentSchema, updateStudentSchema } from "~/lib/zod-schemas/student";
+import { studentsTable } from './../../../db/schema';
 
 export async function handleCreateStudent(request: Request, formData: FormData) {
     // admin auth check
@@ -85,7 +85,7 @@ export async function handleActivateStudent(request: Request, formData: FormData
     if (!isLoggedIn) {
         return data({ success: false, message: "Unauthorized" }, { status: 401 })
     }
-
+    console.log("🔴Activating student", formData)
     const { studentId } = Object.fromEntries(formData);
 
     if (!studentId) {
@@ -96,10 +96,10 @@ export async function handleActivateStudent(request: Request, formData: FormData
         const [updatedStudent] = await db.update(studentsTable).set({
             isActivated: true
         }).where(eq(studentsTable.studentId, studentId as string)).returning({
-            id: studentsTable.id
+            studentId: studentsTable.studentId
         })
 
-        if (!updatedStudent.id) {
+        if (!updatedStudent.studentId) {
             throw new Error("Something went wrong")
         }
 
@@ -137,6 +137,59 @@ export async function handleDeactivateStudent(request: Request, formData: FormDa
 
 
         return data({ success: true, message: "Student deactivated successfully" }, { status: 200 })
+    } catch (error) {
+        return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
+    }
+}
+
+export async function handleUpdateStudent(request: Request, formData: FormData) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+
+    const { studentId, name, email, phoneNumber } = Object.fromEntries(formData);
+
+    if (!studentId) {
+        return data({ success: false, message: "Student ID is required" }, { status: 400 })
+    }
+
+    // validate the data using updateStudentSchema
+    const unvalidatedFields = updateStudentSchema.safeParse({ name, email, phoneNumber })
+
+    if (!unvalidatedFields.success) {
+        return data({ success: false, message: "Invalid form data" }, { status: 400 })
+    }
+
+    const validatedFields = unvalidatedFields.data
+
+    // Check if email is already in use by another student
+    const [existingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.email, validatedFields.email)).limit(1)
+
+    if (existingStudent && existingStudent.id !== studentId) {
+        return data({ success: false, message: "Email already in use by another student" }, { status: 400 })
+    }
+
+    try {
+        // Update student in the database
+        const [updatedStudent] = await db.update(studentsTable)
+            .set({
+                name: validatedFields.name,
+                email: validatedFields.email,
+                phone: validatedFields.phoneNumber,
+                updated_at: new Date()
+            })
+            .where(eq(studentsTable.id, studentId as string))
+            .returning({
+                id: studentsTable.id
+            });
+
+        if (!updatedStudent) {
+            throw new Error("Failed to update student")
+        }
+
+        return data({ success: true, message: "Student updated successfully" }, { status: 200 })
     } catch (error) {
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }

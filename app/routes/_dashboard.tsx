@@ -51,7 +51,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <Outlet />}
+          {isLoading ? <DashboardSkeleton /> : <div className="container"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>
