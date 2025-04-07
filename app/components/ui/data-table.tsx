@@ -73,7 +73,7 @@ export function DataTable<T extends { id: string }>({
                                 {columns.map((column) => (
                                     <TableCell
                                         key={String(column.accessorKey)}
-                                        className={`py-2 ${column.accessorKey === 'name' ||
+                                        className={`py-5 ${column.accessorKey === 'name' ||
                                             column.accessorKey === 'studentName'
                                             ? 'sticky left-0 z-10 bg-muted font-medium xl:static xl:bg-inherit'
                                             : ''

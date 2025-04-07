@@ -1,9 +1,8 @@
 import { DataTable } from "~/components/ui/data-table";
-import { useStudentsLoaderData } from "~/routes/_dashboard.dashboard.students";
-import { Button } from "~/components/ui/button";
-import { Link } from "react-router";
 import type { Student } from "~/db/schema";
 import { formatDateToString } from "~/lib/utils";
+import { useStudentsLoaderData } from "~/routes/_dashboard.dashboard.students";
+import { ActivateStudent } from "./activate-student";
 import { StatusBadge } from "./status-badge";
 
 export function StudentsList() {
@@ -31,9 +30,7 @@ export function StudentsList() {
 
     const renderActions = (student: Student) => (
         <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
-                <Link to={`/dashboard/students/${student.id}/edit`}>Edit</Link>
-            </Button>
+            {!student.isActivated && <ActivateStudent studentId={student.id} />}
         </div>
     );
 
