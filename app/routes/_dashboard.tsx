@@ -10,7 +10,7 @@ import type { Route } from "./+types/_dashboard.dashboard";
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn, adminId } = await isAdminLoggedIn(request);
   if (!isLoggedIn || !adminId) {
-    throw redirect('/admin/login')
+    return redirect('/admin/login')
   }
   // load data about the admin
   const admin = await getAdminById(request);
