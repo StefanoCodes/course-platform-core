@@ -1,5 +1,6 @@
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { redirect } from "react-router";
+import { StudentAnalytics } from "~/components/features/students/student-analytics";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -10,9 +11,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     return null;
 }
 export default function Page() {
+
     return (
-        <div>
-            <h1>Dashboard</h1>
+        <div className="flex flex-col gap-8 divide-y divide-border">
+            <StudentAnalytics />
+            {/* TODO: Update this with the courses Analytics Data */}
+            <StudentAnalytics />
         </div>
     )
 }

@@ -25,14 +25,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar"
-import { useDashboardLoaderData } from "~/routes/_dashboard"
+import { useDashboardLayoutLoaderData } from "~/routes/_dashboard"
 import { LogoutProvider } from "./logout"
 import { useMatches } from "react-router"
 
 export function NavUser() {
 
   const { isMobile } = useSidebar()
-  const { admin } = useDashboardLoaderData()
+  const { admin } = useDashboardLayoutLoaderData()
   const { name, email, } = admin
   const displayName = name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase()
   return (

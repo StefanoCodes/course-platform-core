@@ -1,6 +1,7 @@
-import { data, Outlet, redirect, useLoaderData, useRouteLoaderData } from "react-router";
+import { data, Outlet, redirect, useLoaderData, useNavigation, useRouteLoaderData } from "react-router";
 import { AppSidebar } from "~/components/global/admin/app-sidebar";
 import { Breadcrumbs } from "~/components/global/admin/breadcrumbs";
+import { DashboardSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { Separator } from "~/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { getAdminById } from "~/lib/data-access/admin.server";
@@ -21,7 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   })
 }
 
-export function useDashboardLoaderData() {
+export function useDashboardLayoutLoaderData() {
   const data = useRouteLoaderData<typeof loader>("routes/_dashboard")
   if (!data) {
     throw new Error('Dashboard Loader needs to be used within a DashboardLoader context, the route needs to be a child of the Dashboard route')
@@ -30,6 +31,8 @@ export function useDashboardLoaderData() {
 }
 
 export default function Page() {
+  const navigation = useNavigation()
+  const isLoading = navigation.state === 'loading'
   return (
     <SidebarProvider
       style={
@@ -47,11 +50,11 @@ export default function Page() {
             <Separator orientation="vertical" className="mr-2 h-2" />
             <Breadcrumbs />
           </div>
-          <Outlet />
+
+          {isLoading ? <DashboardSkeleton /> : <Outlet />}
         </div>
       </SidebarInset>
     </SidebarProvider>
-
   );
 }
 
