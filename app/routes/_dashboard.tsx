@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/s
 import { getAdminById } from "~/lib/data-access/admin.server";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
+
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn, adminId } = await isAdminLoggedIn(request);
   if (!isLoggedIn || !adminId) {
@@ -53,7 +54,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <div className="md:container overflow-hidden h-full"><Outlet /></div>}
+          {isLoading ? <DashboardSkeleton /> : <div className="md:container md:mx-auto overflow-hidden h-full"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>
