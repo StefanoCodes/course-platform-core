@@ -1,52 +1,62 @@
+import { Users } from "lucide-react";
 import { Link } from "react-router";
-import { Book, Home, Settings, Users } from "lucide-react";
+import { CreateSegment } from "./create-segment";
 
 export function CourseEditSidebar() {
     return (
-        <div className="w-64 h-full bg-gray-50 border-r border-gray-200 p-2 flex flex-col">
-            {/* List of segments */}
-            <nav className="flex-1">
-                <ul className="space-y-2">
-                    <li>
-                        <Link
-                            to="/dashboard"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
-                        >
-                            <Home className="w-5 h-5" />
-                            <span>Segment 1</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/dashboard/courses"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
-                        >
-                            <Book className="w-5 h-5" />
-                            <span>Segment 2</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/dashboard/students"
-                            className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
-                        >
-                            <Users className="w-5 h-5" />
-                            <span>Segment 3</span>
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
+        <aside className="w-full md:w-64 h-full overflow-hidden bg-gray-50 md:border-r border-r-0 border-b md:border-b-0 border-gray-200 p-2 flex flex-col">
+            <div className="h-full flex flex-col gap-4">
+                {/* Scrollable Content (Segments) */}
+                <div className="flex-1 relative overflow-y-auto [scrollbar-width:thin]">
+                    <nav>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    to="/dashboard/students"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+                                >
+                                    <Users className="w-5 h-5" />
+                                    <span>Segment 3</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/dashboard/students"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+                                >
+                                    <Users className="w-5 h-5" />
+                                    <span>Segment 3</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/dashboard/students"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+                                >
+                                    <Users className="w-5 h-5" />
+                                    <span>Segment 3</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/dashboard/students"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
+                                >
+                                    <Users className="w-5 h-5" />
+                                    <span>Segment 3</span>
+                                </Link>
+                            </li>
+                        </ul>
+                        {/* Gradient mask to indicate scrollable content */}
 
-            {/* Add segment btn */}
-            {/* <div className="mt-auto pt-4 border-t border-gray-200">
-                <Link
-                    to="/dashboard/settings"
-                    className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
-                >
-                    <Settings className="w-5 h-5" />
-                    <span>Settings</span>
-                </Link>
-            </div> */}
-        </div>
+                        <div className="sticky bottom-0 left-0 right-0 h-16 pointer-events-none" style={{
+                            background: 'linear-gradient(to bottom, transparent, rgb(249 250 251) 100%)'
+                        }} />
+                    </nav>
+                </div>
+                {/* Add Segment Button */}
+                <CreateSegment />
+            </div>
+        </aside>
     );
 }

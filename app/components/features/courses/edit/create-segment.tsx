@@ -9,20 +9,23 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
-import { createCourseSchema, type CreateCourseSchema } from "~/lib/zod-schemas/course";
-type CreateCourseFetcherResponse = FetcherResponse & {
-    courseSlug: string;
+import { createSegmentSchema, type CreateSegmentSchema } from "~/lib/zod-schemas/segment";
+import { useEditorLoaderData } from "~/routes/_dashboard._editor";
+type CreateSegmentFetcherResponse = FetcherResponse & {
+    segmentSlug: string;
 }
-export function CreateCourse() {
+export function CreateSegment() {
+    const { slug: courseSlug } = useEditorLoaderData();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const fetcher = useFetcher<CreateCourseFetcherResponse>();
+    const fetcher = useFetcher<CreateSegmentFetcherResponse>();
     const isSubmitting = fetcher.state === "submitting";
     const navigate = useNavigate();
-    const form = useForm<CreateCourseSchema>({
-        resolver: zodResolver(createCourseSchema),
+    const form = useForm<CreateSegmentSchema>({
+        resolver: zodResolver(createSegmentSchema),
         defaultValues: {
             name: "",
             description: "",
+            videoUrl: "",
         },
     });
 
@@ -30,8 +33,8 @@ export function CreateCourse() {
         if (fetcher.data) {
             if (fetcher.data.success) {
                 toast.success(fetcher.data.message)
-                if (fetcher.data.courseSlug) {
-                    navigate(`/dashboard/courses/${fetcher.data.courseSlug}`)
+                if (fetcher.data.segmentSlug) {
+                    navigate(`/dashboard/courses/${courseSlug}/${fetcher.data.segmentSlug}`)
                 }
             } if (!fetcher.data.success) {
                 toast.error(fetcher.data.message)
@@ -41,16 +44,16 @@ export function CreateCourse() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Course</Button>
+                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Segment</Button>
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-8">
                 <DialogHeader>
-                    <DialogTitle>Create Course</DialogTitle>
+                    <DialogTitle>Create Segment</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <fetcher.Form method="POST" action="/resource/course" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
-                        fetcher.submit({ ...data, intent: "create-course" }, {
-                            action: "/resource/course",
+                    <fetcher.Form method="POST" action="/resource/segment" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
+                        fetcher.submit({ ...data, intent: "create-segment" }, {
+                            action: "/resource/segment",
                             method: "POST"
                         })
                     })}>
@@ -62,7 +65,7 @@ export function CreateCourse() {
                                 <FormItem>
                                     <FormLabel>Name <span className="text-xs text-red-500">*</span></FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter course name" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                        <Input placeholder="Enter segment name" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -76,15 +79,28 @@ export function CreateCourse() {
                                 <FormItem>
                                     <FormLabel>Description <span className="text-xs text-red-500">*</span></FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Enter course description" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                        <Textarea placeholder="Enter segment description" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
+                        <FormField
+                            control={form.control}
+                            name="videoUrl"
+                            disabled={isSubmitting}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Video URL <span className="text-xs text-red-500">*</span></FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter video URL" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         {/* Submit button */}
-                        <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Course..." : "Create Course"}</Button>
+                        <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

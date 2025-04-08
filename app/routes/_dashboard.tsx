@@ -53,7 +53,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <div className="container h-full overflow-hidden"><Outlet /></div>}
+          {isLoading ? <DashboardSkeleton /> : <div className="md:container overflow-hidden h-full"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>
