@@ -28,7 +28,7 @@ export async function GetStudentsAnalytics(request: Request) {
         return { success: true, totalStudentsCount: totalStudentsCount.count, activeStudentsCount: activeStudentsCount.count, inactiveStudentsCount: totalStudentsCount.count - activeStudentsCount.count }
     } catch (e) {
         console.error("🔴Error fetching students from database:", e)
-        return { success: false, totalStudentsCount: 0, activeStudentsCount: 0 }
+        return { success: false, totalStudentsCount: 0, activeStudentsCount: 0, inactiveStudentsCount: 0 }
     }
 }
 export async function GetStudentById(request: Request, studentId: string) {

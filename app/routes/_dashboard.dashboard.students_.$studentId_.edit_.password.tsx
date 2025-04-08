@@ -94,7 +94,7 @@ export default function EditPasswordPage({ loaderData }: Route.ComponentProps) {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input type="text" {...field} />
+                                        <Input type="text" placeholder="Enter new password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

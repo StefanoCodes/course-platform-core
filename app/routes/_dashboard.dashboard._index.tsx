@@ -1,4 +1,5 @@
 import { redirect } from "react-router";
+import { CoursesAnalytics } from "~/components/features/courses/courses-analytics";
 import { StudentAnalytics } from "~/components/features/students/student-analytics";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
@@ -15,8 +16,7 @@ export default function Page() {
     return (
         <div className="flex flex-col gap-8 divide-y divide-border">
             <StudentAnalytics />
-            {/* TODO: Update this with the courses Analytics Data */}
-            <StudentAnalytics />
+            <CoursesAnalytics />
         </div>
     )
 }
