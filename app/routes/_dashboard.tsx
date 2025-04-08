@@ -47,7 +47,7 @@ export default function Page() {
       <SidebarInset>
         <div className="flex flex-1 flex-col p-4 h-full">
           {/* BreadCrumbs Component */}
-          <div className="flex items-center gap-2 pb-4 md:pb-10">
+          <div className="flex items-center gap-2 pb-4 border-b">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-2" />
             <Breadcrumbs />
