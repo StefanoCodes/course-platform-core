@@ -30,3 +30,9 @@ export function titleToSlug(title: string) {
   const slug = hyphenatedTitle.replace(/[^a-z0-9-]/g, '');
   return slug;
 }
+
+// extract the video id from a youtube url
+export function extractVideoId(url: string) {
+  const videoId = url.split('v=')[1];
+  return videoId;
+}

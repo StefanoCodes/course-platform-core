@@ -1,5 +1,14 @@
 import { FileText } from "lucide-react";
-
+import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug._index";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { redirect } from "react-router";
+export async function loader({ request }: Route.LoaderArgs) {
+    // auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/admin/login")
+    }
+}
 export default function CourseIndex() {
     return (
         <div className="flex flex-col h-full bg-gray-50 p-8 flex-1 border border-gray-200 border-l-0 border-t-0 justify-center items-center text-center">

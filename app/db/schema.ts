@@ -48,8 +48,8 @@ export const coursesTable = pgTable('courses', {
 // which we will use to get the courses that a student has access to
 export const studentCoursesTable = pgTable('student_courses', {
     id: uuid('id').primaryKey().defaultRandom(),
-    studentId: uuid('student_id').references(() => studentsTable.studentId),
-    courseId: uuid('course_id').references(() => coursesTable.id),
+    studentId: uuid('student_id').references(() => studentsTable.studentId).notNull(),
+    courseId: uuid('course_id').references(() => coursesTable.id).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => [index('student_course_student_id_index').on(t.studentId), index('student_course_course_id_index').on(t.courseId)]);
@@ -59,9 +59,10 @@ export const segmentsTable = pgTable('segments', {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 255 }).notNull(),
     description: varchar('description', { length: 255 }),
-    videoUrl: varchar('video_url', { length: 255 }),
+    videoUrl: varchar('video_url', { length: 255 }).notNull(),
+    isPublic: boolean('is_public').notNull().default(true),
     slug: varchar('slug', { length: 255 }).notNull(),
-    courseId: uuid('course_id').references(() => coursesTable.id),
+    courseId: uuid('course_id').references(() => coursesTable.id).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => [index('segment_name_index').on(t.name), index('segment_slug_index').on(t.slug)]);

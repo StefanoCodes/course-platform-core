@@ -1,8 +1,14 @@
 import { Outlet, redirect, useRouteLoaderData } from "react-router";
 import { CourseEditSidebar } from "~/components/features/courses/edit/course-edit-sidebar";
 import type { Route } from "./+types/_dashboard._editor";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { getAllSegmentsForCourse } from "~/lib/data-access/segments.sever";
 export async function loader({ request, params }: Route.LoaderArgs) {
+    // auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/admin/login")
+    }
     const { slug: courseSlug } = params;
     if (!courseSlug) {
         throw redirect('/dashboard/courses');

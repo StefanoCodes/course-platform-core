@@ -28,7 +28,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         throw redirect("/dashboard/students")
     }
 
-    const { success, student } = await GetStudentById(request, studentId as string)
+    const { success, student } = await GetStudentById(request, studentId)
     if (!success || !student) {
         throw redirect("/dashboard/students")
     }
