@@ -20,3 +20,13 @@ export const formatDateToString = (
     ...options,
   });
 };
+
+export function titleToSlug(title: string) {
+  // lowercase the title
+  const lowerCaseTitle = title.toLowerCase();
+  // replace spaces with hyphens
+  const hyphenatedTitle = lowerCaseTitle.replace(/ /g, '-');
+  // remove special characters
+  const slug = hyphenatedTitle.replace(/[^a-z0-9-]/g, '');
+  return slug;
+}
