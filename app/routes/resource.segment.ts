@@ -1,8 +1,8 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleCreateSegment } from "~/lib/actions/segment/segment.server"
+import { handleCreateSegment, handleEditSegment } from "~/lib/actions/segment/segment.server"
 
 
-const intents = ["create-segment"]
+const intents = ["create-segment", "edit-segment"]
 
 export async function loader() {
     return data('Not Allowed', { status: 405 })
@@ -20,6 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
     try {
         const handlers = {
             'create-segment': handleCreateSegment,
+            'edit-segment': handleEditSegment,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]

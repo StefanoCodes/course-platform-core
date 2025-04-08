@@ -45,7 +45,7 @@ export default function Page() {
       className="h-dvh"
     >
       <AppSidebar variant="inset" />
-      <SidebarInset>
+      <SidebarInset className="overflow-hidden">
         <div className="flex flex-1 flex-col p-4 h-full">
           {/* BreadCrumbs Component */}
           <div className="flex items-center gap-2 pb-4 border-b">
@@ -54,7 +54,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <div className="md:container md:mx-auto overflow-hidden h-full"><Outlet /></div>}
+          {isLoading ? <DashboardSkeleton /> : <div className="md:container md:mx-auto overflow-y-auto h-full"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>
