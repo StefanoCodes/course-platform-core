@@ -49,7 +49,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
     useEffect(() => {
         if (fetcher.data) {
             if (fetcher.data.success) {
-                toast.success("Student updated successfully");
+                toast.success(fetcher.data.message);
             }
             if (!fetcher.data.success) {
                 toast.error(fetcher.data.message);
