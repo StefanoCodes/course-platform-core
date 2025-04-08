@@ -1,8 +1,8 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleCreateCourse } from "~/lib/actions/course/course.server"
+import { handleCreateSegment } from "~/lib/actions/segment/segment.server"
 
 
-const intents = ["create-course"]
+const intents = ["create-segment"]
 
 export async function loader() {
     return data('Not Allowed', { status: 405 })
@@ -12,12 +12,14 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData()
     const intent = formData.get('intent') as string
 
+    console.log("intent", intent)
+
     if (!intent || !intents.includes(intent)) {
         return data({ success: false, message: 'Invalid form submission' }, { status: 400 })
     }
     try {
         const handlers = {
-            'create-course': handleCreateCourse,
+            'create-segment': handleCreateSegment,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]

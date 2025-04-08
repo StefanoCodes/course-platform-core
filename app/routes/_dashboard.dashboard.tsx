@@ -20,7 +20,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { totalStudentsCount, activeStudentsCount, inactiveStudentsCount, totalCoursesCount, totalPublicCourses, totalPrivateCourses }
 }
 
-
 export function useDashboardLoaderData() {
   const data = useRouteLoaderData<typeof loader>("routes/_dashboard.dashboard")
   if (!data) {

@@ -48,7 +48,7 @@ export function CreateCourse() {
                     <DialogTitle>Create Course</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <fetcher.Form method="POST" action="/resource/student" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
+                    <fetcher.Form method="POST" action="/resource/course" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
                         fetcher.submit({ ...data, intent: "create-course" }, {
                             action: "/resource/course",
                             method: "POST"
