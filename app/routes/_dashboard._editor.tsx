@@ -1,21 +1,23 @@
-import { Outlet, useRouteLoaderData } from "react-router";
-import type { Route } from "./+types/_dashboard._editor";
+import { Outlet, redirect, useRouteLoaderData } from "react-router";
 import { CourseEditSidebar } from "~/components/features/courses/edit/course-edit-sidebar";
-
-// load all the segments of a course
-export async function loader({ params }: Route.LoaderArgs) {
-    const { slug } = params;
-    return { slug };
+import type { Route } from "./+types/_dashboard._editor";
+import { getAllSegmentsForCourse } from "~/lib/data-access/segments.sever";
+export async function loader({ request, params }: Route.LoaderArgs) {
+    const { slug: courseSlug } = params;
+    if (!courseSlug) {
+        throw redirect('/dashboard/courses');
+    }
+    // get all segments for that course
+    const { segments } = await getAllSegmentsForCourse(request, courseSlug);
+    return { courseSlug, segments };
 }
-
 export function useEditorLoaderData() {
     const data = useRouteLoaderData<typeof loader>("routes/_dashboard._editor");
     if (!data) {
-        throw new Error('Editor Loader needs to be used within a EditorLoader context, the route needs to be a child of the Editor route')
+        throw new Error("Editor Loader needs to be used within a EditorLoader context, the route needs to be a child of the Editor route");
     }
     return data;
 }
-
 export default function CourseEditorLayout() {
     return (
         <div className="flex flex-col gap-4 h-full overflow-hidden">

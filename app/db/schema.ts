@@ -59,7 +59,7 @@ export const segmentsTable = pgTable('segments', {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 255 }).notNull(),
     description: varchar('description', { length: 255 }),
-    vimeoLink: varchar('vimeo_link', { length: 255 }),
+    videoUrl: varchar('video_url', { length: 255 }),
     slug: varchar('slug', { length: 255 }).notNull(),
     courseId: uuid('course_id').references(() => coursesTable.id),
     created_at: timestamp('created_at').notNull().defaultNow(),

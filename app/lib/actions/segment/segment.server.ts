@@ -1,0 +1,57 @@
+import { data, redirect } from "react-router";
+import db from "~/db/index.server";
+import { segmentsTable } from "~/db/schema";
+import { getCourseBySlug } from "~/lib/data-access/courses.server";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { titleToSlug } from "~/lib/utils";
+import { createSegmentSchema } from "~/lib/zod-schemas/segment";
+
+export async function handleCreateSegment(request: Request, formData: FormData) {
+  // auth check
+  const { isLoggedIn } = await isAdminLoggedIn(request);
+
+  if (!isLoggedIn) {
+    throw redirect('/admin/login');
+  }
+
+  // validation
+  const unvalidatedFields = createSegmentSchema.safeParse(Object.fromEntries(formData));
+  if (!unvalidatedFields.success) {
+    return data({ success: false, message: 'Invalid form data' }, { status: 400 });
+  }
+  const { courseSlug, name, description, videoUrl } = unvalidatedFields.data;
+
+  try {
+    // getting the course where the segment will be created
+    const { success: courseSuccess, course } = await getCourseBySlug(request, courseSlug);
+
+    if (!courseSuccess || !course) {
+      return data({ success: false, message: 'Course not found' }, { status: 404 });
+    }
+
+    // convert segment name to slug
+    const slug = titleToSlug(name);
+
+    // insert segment into database
+
+    const [insertedSegment] = await db.insert(segmentsTable).values({
+      name,
+      description,
+      videoUrl,
+      slug,
+      courseId: course.id,
+    }).returning({
+      slug: segmentsTable.slug,
+    })
+
+    if (!insertedSegment.slug) {
+      return data({ success: false, message: 'Failed to create segment' }, { status: 500 });
+    }
+
+    return data({ success: true, message: 'Segment created successfully', segmentSlug: insertedSegment.slug }, { status: 200 });
+  }
+  catch (error) {
+    console.error('Error creating segment:', error);
+    return data({ success: false, message: error instanceof Error ? error.message : 'An unexpected error occurred' }, { status: 500 });
+  }
+}

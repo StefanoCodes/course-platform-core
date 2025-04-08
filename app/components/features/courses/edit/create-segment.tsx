@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useFetcher, useNavigate } from "react-router";
+import { redirect, useFetcher, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
@@ -10,12 +10,13 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
 import { createSegmentSchema, type CreateSegmentSchema } from "~/lib/zod-schemas/segment";
-import { useEditorLoaderData } from "~/routes/_dashboard._editor";
+
 type CreateSegmentFetcherResponse = FetcherResponse & {
     segmentSlug: string;
 }
 export function CreateSegment() {
-    const { slug: courseSlug } = useEditorLoaderData();
+    const { slug: courseSlug } = useParams();
+    if (!courseSlug) throw redirect('/dashboard/courses')
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const fetcher = useFetcher<CreateSegmentFetcherResponse>();
     const isSubmitting = fetcher.state === "submitting";
@@ -99,8 +100,23 @@ export function CreateSegment() {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="courseSlug"
+                            defaultValue={courseSlug}
+                            disabled={isSubmitting}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input hidden {...field} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                         {/* Submit button */}
-                        <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
+                        <Button type="submit" onClick={() => {
+                            console.log("clicked")
+                        }} className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

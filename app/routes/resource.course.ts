@@ -24,6 +24,6 @@ export async function action({ request }: ActionFunctionArgs) {
         return handler(request, formData)
     } catch (error) {
         console.error('Action error:', error)
-        return data({ error: 'An unexpected error occurred' }, { status: 500 })
+        return data({ success: false, message: 'An unexpected error occurred' }, { status: 500 })
     }
 }

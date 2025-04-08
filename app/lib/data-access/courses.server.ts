@@ -21,6 +21,22 @@ export async function getAllCourses(request: Request) {
     }
 }
 
+// get course by slug
+export async function getCourseBySlug(request: Request, slug: string) {
+    // auth check 
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/admin/login");
+    }
+    try {
+        const [course] = await db.select().from(coursesTable).where(eq(coursesTable.slug, slug)).limit(1);
+        return { success: true, course };
+    } catch (error) {
+        console.error("🔴Error fetching course from database:", error);
+        return { success: false, course: null };
+    }
+}
+
 // get courses analytics
 
 export async function GetCoursesAnalytics(request: Request) {
