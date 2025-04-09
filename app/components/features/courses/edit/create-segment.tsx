@@ -45,7 +45,7 @@ export function CreateSegment() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Segment</Button>
+                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Segment</Button>
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-8">
                 <DialogHeader>
@@ -116,7 +116,7 @@ export function CreateSegment() {
                         {/* Submit button */}
                         <Button type="submit" onClick={() => {
                             console.log("clicked")
-                        }} className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
+                        }} className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

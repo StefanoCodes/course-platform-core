@@ -27,7 +27,6 @@ import {
 } from "~/components/ui/sidebar"
 import { useDashboardLayoutLoaderData } from "~/routes/_dashboard"
 import { LogoutProvider } from "./logout"
-import { useMatches } from "react-router"
 
 export function NavUser() {
 

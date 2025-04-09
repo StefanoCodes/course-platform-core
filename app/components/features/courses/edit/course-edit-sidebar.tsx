@@ -19,7 +19,7 @@ export function CourseEditSidebar() {
                                 const isActive = pathname.includes(segment.slug);
                                 return (
                                     <li key={segment.id} className="w-full">
-                                        <Link className={cn("text-sm capitalize block bg-gray-100 hover:bg-gray-200 transition-all duration-300 w-full p-2 rounded-md text-gray-500 hover:text-gray-700", isActive && "bg-blue-500 text-white hover:text-gray-300")} to={`/dashboard/courses/${courseSlug}/${segment.slug}`}>
+                                        <Link className={cn("text-sm capitalize block bg-gray-100 hover:bg-gray-200 transition-all duration-300 w-full p-2 rounded-md text-gray-500 hover:text-gray-700", isActive && "bg-brand-primary text-white hover:text-gray-300")} to={`/dashboard/courses/${courseSlug}/${segment.slug}`}>
                                             {segment.name}
                                         </Link>
                                     </li>

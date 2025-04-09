@@ -4,7 +4,7 @@ import { Input } from "~/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { redirect, useFetcher } from "react-router";
+import { redirect, useFetcher, useSubmit } from "react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { createStudentSchema, type CreateStudentSchema } from "~/lib/zod-schemas/student";
@@ -12,13 +12,12 @@ import type { FetcherResponse } from "~/lib/types";
 import { generateRandomPassword } from "~/lib/utils";
 
 export function CreateStudent() {
-
-
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [hasCopied, setHasCopied] = useState(false);
     const fetcher = useFetcher<FetcherResponse>();
     const isSubmitting = fetcher.state === "submitting";
+
     const form = useForm<CreateStudentSchema>({
         resolver: zodResolver(createStudentSchema),
         defaultValues: {
@@ -39,6 +38,7 @@ export function CreateStudent() {
             }
         }
     }, [fetcher.data])
+    // null or undefined 
 
     useEffect(() => {
         // when dialog closes reset the form
@@ -58,7 +58,7 @@ export function CreateStudent() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Student</Button>
+                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Student</Button>
             </DialogTrigger>
             {isSubmitted ? (
                 <SubmittedState email={form.getValues("email")} password={form.getValues("password")} setHasCopied={setHasCopied} />
@@ -68,6 +68,7 @@ export function CreateStudent() {
                         <DialogTitle>Create Student</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
+
                         <fetcher.Form method="POST" action="/resource/student" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
                             fetcher.submit({ ...data, intent: "create-student" }, {
                                 action: "/resource/student",
@@ -138,7 +139,7 @@ export function CreateStudent() {
                                 />
                             </div>
                             {/* Submit button */}
-                            <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
+                            <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
                         </fetcher.Form>
                     </Form>
                 </DialogContent>

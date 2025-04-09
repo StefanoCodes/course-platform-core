@@ -156,7 +156,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white"
+                                    className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white"
                                     disabled={isSubmitting || !isThereAnyChanges}
                                 >
                                     {isSubmitting ? "Saving Changes..." : "Save Changes"}
