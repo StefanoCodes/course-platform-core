@@ -41,7 +41,7 @@ export function CreateCourse() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Course</Button>
+                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Course</Button>
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-8">
                 <DialogHeader>
@@ -84,7 +84,7 @@ export function CreateCourse() {
                         />
 
                         {/* Submit button */}
-                        <Button type="submit" className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Course..." : "Create Course"}</Button>
+                        <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Course..." : "Create Course"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

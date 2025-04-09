@@ -2,7 +2,7 @@ import db from "~/db/index.server";
 import { coursesTable, studentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "../supabase-utils.server";
 import { data, redirect } from "react-router";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { count } from "drizzle-orm";
 
 // get all courses
@@ -13,7 +13,7 @@ export async function getAllCourses(request: Request) {
         throw redirect("/admin/login");
     }
     try {
-        const courses = await db.select().from(coursesTable);
+        const courses = await db.select().from(coursesTable).orderBy(desc(coursesTable.created_at));
         return { success: true, courses };
     } catch (error) {
         console.error("🔴Error fetching courses from database:", error);

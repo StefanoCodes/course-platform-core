@@ -63,7 +63,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
         <div className="p-4 flex flex-col gap-4">
             {/* Go back to course segment */}
             <Button variant={"link"} asChild>
-                <Link to={href("/dashboard/courses/:slug/:segment", { segment: segmentData.slug, slug: courseSlug })}>
+                <Link to={href("/dashboard/courses/:slug/:segment/edit", { segment: segmentData.slug, slug: courseSlug })}>
                     <ArrowLeftIcon className="w-4 h-4" />
                     Back to segment
                 </Link>
@@ -156,7 +156,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    className="bg-blue-500 text-white cursor-pointer hover:bg-blue-600 hover:text-white"
+                                    className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white"
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? "Saving Changes..." : "Save Changes"}

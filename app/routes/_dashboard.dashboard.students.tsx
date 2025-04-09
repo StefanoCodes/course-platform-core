@@ -23,9 +23,8 @@ export function useStudentsLoaderData() {
     if (!data) throw new Error("Cannot use students loader data if the route is not a child of the students route")
     return data
 }
-
-
 export default function Page() {
+
     return (
         <div className="flex flex-col gap-4 h-full overflow-hidden">
             <div className="flex flex-row justify-between w-full ">
