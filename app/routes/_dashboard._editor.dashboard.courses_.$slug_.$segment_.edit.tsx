@@ -14,6 +14,8 @@ import type { EditSegmentSchema } from "~/lib/zod-schemas/segment";
 import { editSegmentSchema } from "~/lib/zod-schemas/segment";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment_.edit";
 import { DeleteSegment } from "~/components/features/courses/edit/delete-segment";
+import { MarkSegmentAsPrivate } from "~/components/features/courses/edit/mark-segment-as-private";
+import { MarkSegmentAsPublic } from "~/components/features/courses/edit/mark-segment-as-public";
 
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -64,7 +66,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
         <div className="p-4 flex flex-col gap-4">
             {/* Go back to course segment */}
             <Button variant={"link"} asChild>
-                <Link to={href("/dashboard/courses/:slug/:segment/edit", { segment: segmentData.slug, slug: courseSlug })}>
+                <Link to={href("/dashboard/courses/:slug/:segment", { segment: segmentData.slug, slug: courseSlug })}>
                     <ArrowLeftIcon className="w-4 h-4" />
                     Back to segment
                 </Link>
@@ -76,7 +78,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
                     <CardTitle>Edit Segment</CardTitle>
                     <CardDescription>Update the segment's information</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="border-b border-t py-4">
                     <Form {...form}>
                         <fetcher.Form
                             method="POST"
@@ -166,7 +168,19 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
                         </fetcher.Form>
                     </Form>
                 </CardContent>
-                <DeleteSegment segmentId={segmentData.id} courseSlug={courseSlug} />
+                <div className="flex flex-col gap-4 px-4">
+                    <h4 className="text-lg">Additional Actions</h4>
+
+                    <div className="flex gap-2 md:flex-row flex-col items-center justify-between">
+                        {segmentData.isPublic ? (
+                            <MarkSegmentAsPrivate segmentId={segmentData.id} courseSlug={courseSlug} />
+                        ) : (
+                            <MarkSegmentAsPublic segmentId={segmentData.id} courseSlug={courseSlug} />
+                        )}
+
+                        <DeleteSegment segmentId={segmentData.id} courseSlug={courseSlug} />
+                    </div>
+                </div>
             </Card>
         </div>
     )

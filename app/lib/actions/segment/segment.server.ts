@@ -130,3 +130,67 @@ export async function handleDeleteSegment(request: Request, formData: FormData) 
     return data({ success: false, message: error instanceof Error ? error.message : 'An unexpected error occurred' }, { status: 500 });
   }
 }
+export async function handleMakeSegmentPrivate(request: Request, formData: FormData) {
+  // auth check
+  const { isLoggedIn } = await isAdminLoggedIn(request);
+
+  if (!isLoggedIn) {
+    throw redirect('/admin/login');
+  }
+  const segmentId = formData.get('id') as string;
+  const courseSlug = formData.get('courseSlug') as string;
+
+  if (!segmentId || !courseSlug) {
+    return data({ success: false, message: 'Invalid form data' }, { status: 400 });
+  }
+
+  try {
+    // getting the course where the segment is created in
+    const { success: courseSuccess, course } = await getCourseBySlug(request, courseSlug);
+
+    if (!courseSuccess || !course) {
+      return data({ success: false, message: 'Course not found' }, { status: 404 });
+    }
+    // db mutation
+    await db.update(segmentsTable).set({
+      isPublic: false,
+    }).where(and(eq(segmentsTable.id, segmentId), eq(segmentsTable.courseId, course.id)));
+    return data({ success: true, message: 'Segment made private successfully' }, { status: 200 });
+  }
+  catch (error) {
+    console.error('Error making segment private:', error);
+    return data({ success: false, message: error instanceof Error ? error.message : 'An unexpected error occurred' }, { status: 500 });
+  }
+}
+export async function handleMakeSegmentPublic(request: Request, formData: FormData) {
+  // auth check
+  const { isLoggedIn } = await isAdminLoggedIn(request);
+
+  if (!isLoggedIn) {
+    throw redirect('/admin/login');
+  }
+  const segmentId = formData.get('id') as string;
+  const courseSlug = formData.get('courseSlug') as string;
+
+  if (!segmentId || !courseSlug) {
+    return data({ success: false, message: 'Invalid form data' }, { status: 400 });
+  }
+
+  try {
+    // getting the course where the segment is created in
+    const { success: courseSuccess, course } = await getCourseBySlug(request, courseSlug);
+
+    if (!courseSuccess || !course) {
+      return data({ success: false, message: 'Course not found' }, { status: 404 });
+    }
+    // db mutation
+    await db.update(segmentsTable).set({
+      isPublic: true,
+    }).where(and(eq(segmentsTable.id, segmentId), eq(segmentsTable.courseId, course.id)));
+    return data({ success: true, message: 'Segment made public successfully' }, { status: 200 });
+  }
+  catch (error) {
+    console.error('Error making segment public:', error);
+    return data({ success: false, message: error instanceof Error ? error.message : 'An unexpected error occurred' }, { status: 500 });
+  }
+}
