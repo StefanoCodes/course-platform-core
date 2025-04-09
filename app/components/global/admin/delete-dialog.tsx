@@ -6,10 +6,14 @@ import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 import type { FetcherResponse } from "~/lib/types";
 
+interface HiddenInput {
+    name: string;
+    value: string;
+}
+
 interface DeleteDialogProps {
     resourceRoute: string;
-    resourceId: string;
-    intent: string;
+    hiddenInputs: HiddenInput[];
     title: string;
     description: React.ReactNode;
     trigger: React.ReactNode;
@@ -18,8 +22,7 @@ interface DeleteDialogProps {
 
 export function DeleteDialog({
     resourceRoute,
-    resourceId,
-    intent,
+    hiddenInputs,
     title,
     description,
     trigger,
@@ -50,8 +53,14 @@ export function DeleteDialog({
 
             <DialogContent>
                 <fetcher.Form className="flex flex-col gap-4" method="POST" action={resourceRoute}>
-                    <input type="hidden" name="id" value={resourceId} />
-                    <input type="hidden" name="intent" value={intent} />
+                    {hiddenInputs.map((input, index) => (
+                        <input
+                            key={index}
+                            type="hidden"
+                            name={input.name}
+                            value={input.value}
+                        />
+                    ))}
 
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
