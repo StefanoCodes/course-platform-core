@@ -1,7 +1,9 @@
+import { CheckCircleIcon, LockIcon } from "lucide-react";
+import { Link, useLocation } from "react-router";
+import { Badge } from "~/components/ui/badge";
+import { cn } from "~/lib/utils";
 import { useEditorLoaderData } from "~/routes/_dashboard._editor";
 import { CreateSegment } from "./create-segment";
-import { Link, useLocation } from "react-router";
-import { cn } from "~/lib/utils";
 
 export function CourseEditSidebar() {
     const { segments, courseSlug } = useEditorLoaderData();
@@ -19,8 +21,11 @@ export function CourseEditSidebar() {
                                 const isActive = pathname.includes(segment.slug);
                                 return (
                                     <li key={segment.id} className="w-full">
-                                        <Link className={cn("text-sm capitalize block bg-gray-100 hover:bg-gray-200 transition-all duration-300 w-full p-2 rounded-md text-gray-500 hover:text-gray-700", isActive && "bg-brand-primary text-white hover:text-gray-300")} to={`/dashboard/courses/${courseSlug}/${segment.slug}`}>
-                                            {segment.name}
+                                        <Link className={cn("text-sm capitalize block bg-gray-100 hover:bg-gray-400 transition-all duration-300 w-full p-2 rounded-md text-gray-500 hover:text-gray-700", isActive && "bg-brand-primary text-white")} to={`/dashboard/courses/${courseSlug}/${segment.slug}`}>
+                                            <div className="w-full flex justify-between items-center">
+                                                <p>{segment.name} </p>
+                                                {segment.isPublic ? <CheckCircleIcon className="w-4 h-4 text-green-200" /> : <LockIcon className="w-4 h-4 text-yellow-500" />}
+                                            </div>
                                         </Link>
                                     </li>
                                 )
