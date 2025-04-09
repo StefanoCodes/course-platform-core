@@ -13,6 +13,7 @@ import type { FetcherResponse } from "~/lib/types";
 import type { EditSegmentSchema } from "~/lib/zod-schemas/segment";
 import { editSegmentSchema } from "~/lib/zod-schemas/segment";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment_.edit";
+import { DeleteSegment } from "~/components/features/courses/edit/delete-segment";
 
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -165,6 +166,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
                         </fetcher.Form>
                     </Form>
                 </CardContent>
+                <DeleteSegment segmentId={segmentData.id} courseSlug={courseSlug} />
             </Card>
         </div>
     )
