@@ -114,7 +114,7 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
         return data({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const courseId = formData.get('courseId') as string;
+    const courseId = formData.get('id') as string;
 
     if (!courseId) {
         return data({ success: false, message: 'Course ID is required' }, { status: 400 });
