@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { coursesTable } from "~/db/schema";
+import { coursesTable, segmentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { titleToSlug } from "~/lib/utils";
 import { createCourseSchema } from "~/lib/zod-schemas/course";
@@ -101,6 +101,35 @@ export async function handleMakePrivate(request: Request, formData: FormData) {
         }
 
         return data({ success: true, message: 'Course made private successfully', courseSlug: updatedCourse.slug }, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return data({ success: false, message: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });
+    }
+}
+
+export async function handleDeleteCourse(request: Request, formData: FormData) {
+    // auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const courseId = formData.get('courseId') as string;
+
+    if (!courseId) {
+        return data({ success: false, message: 'Course ID is required' }, { status: 400 });
+    }
+
+    try {
+        // need to delete all the segments connected to the course aswell i belive with onCascade
+        await db.transaction(async (tx) => {
+            // delete all the segments connected to the course
+            await tx.delete(segmentsTable).where(eq(segmentsTable.courseId, courseId));
+            // delete the course
+            await tx.delete(coursesTable).where(eq(coursesTable.id, courseId));
+        });
+
+        return data({ success: true, message: 'Course deleted successfully' }, { status: 200 });
     } catch (error) {
         console.error(error);
         return data({ success: false, message: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });

@@ -113,10 +113,7 @@ export function CreateSegment() {
                                 </FormItem>
                             )}
                         />
-                        {/* Submit button */}
-                        <Button type="submit" onClick={() => {
-                            console.log("clicked")
-                        }} className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
+                        <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

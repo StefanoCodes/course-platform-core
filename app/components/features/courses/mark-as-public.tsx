@@ -7,7 +7,7 @@ import type { FetcherResponse } from "~/lib/types";
 
 export function MarkAsPublic({ courseId }: { courseId: string }) {
     const fetcher = useFetcher<FetcherResponse>();
-    const isSubmitting = fetcher.state === 'submitting';
+    const isSubmitting = fetcher.state !== 'idle';
     useEffect(() => {
         if (fetcher.data) {
             if (fetcher.data.success) {
