@@ -21,7 +21,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader className="p-4 text-xl flex flex-row items-center gap-2">
         <PrimaryLogo />
-        <span className="text-xl font-medium">Admin Panel</span>
+        {/* <span className="text-xl font-medium">Admin Panel</span> */}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={dashboardConfig.sidebar.items} />

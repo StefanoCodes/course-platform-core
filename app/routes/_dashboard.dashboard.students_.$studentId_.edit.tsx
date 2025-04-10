@@ -60,7 +60,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 py-4">
             <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" asChild>
                     <Link to={`/dashboard/students/${student.studentId}`}>

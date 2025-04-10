@@ -14,7 +14,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Page() {
 
     return (
-        <div className="flex flex-col gap-8 divide-y divide-border">
+        <div className="flex flex-col gap-8 divide-y divide-border py-4">
             <StudentAnalytics />
             <CoursesAnalytics />
         </div>

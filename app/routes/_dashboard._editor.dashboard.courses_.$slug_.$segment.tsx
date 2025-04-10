@@ -27,8 +27,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
 export default function CourseSegment({ loaderData }: Route.ComponentProps) {
     const { courseSlug, segmentData } = loaderData;
-
-    // todo: display course information title, description, video player
     return <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full [scrollbar-width:thin]">
         {/* display created at */}
         <div className="flex items-center justify-between w-full">
