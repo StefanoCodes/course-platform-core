@@ -1,6 +1,6 @@
 import { redirect, useRouteLoaderData } from "react-router";
 import { StudentsList } from "~/components/features/students/students-list";
-import { GetAllStudents } from "~/lib/data-access/students.server";
+import { GetAllStudents } from "~/lib/admin/data-access/students.server";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard.students";
 

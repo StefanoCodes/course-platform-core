@@ -2,7 +2,7 @@ import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment";
 import { href, Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
-import { getSegmentBySlug } from "~/lib/data-access/segments.sever";
+import { getSegmentBySlug } from "~/lib/admin/data-access/segments.sever";
 import { extractVideoId, formatDateToString } from "~/lib/utils";
 import { ArrowRightIcon } from "lucide-react";
 export async function loader({ request, params }: Route.LoaderArgs) {

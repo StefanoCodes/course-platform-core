@@ -1,6 +1,5 @@
 import { CheckCircleIcon, LockIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
-import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 import { useEditorLoaderData } from "~/routes/_dashboard._editor";
 import { CreateSegment } from "./create-segment";

@@ -4,8 +4,8 @@ import { data } from "react-router";
 import db from "~/db/index.server";
 import { createSupabaseAdminClient, createSupabaseServerClient } from '~/db/supabase/server';
 import { isAdminLoggedIn } from '~/lib/supabase-utils.server';
-import { createStudentSchema, updateStudentPasswordSchema, updateStudentSchema } from "~/lib/zod-schemas/student";
-import { studentsTable } from './../../../db/schema';
+import { createStudentSchema, updateStudentPasswordSchema, updateStudentSchema } from "~/lib/admin/zod-schemas/student";
+import { studentsTable } from '~/db/schema';
 
 
 
@@ -65,7 +65,7 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
                 id: studentsTable.id,
             })
 
-            if (!insertedStudent.id) {
+            if (!insertedStudent) {
                 throw new Error("Something went wrong")
             }
 
@@ -99,7 +99,7 @@ export async function handleActivateStudent(request: Request, formData: FormData
             studentId: studentsTable.studentId
         })
 
-        if (!updatedStudent.studentId) {
+        if (!updatedStudent) {
             throw new Error("Something went wrong")
         }
 
@@ -129,7 +129,7 @@ export async function handleDeactivateStudent(request: Request, formData: FormDa
             id: studentsTable.id
         })
 
-        if (!updatedStudent.id) {
+        if (!updatedStudent) {
             throw new Error("Something went wrong")
         }
 
@@ -245,7 +245,7 @@ export async function handleUpdateStudentPassword(request: Request, formData: Fo
             }).where(eq(studentsTable.studentId, studentId)).returning({
                 studentId: studentsTable.studentId
             })
-            if (!updatedStudent.studentId) {
+            if (!updatedStudent) {
                 throw new Error("Failed to update password")
             }
             // TODO: check if we need to logout them out ?

@@ -4,7 +4,7 @@ import { Breadcrumbs } from "~/components/global/admin/breadcrumbs";
 import { DashboardSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { Separator } from "~/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-import { getAdminById } from "~/lib/data-access/admin.server";
+import { getAdminById } from "~/lib/admin/data-access/admin.server";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
 

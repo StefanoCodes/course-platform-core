@@ -25,7 +25,7 @@ export default function AuthenticationPage() {
           <p className="text-base text-muted-foreground">
             Enter your credentials below to enter the admin area
           </p>
-          <LoginAuthForm />
+          <LoginAuthForm type="admin" />
         </div>
       </div>
       {/* RIGHT SIDE */}

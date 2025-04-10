@@ -4,7 +4,7 @@ import db from "~/db/index.server";
 import { coursesTable, segmentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { titleToSlug } from "~/lib/utils";
-import { createCourseSchema } from "~/lib/zod-schemas/course";
+import { createCourseSchema } from "~/lib/admin/zod-schemas/course";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
     // auth check

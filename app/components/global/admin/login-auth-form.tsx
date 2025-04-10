@@ -12,11 +12,19 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { loginSchema } from "~/lib/admin/zod-schemas/auth";
+import type { LoginSchema } from "~/lib/admin/zod-schemas/auth";
 import type { FetcherResponse } from "~/lib/types";
-import { loginSchema, type LoginSchema } from "~/lib/zod-schemas/auth";
 
 
-export default function LoginAuthForm() {
+export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
+	const config = type === "admin" ? {
+		action: "/resource/auth",
+		intent: "sign-in-admin",
+	} : {
+		action: "/resource/auth",
+		intent: "sign-in-student",
+	}
 	const fetcher = useFetcher<FetcherResponse>();
 	const isPending = fetcher.state !== "idle";
 	const form = useForm<LoginSchema>({
@@ -43,16 +51,16 @@ export default function LoginAuthForm() {
 		<div className="rounded-lg bg-gray-100 p-6 md:p-8">
 			<Form {...form}>
 				<fetcher.Form
-					action="/resource/auth"
+					action={config.action}
 					method="POST"
 					onSubmit={form.handleSubmit((data) => {
 						fetcher.submit(
 							{
 								...data,
-								intent: "sign-in-admin",
+								intent: config.intent,
 							},
 							{
-								action: "/resource/auth",
+								action: config.action,
 								method: "POST",
 							}
 						);
@@ -112,7 +120,7 @@ export default function LoginAuthForm() {
 							disabled={isPending}
 							className="bg-gray-900 hover:bg-black text-white cursor-pointer h-10 font-medium"
 						>
-							{isPending ? "Signing in..." : "Sign in"}
+							{isPending ? "Logging in..." : "Login"}
 						</Button>
 					</div>
 				</fetcher.Form>

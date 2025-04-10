@@ -6,7 +6,7 @@ import { StatusBadge } from "~/components/features/students/status-badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { GetStudentById } from "~/lib/data-access/students.server";
+import { GetStudentById } from "~/lib/admin/data-access/students.server";
 import { formatDateToString } from "~/lib/utils";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
