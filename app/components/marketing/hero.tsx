@@ -94,7 +94,7 @@ export default function Hero({
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-var(--navbar-height))] w-full flex items-center justify-center overflow-hidden bg-[#030303]">
+    <div className="relative min-h-[calc(100dvh-var(--navbar-height))] w-full flex items-center justify-center overflow-hidden bg-white">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
       <div className="absolute inset-0 overflow-hidden">
@@ -159,7 +159,7 @@ export default function Hero({
 
           <motion.div custom={1} variants={fadeUpVariants} initial="hidden" animate="visible">
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 md:mb-8 tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">{title1}</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-black to-black/80">{title1}</span>
               <br />
               <span
                 className={cn(
@@ -182,7 +182,7 @@ export default function Hero({
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+      {/* <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" /> */}
     </div>
   )
 }
