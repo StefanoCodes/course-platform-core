@@ -8,9 +8,9 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { GetStudentById } from "~/lib/data-access/students.server";
+import { GetStudentById } from "~/lib/admin/data-access/students.server";
 import type { FetcherResponse } from "~/lib/types";
-import { updateStudentSchema, type UpdateStudentSchema } from "~/lib/zod-schemas/student";
+import { updateStudentSchema, type UpdateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId_.edit";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 

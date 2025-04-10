@@ -1,5 +1,5 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleCreateCourse, handleDeleteCourse, handleMakePrivate, handleMakePublic } from "~/lib/actions/course/course.server"
+import { handleCreateCourse, handleDeleteCourse, handleMakePrivate, handleMakePublic } from "~/lib/admin/actions/course/course.server"
 
 
 const intents = ["create-course", "make-public", "make-private", "delete-course"]

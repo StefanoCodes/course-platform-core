@@ -2,10 +2,10 @@ import { and, eq } from "drizzle-orm";
 import { data, redirect } from "react-router";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";
-import { getCourseBySlug } from "~/lib/data-access/courses.server";
+import { getCourseBySlug } from "~/lib/admin/data-access/courses.server";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { titleToSlug } from "~/lib/utils";
-import { createSegmentSchema, editSegmentSchema } from "~/lib/zod-schemas/segment";
+import { createSegmentSchema, editSegmentSchema } from "~/lib/admin/zod-schemas/segment";
 
 export async function handleCreateSegment(request: Request, formData: FormData) {
   // auth check
@@ -45,7 +45,7 @@ export async function handleCreateSegment(request: Request, formData: FormData) 
       slug: segmentsTable.slug,
     })
 
-    if (!insertedSegment.slug) {
+    if (!insertedSegment) {
       return data({ success: false, message: 'Failed to create segment' }, { status: 500 });
     }
 
@@ -90,7 +90,7 @@ export async function handleEditSegment(request: Request, formData: FormData) {
         slug: segmentsTable.slug,
       })
 
-    if (!updatedSegment.slug) {
+    if (!updatedSegment) {
       return data({ success: false, message: 'Failed to update segment' }, { status: 500 });
     }
     return data({ success: true, message: 'Segment updated successfully', segmentSlug: updatedSegment.slug }, { status: 200 });

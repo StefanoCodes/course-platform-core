@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
-import { createCourseSchema, type CreateCourseSchema } from "~/lib/zod-schemas/course";
+import { createCourseSchema, type CreateCourseSchema } from "~/lib/admin/zod-schemas/course";
 type CreateCourseFetcherResponse = FetcherResponse & {
     courseSlug: string;
 }

@@ -1,6 +1,6 @@
 import { redirect, useRouteLoaderData, type LoaderFunctionArgs } from "react-router";
 import { CreateCourse } from "~/components/features/courses/create-course";
-import { getAllCourses } from "~/lib/data-access/courses.server";
+import { getAllCourses } from "~/lib/admin/data-access/courses.server";
 import type { Route } from "./+types/_dashboard.dashboard.courses";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { CoursesList } from "~/components/features/courses/courses-list";

@@ -1,6 +1,6 @@
 import db from "~/db/index.server";
 import { coursesTable, studentsTable } from "~/db/schema";
-import { isAdminLoggedIn } from "../supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { data, redirect } from "react-router";
 import { desc, eq } from "drizzle-orm";
 import { count } from "drizzle-orm";

@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
-import { createSegmentSchema, type CreateSegmentSchema } from "~/lib/zod-schemas/segment";
+import { createSegmentSchema, type CreateSegmentSchema } from "~/lib/admin/zod-schemas/segment";
 
 type CreateSegmentFetcherResponse = FetcherResponse & {
     segmentSlug: string;

@@ -1,8 +1,8 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleSignIn, handleSignOut } from "~/lib/actions/auth/auth.server"
+import { handleSignInAdmin, handleSignInStudent, handleSignOut } from "~/lib/admin/actions/auth/auth.server"
 
 
-const intents = ["sign-in-admin", "sign-out"]
+const intents = ["sign-in-admin", "sign-in-student", "sign-out"]
 
 export async function loader() {
     return data('Not Allowed', { status: 405 })
@@ -15,9 +15,11 @@ export async function action({ request }: ActionFunctionArgs) {
     if (!intent || !intents.includes(intent)) {
         return data({ success: false, message: 'Invalid form submission' }, { status: 400 })
     }
+
     try {
         const handlers = {
-            'sign-in-admin': handleSignIn,
+            'sign-in-admin': handleSignInAdmin,
+            'sign-in-student': handleSignInStudent,
             'sign-out': handleSignOut,
         } as const
 

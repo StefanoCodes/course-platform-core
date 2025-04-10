@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { redirect, useFetcher, useSubmit } from "react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { createStudentSchema, type CreateStudentSchema } from "~/lib/zod-schemas/student";
+import { createStudentSchema, type CreateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import type { FetcherResponse } from "~/lib/types";
 import { generateRandomPassword } from "~/lib/utils";
 

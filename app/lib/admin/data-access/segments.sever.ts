@@ -1,5 +1,5 @@
 import { redirect } from "react-router";
-import { isAdminLoggedIn } from "../supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { and, eq } from "drizzle-orm";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";

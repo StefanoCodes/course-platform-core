@@ -1,5 +1,5 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent, handleUpdateStudent, handleUpdateStudentPassword } from "~/lib/actions/student/student.server"
+import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent, handleUpdateStudent, handleUpdateStudentPassword } from "~/lib/admin/actions/student/student.server"
 
 
 const intents = ["create-student", "activate-student", "deactivate-student", "update-student", "update-student-password"]

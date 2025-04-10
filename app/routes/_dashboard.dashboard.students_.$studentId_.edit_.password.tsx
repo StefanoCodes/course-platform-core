@@ -1,10 +1,10 @@
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 
 import { data, Link, redirect, useFetcher } from "react-router";
-import { GetStudentById } from "~/lib/data-access/students.server";
+import { GetStudentById } from "~/lib/admin/data-access/students.server";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId_.edit_.password";
 import type { FetcherResponse } from "~/lib/types";
-import { updateStudentPasswordSchema, type UpdateStudentPasswordSchema } from "~/lib/zod-schemas/student";
+import { updateStudentPasswordSchema, type UpdateStudentPasswordSchema } from "~/lib/admin/zod-schemas/student";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
