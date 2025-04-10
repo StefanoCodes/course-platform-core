@@ -23,6 +23,7 @@ import {
   Trash
 } from 'lucide-react'
 import * as React from 'react'
+import { href, Link } from 'react-router'
 import { ActivateStudent } from '~/components/features/students/activate-student'
 import { CreateStudent } from '~/components/features/students/create-student'
 import { DeactivateStudent } from '~/components/features/students/deactivate-student'
@@ -60,6 +61,9 @@ const columns: ColumnDef<Student>[] = [
     accessorKey: 'name',
     header: 'Name',
     enableHiding: false,
+    cell: ({ row }) => (
+      <Link className='hover:underline' to={href(`/dashboard/students/:studentId`, { studentId: row.original.studentId })}>{row.original.name}</Link>
+    ),
   },
   {
     accessorKey: 'email',
