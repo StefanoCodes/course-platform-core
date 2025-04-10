@@ -18,10 +18,14 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Columns
+  Columns,
+  Pencil,
+  Trash
 } from 'lucide-react'
 import * as React from 'react'
+import { ActivateStudent } from '~/components/features/students/activate-student'
 import { CreateStudent } from '~/components/features/students/create-student'
+import { DeactivateStudent } from '~/components/features/students/deactivate-student'
 import { StatusBadge } from '~/components/features/students/status-badge'
 
 import { Button } from '~/components/ui/button'
@@ -77,6 +81,19 @@ const columns: ColumnDef<Student>[] = [
     header: 'Created At',
     cell: ({ row }) => (
       <span className='text-muted-foreground'>{formatDateToString(row.original.created_at)}</span>
+    ),
+  },
+  {
+    accessorKey: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => (
+      <div className='flex items-center gap-2'>
+        {!row.original.isActivated ? (
+          <ActivateStudent studentId={row.original.studentId} />
+        ) : (
+          <DeactivateStudent studentId={row.original.studentId} />
+        )}
+      </div>
     ),
   },
 ]
