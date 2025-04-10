@@ -1,10 +1,34 @@
-import { Outlet } from "react-router";
-
+import { Outlet, redirect, useRouteLoaderData } from "react-router";
+import { StudentNavbar } from "~/components/global/student/navbar";
+import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+import type { Route } from "./+types/_student";
+export async function loader({ request }: Route.LoaderArgs) {
+    // student auth check
+    const { isLoggedIn, student } = await isStudentLoggedIn(request);
+    if (!isLoggedIn || !student) {
+        throw redirect('/login');
+    }
+    const dto = {
+        name: student.name,
+        isActivated: student.isActivated,
+    }
+    return dto;
+}
+export function useStudentLayoutData() {
+    const data = useRouteLoaderData<typeof loader>("routes/_student");
+    if( !data) {
+        throw new Error("Cannot use student layout data outside of the student layout context the route must be a child of the student layout");
+    }
+    return data;
+}
 export default function StudentLayout() {
+
     return (
-        <div className="flex flex-col gap-8">
-            <p>Dashboard Layout</p>
+        <main>
+        <StudentNavbar />
+        <div className="min-h-[calc(100dvh-var(--navbar-height))]">
             <Outlet />
         </div>
+        </main>
     )
 }

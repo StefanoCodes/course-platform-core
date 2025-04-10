@@ -24,11 +24,11 @@ export function LogoutProvider({ children }: { children?: React.ReactNode }) {
             }}
         >
 
-            <Button variant={"outline"} type="submit" disabled={isPending}>
+            <Button variant={"outline"} className="cursor-pointer" type="submit" disabled={isPending}>
                 {children ? children : (
                     <>
                         <LogOut className="w-4 h-4 text-red-500" />
-                        <span>Sign out</span>
+                        <span>Log out</span>
                     </>
                 )}
             </Button>
