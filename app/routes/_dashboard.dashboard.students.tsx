@@ -1,9 +1,8 @@
 import { redirect, useRouteLoaderData } from "react-router";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
-import type { Route } from "./+types/_dashboard.dashboard.students";
-import { CreateStudent } from "~/components/features/students/create-student";
 import { StudentsList } from "~/components/features/students/students-list";
 import { GetAllStudents } from "~/lib/data-access/students.server";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import type { Route } from "./+types/_dashboard.dashboard.students";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -26,11 +25,7 @@ export function useStudentsLoaderData() {
 export default function Page() {
 
     return (
-        <div className="flex flex-col gap-4 h-full overflow-hidden py-4">
-            <div className="flex flex-row justify-between w-full ">
-                <h1>Students</h1>
-                <CreateStudent />
-            </div>
+        <div className="flex flex-col gap-4 h-full overflow-y-auto py-4 [scrollbar-width:thin]">
             <StudentsList />
         </div>
     )

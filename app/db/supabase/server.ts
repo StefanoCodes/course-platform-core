@@ -6,6 +6,7 @@ export const createSupabaseServerClient = (request: Request) => {
         process.env.SUPABASE_ANON_KEY!,
         {
             cookies: {
+                // @ts-ignore
                 getAll() {
                     return parseCookieHeader(request.headers.get("Cookie") ?? "") ?? {};
                 },
