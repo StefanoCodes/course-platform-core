@@ -39,7 +39,7 @@ export default function Page() {
     <SidebarProvider
       style={
         {
-          '--sidebar-width': '19rem',
+          '--sidebar-width': '12rem',
         } as React.CSSProperties
       }
       className="h-dvh"
