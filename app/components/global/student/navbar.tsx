@@ -14,7 +14,7 @@ export function StudentNavbar() {
     const pathname = location.pathname;
     return(
         <nav className="bg-[#333] sticky top-0 z-20 h-[var(--navbar-height)] [--widest-el:11.375rem]">
-            <div className="flex items-center h-full justify-between px-4">
+            <div className="flex items-center h-full justify-between px-4 lg:px-0 container mx-auto">
                 <div className="flex items-center gap-2">
                     <p className="text-white">Welcome Back {name}</p>
                     <Heart className="w-4 h-4 text-red-300" />
@@ -33,7 +33,7 @@ export function StudentNavbar() {
                     )
                    })}
                 </div>
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden md:flex items-center gap-2 min-w-[var(--widest-el)]">
                    <LogoutProvider />
                 </div>
                 <HamburgerMenu pathname={pathname} />

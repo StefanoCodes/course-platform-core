@@ -30,7 +30,7 @@ export default function AuthenticationPage() {
       </div>
       {/* RIGHT SIDE */}
       <div className="relative h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 rounded-md bg-zinc-900 md:rounded-none" />
+        <div className="absolute inset-0 rounded-md bg-gradient-to-br from-brand-primary to-brand-primary/80 md:rounded-none" />
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">

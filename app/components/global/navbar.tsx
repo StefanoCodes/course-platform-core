@@ -4,14 +4,13 @@ import { Button } from "../ui/button";
 
 export default function Navbar() {
   return (
-    <div className="w-full sticky top-0 z-10 h-[var(--navbar-height)]  bg-black/90 backdrop-blur-xl">
+    <div className="w-full sticky top-0 z-40 h-[var(--navbar-height)]  bg-[#010101] backdrop-blur-xl">
       <header className=" px-6 py-4 mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-white text-2xl font-bold">
             Logo
           </Link>
           <div className="flex items-center">
-
             <nav className="hidden ml-12 space-x-8 md:flex">
               {mainNavItems.map((item) => (
                 <Link
