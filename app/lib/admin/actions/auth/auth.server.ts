@@ -157,7 +157,6 @@ export async function handleSignOut(request: Request) {
     return data({
         success: true,
         message: 'Logged out',
-
     }, {
         headers: headers
     })

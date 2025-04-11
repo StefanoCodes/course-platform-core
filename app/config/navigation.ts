@@ -1,4 +1,4 @@
-import { type LucideIcon } from "lucide-react";
+import { BookOpen, User, type LucideIcon } from "lucide-react";
 
 export interface NavItem {
     label: string;
@@ -31,4 +31,18 @@ export const authNavItems: NavItem[] = [
         label: "Book a Demo",
         href: "/demo",
     },
-]; 
+];
+export const studentNavItems: NavItem[] = [
+    {
+        label: "Courses",
+        href: "/student/courses",
+        icon: BookOpen
+    },
+    {
+        label: "Profile",
+        href: "/student/profile",
+        icon: User
+    },
+
+];
+

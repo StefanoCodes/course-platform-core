@@ -58,7 +58,7 @@ export function CreateStudent() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white">Add Student</Button>
+                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white">Add Student</Button>
             </DialogTrigger>
             {isSubmitted ? (
                 <SubmittedState email={form.getValues("email")} password={form.getValues("password")} setHasCopied={setHasCopied} />
@@ -139,7 +139,7 @@ export function CreateStudent() {
                                 />
                             </div>
                             {/* Submit button */}
-                            <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-blue-600 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
+                            <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
                         </fetcher.Form>
                     </Form>
                 </DialogContent>

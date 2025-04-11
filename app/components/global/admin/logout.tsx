@@ -2,9 +2,10 @@ import { LogOut } from "lucide-react";
 import { useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import type { FetcherResponse } from "~/lib/types";
+import { cn } from "~/lib/utils";
 
 
-export function LogoutProvider({ children }: { children?: React.ReactNode }) {
+export function LogoutProvider({ children, className }: { children?: React.ReactNode, className?: string }) {
     const fetcher = useFetcher<FetcherResponse>({ key: "sign-out" });
     const isPending = fetcher.state !== "idle";
     return (
@@ -24,11 +25,11 @@ export function LogoutProvider({ children }: { children?: React.ReactNode }) {
             }}
         >
 
-            <Button variant={"outline"} type="submit" disabled={isPending}>
+            <Button variant={"outline"} className={cn("cursor-pointer", className)} type="submit" disabled={isPending}>
                 {children ? children : (
                     <>
                         <LogOut className="w-4 h-4 text-red-500" />
-                        <span>Sign out</span>
+                        <span>Log out</span>
                     </>
                 )}
             </Button>

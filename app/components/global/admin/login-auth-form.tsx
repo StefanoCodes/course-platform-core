@@ -21,9 +21,11 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 	const config = type === "admin" ? {
 		action: "/resource/auth",
 		intent: "sign-in-admin",
+		buttonStyles: "bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white cursor-pointer h-10 font-medium"
 	} : {
 		action: "/resource/auth",
 		intent: "sign-in-student",
+		buttonStyles: "bg-gradient-to-br from-blue-500 to-blue-900 text-white cursor-pointer h-10 font-medium"
 	}
 	const fetcher = useFetcher<FetcherResponse>();
 	const isPending = fetcher.state !== "idle";
@@ -118,7 +120,7 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 						<Button
 							type="submit"
 							disabled={isPending}
-							className="bg-gray-900 hover:bg-black text-white cursor-pointer h-10 font-medium"
+							className={config.buttonStyles}
 						>
 							{isPending ? "Logging in..." : "Login"}
 						</Button>

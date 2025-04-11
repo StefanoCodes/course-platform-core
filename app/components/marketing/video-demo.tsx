@@ -8,7 +8,7 @@ export default function VideoDemo() {
     return (
         <motion.section
         id="video-section"
-        className="py-8 md:py-16 px-4"
+        className=" py-8 px-4"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -17,7 +17,7 @@ export default function VideoDemo() {
     
           <div className="max-w-7xl mx-auto">
             {/* section title */}
-            <h2 className="text-7xl font-bold text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 text-center mb-8">
                 Watch a demo
             </h2>
             {/* Browser Window Mockup */}
@@ -29,8 +29,8 @@ export default function VideoDemo() {
                   <div className="w-3 h-3 rounded-full bg-zinc-600" />
                   <div className="w-3 h-3 rounded-full bg-zinc-600" />
                 </div>
-                <div className="flex-1 mx-4">
-                  <div className="bg-black/40 rounded-md py-1.5 px-3 text-xs  text-zinc-500 max-w-[300px] flex items-center gap-2">
+                <div className="flex-1  flex justify-center ">
+                  <div className="bg-black/40 self-center rounded-md py-1.5 px-3 text-xs  text-zinc-500 max-w-[300px] flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-zinc-800" />
                     my-new-online-course-platform.com
                   </div>

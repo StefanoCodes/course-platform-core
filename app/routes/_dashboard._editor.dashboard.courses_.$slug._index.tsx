@@ -14,7 +14,7 @@ export default function CourseIndex() {
         <div className="flex flex-col h-full bg-gray-50 p-8 flex-1 border border-gray-200 border-l-0 border-t-0 justify-center items-center text-center">
             <div>
                 <div className="flex justify-center mb-6">
-                    <div className="bg-blue-100 p-4 rounded-full">
+                    <div className="bg-primary/90-100 p-4 rounded-full">
                         <FileText className="w-12 h-12 text-blue-600" />
                     </div>
                 </div>
