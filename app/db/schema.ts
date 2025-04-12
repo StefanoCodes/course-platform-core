@@ -36,7 +36,7 @@ export const rolesTable = pgTable('roles', {
 export const coursesTable = pgTable('courses', {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 255 }).notNull(),
-    description: varchar('description', { length: 255 }),
+    description: varchar('description', { length: 255 }).notNull(),
     isPublic: boolean('is_public').notNull().default(false),
     slug: varchar('slug', { length: 255 }).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),

@@ -12,7 +12,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData()
     const intent = formData.get('intent') as string
 
-    console.log("intent", intent)
 
     if (!intent || !intents.includes(intent)) {
         return data({ success: false, message: 'Invalid form submission' }, { status: 400 })

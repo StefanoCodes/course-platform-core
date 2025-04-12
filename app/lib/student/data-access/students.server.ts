@@ -26,7 +26,7 @@ export async function getStudentCourses(request: Request) {
     if (!isLoggedIn) {
         throw redirect('/login');
     }
-    // get all courses that are public and the student is assigned to
+    //TODO: get all courses that are public and the student is assigned to
     try {
         const courses = await db.select().from(coursesTable).where(eq(coursesTable.isPublic, true));
         return { courses };

@@ -1,8 +1,8 @@
-import { redirect } from "react-router";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { and, eq } from "drizzle-orm";
+import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";
+import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { getCourseBySlug } from "./courses.server";
 
 export async function getAllSegmentsForCourse(request: Request, courseSlug: string) {

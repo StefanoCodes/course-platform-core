@@ -21,10 +21,9 @@ export function StudentNavbar() {
                 </div>
                 <div className="hidden md:flex items-center gap-2">
                    {studentNavItems.map((link) => {
-                    const isActive = pathname === link.href;
-                    console.log(pathname)
+                    const isActive = pathname.startsWith(link.href);
                     return (
-                        <Button variant={"outline"} className={cn("hover:bg-brand-primary/80 border-none   text-black",isActive && "bg-brand-primary text-white",)} asChild>
+                        <Button key={link.href} variant={"outline"} className={cn("hover:bg-brand-primary/80 border-none   text-black",isActive && "bg-brand-primary text-white",)} asChild>
                         <Link className="cursor-pointer" to={link.href} key={link.href}>
                             {link.icon && <link.icon className="w-4 h-4" />}
                             <span>{link.label}</span>
