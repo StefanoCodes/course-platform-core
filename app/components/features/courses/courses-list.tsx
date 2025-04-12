@@ -1,4 +1,4 @@
-import { CircleCheck, Lock, Pencil } from "lucide-react";
+import { ChevronRight, CircleCheck, Lock, Pencil } from "lucide-react";
 import { Link } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -8,6 +8,8 @@ import { MarkAsPublic } from "./mark-as-public";
 import { MarkAsPrivate } from "./mark-as-private";
 import type { Course } from "~/db/schema";
 import { DeleteCourse } from "./delete-course";
+import { EditCourse } from "./edit-course";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 
 export function CoursesList() {
     const { courses } = useCoursesLoaderData();
@@ -34,22 +36,48 @@ function CourseCard({ course }: { course: Course }) {
                 {isPublic ? <IsPublicBadge /> : <IsPrivateBadge />}
 
             </CardHeader>
+
             <CardContent>
                 <CardDescription>
                     {description}
                 </CardDescription>
             </CardContent>
-            <CardFooter className="flex flex-row justify-between items-center">
-                <Button variant="outline" asChild>
+            <CardFooter className="flex flex-row gap-4 items-center">
+                <Button className="bg-brand-primary text-white hover:bg-brand-primary/60" asChild>
                     <Link to={`/dashboard/courses/${slug}`}>
-                        <Pencil />
-                        Edit Course
+                        View Course
+                        <ChevronRight className="w-4 h-4" />
                     </Link>
                 </Button>
                 {!isPublic ? <MarkAsPublic courseId={id} /> : <MarkAsPrivate courseId={id} />}
             </CardFooter>
-            <div className="absolute -top-4 -right-4">
-                <DeleteCourse courseId={id} />
+            <div className="absolute -top-4 -right-0">
+                <TooltipProvider>
+                    <Tooltip delayDuration={100}>
+                        <TooltipTrigger asChild>
+                            <div>
+                                <DeleteCourse courseId={id} />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            <p>Delete Course</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </div>
+            <div className="absolute -top-4 right-12">
+                <TooltipProvider>
+                    <Tooltip delayDuration={100}>
+                        <TooltipTrigger asChild>
+                            <div>
+                                <EditCourse name={name} description={description} courseId={id} slug={slug} />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            <p>Edit Course</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </div>
         </Card>
     )

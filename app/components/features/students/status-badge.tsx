@@ -10,6 +10,7 @@ export function StatusBadge({
     status = false,
     className,
 }: StatusBadgeProps) {
+    
     return (
         <div
             className={cn(

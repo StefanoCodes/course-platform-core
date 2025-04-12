@@ -1,5 +1,4 @@
 import { X } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import { DeleteDialog } from "~/components/global/admin/delete-dialog";
 
 export function DeleteCourse({ courseId }: { courseId: string }) {
@@ -18,11 +17,9 @@ export function DeleteCourse({ courseId }: { courseId: string }) {
                 </div>
             }
             trigger={
-                <Button type="button" variant="ghost" className="cursor-pointer hover:bg-transparent w-auto h-10">
-                    <div className="h-6 w-6 flex items-center justify-center rounded-full bg-red-100">
+                    <div className="h-6 w-6 cursor-pointer flex items-center justify-center rounded-full bg-red-100">
                         <X className="w-4 h-4 text-red-400" />
                     </div>
-                </Button>
             }
         />
     );

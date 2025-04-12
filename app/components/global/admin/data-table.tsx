@@ -23,6 +23,7 @@ import {
   Trash
 } from 'lucide-react'
 import * as React from 'react'
+import { useEffect } from 'react'
 import { href, Link } from 'react-router'
 import { ActivateStudent } from '~/components/features/students/activate-student'
 import { CreateStudent } from '~/components/features/students/create-student'
@@ -54,6 +55,7 @@ import {
 } from '~/components/ui/table'
 import type { Student } from '~/db/schema'
 import { formatDateToString } from '~/lib/utils'
+import  { useStudentsLoaderData } from '~/routes/_dashboard.dashboard.students'
 
 const columns: ColumnDef<Student>[] = [
 
@@ -104,8 +106,8 @@ const columns: ColumnDef<Student>[] = [
 
 
 
-export function DataTable({ data: initialData }: { data: Student[] }) {
-  const [data, setData] = React.useState(() => initialData)
+export function DataTable({initialData}:{initialData:any}) {
+  const [data,setData] = React.useState(initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -140,6 +142,11 @@ export function DataTable({ data: initialData }: { data: Student[] }) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
+
+  useEffect(() => {
+    setData(initialData)
+  },[initialData])
+
 
   
 
