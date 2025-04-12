@@ -10,11 +10,11 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-8 xl:col-span-1">
             <Link to="/" className="flex items-center space-x-2">
-              <img
+              {/* <img
                 className="h-10 w-auto"
                 src="/images/logo.png"
                 alt="Company Logo"
-              />
+              /> */}
               <span className="text-xl font-bold text-gray-900">EduPlatform</span>
             </Link>
             <p className="text-base text-gray-600">
