@@ -6,6 +6,7 @@ import { getCourseBySlug } from "~/lib/admin/data-access/courses.server";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { titleToSlug } from "~/lib/utils";
 import { createSegmentSchema, editSegmentSchema } from "~/lib/admin/zod-schemas/segment";
+import { checkSlugUnique } from "../shared/shared.server";
 
 export async function handleCreateSegment(request: Request, formData: FormData) {
   // auth check
@@ -23,6 +24,8 @@ export async function handleCreateSegment(request: Request, formData: FormData) 
   const { courseSlug, name, description, videoUrl } = unvalidatedFields.data;
 
   try {
+    // check the slug created is unique in all the other courses
+
     // getting the course where the segment will be created
     const { success: courseSuccess, course } = await getCourseBySlug(request, courseSlug);
 
@@ -32,6 +35,12 @@ export async function handleCreateSegment(request: Request, formData: FormData) 
 
     // convert segment name to slug
     const slug = titleToSlug(name);
+
+    // check the slug created is unique in all the other courses
+    const isSlugUnique = await checkSlugUnique(slug, segmentsTable);
+    if (!isSlugUnique) {
+      return data({ success: false, message: 'a segment with this name already exists' }, { status: 400 });
+    }
 
     // insert segment into database
 
@@ -80,11 +89,20 @@ export async function handleEditSegment(request: Request, formData: FormData) {
     if (!courseSuccess || !course) {
       return data({ success: false, message: 'Course not found' }, { status: 404 });
     }
+
+    // check the slug created is unique in all the other courses
+    const isSlugUnique = await checkSlugUnique(validatedFields.segmentSlug, segmentsTable);
+    // check that the name currently sent back and the one in the database are not the same
+    const isCourseNameChanged = validatedFields.segmentSlug !== titleToSlug(validatedFields.name);
+    if (!isSlugUnique && isCourseNameChanged) {
+      return data({ success: false, message: 'a segment with this name already exists' }, { status: 400 });
+    }
     // db mutation
     const [updatedSegment] = await db.update(segmentsTable).set({
       name: validatedFields.name,
       description: validatedFields.description,
       videoUrl: validatedFields.videoUrl,
+      slug: validatedFields.segmentSlug,
     }).where(and(eq(segmentsTable.slug, validatedFields.segmentSlug), eq(segmentsTable.courseId, course.id)))
       .returning({
         slug: segmentsTable.slug,

@@ -12,7 +12,10 @@ export async function getSegmentsByCourseId(request: Request, courseId: string) 
     }
 
     try {
-        const segments = await db.select().from(segmentsTable).where(eq(segmentsTable.courseId, courseId));
+        const segments = await db.select().from(segmentsTable).where(and(
+            eq(segmentsTable.courseId, courseId),
+            eq(segmentsTable.isPublic, true)
+        ));
         return { success: true, segments };
     } catch (error) {
         console.error("Error fetching segments from database:", error);

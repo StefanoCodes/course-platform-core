@@ -17,7 +17,7 @@ export function CourseEditSidebar() {
                     <nav className="h-full w-full">
                         <ul className="space-y-2 w-full">
                             {segments.map((segment) => {
-                                const isActive = pathname.includes(segment.slug);
+                                const isActive = pathname === `/dashboard/courses/${courseSlug}/${segment.slug}`;
                                 return (
                                     <li key={segment.id} className="w-full">
                                         <Link className={cn("text-sm capitalize block bg-gray-100 hover:bg-gray-400 transition-all duration-300 w-full p-2 rounded-md text-gray-500 hover:text-gray-700", isActive && "bg-brand-primary text-white")} to={`/dashboard/courses/${courseSlug}/${segment.slug}`}>
