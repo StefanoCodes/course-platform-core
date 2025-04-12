@@ -5,6 +5,7 @@ import { coursesTable, segmentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { titleToSlug } from "~/lib/utils";
 import { createCourseSchema } from "~/lib/admin/zod-schemas/course";
+import { checkSlugUnique } from "../shared/shared.server";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
     // auth check
@@ -25,6 +26,11 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
 
     try {
         const slug = titleToSlug(validatedFields.name);
+        // check the slug created is unique in all the other courses
+        const isSlugUnique = await checkSlugUnique(slug);
+        if (!isSlugUnique) {
+            return data({ success: false, message: 'a course with this name already exists' }, { status: 400 });
+        }
         const [insertedCourse] = await db.insert(coursesTable).values({
             name: validatedFields.name,
             description: validatedFields.description,
