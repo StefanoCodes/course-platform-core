@@ -7,7 +7,7 @@ export function StudentsList() {
     const { students } = useStudentsLoaderData();
     return (
         <DataTable
-            data={students}
+            initialData={students}
         />
     );
 }
