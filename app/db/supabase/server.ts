@@ -19,6 +19,11 @@ export const createSupabaseServerClient = (request: Request) => {
                     );
                 },
             },
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true,
+            },
         }
     );
     return { client: supabase, headers };
