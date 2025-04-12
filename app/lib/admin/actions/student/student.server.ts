@@ -85,7 +85,6 @@ export async function handleActivateStudent(request: Request, formData: FormData
     if (!isLoggedIn) {
         return data({ success: false, message: "Unauthorized" }, { status: 401 })
     }
-    console.log("🔴Activating student", formData)
     const { studentId } = Object.fromEntries(formData);
 
     if (!studentId) {
@@ -181,7 +180,6 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
 
         // Update email if it has changed since attahed to supabase auth 
         if (isEmailChanged) {
-            console.log("🔴Updating email", validatedFields.email, studentId)
             const { success } = await UpdateEmail(request, validatedFields.email, studentId as string)
             if (!success) {
                 return data({ success: false, message: "Failed to update email" }, { status: 500 })

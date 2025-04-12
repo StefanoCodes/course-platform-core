@@ -1,7 +1,8 @@
-import { Outlet, redirect, useRouteLoaderData } from "react-router";
+import { Outlet, redirect, useNavigation, useRouteLoaderData } from "react-router";
 import { StudentNavbar } from "~/components/global/student/navbar";
 import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_student";
+import { CourseCardSkeleton } from "~/components/global/student/student-skeleton";
 export async function loader({ request }: Route.LoaderArgs) {
     // student auth check
     const { isLoggedIn, student } = await isStudentLoggedIn(request);
@@ -22,13 +23,15 @@ export function useStudentLayoutData() {
     return data;
 }
 export default function StudentLayout() {
-
+    const navigation = useNavigation();
+    const isLoading = navigation.state !== "idle"
     return (
         <main>
         <StudentNavbar />
         <div className="min-h-[calc(100dvh-var(--navbar-height))]">
-            <Outlet />
+           {!isLoading ? <Outlet /> : <CourseCardSkeleton/>} 
         </div>
         </main>
     )
 }
+

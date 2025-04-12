@@ -1,8 +1,11 @@
-import { redirect } from "react-router";
+import { BookOpen } from "lucide-react";
+import { Link, redirect } from "react-router";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { getStudentCourses } from "~/lib/student/data-access/students.server";
 import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_student.student.courses";
-import { getStudentCourses } from "~/lib/student/data-access/students.server";
-
+import type { Course } from "~/db/schema";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isStudentLoggedIn(request);
@@ -17,8 +20,50 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function StudentCourses({loaderData}:Route.ComponentProps) {
     const {courses} = loaderData;
     return (
-        <div className="container mx-auto pt-20">
-            <h1 className="text-center text-2xl font-bold">Student Courses</h1>
+        <div className="container mx-auto pt-20 px-4">
+            <h1 className="text-center text-3xl font-bold mb-8">Available Courses</h1>
+            
+            {courses.length === 0 ? (
+                <div className="text-center py-12">
+                    <p className="text-gray-500 text-lg">No courses available at the moment.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {courses.map((course) => (
+                        <CourseCard key={course.id} course={course} />
+                    ))}
+                </div>
+            )}
         </div>
+    );
+}
+
+
+function CourseCard({ course }: { course: Course }) {
+    const { name, description, slug } = course;
+    
+    return (
+        <Card className="flex flex-col h-full transition-all duration-300 hover:shadow-lg hover:border-brand-primary/30">
+            <CardHeader>
+                <div className="flex items-center gap-2 mb-2">
+                    <div className="bg-brand-primary/10 p-2 rounded-full">
+                        <BookOpen className="h-5 w-5 text-brand-primary" />
+                    </div>
+                    <CardTitle className="text-xl">{name}</CardTitle>
+                </div>
+            </CardHeader>
+            <CardContent className="flex-grow">
+                <CardDescription className="text-base">
+                    {description}
+                </CardDescription>
+            </CardContent>
+            <CardFooter>
+                <Button asChild className="w-full bg-brand-primary hover:bg-brand-primary/90">
+                    <Link to={`/student/courses/${slug}`}>
+                        View Course
+                    </Link>
+                </Button>
+            </CardFooter>
+        </Card>
     );
 }

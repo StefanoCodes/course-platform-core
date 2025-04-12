@@ -1,9 +1,8 @@
+import { count, desc, eq } from "drizzle-orm";
+import { redirect } from "react-router";
 import db from "~/db/index.server";
-import { coursesTable, studentsTable } from "~/db/schema";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
-import { data, redirect } from "react-router";
-import { desc, eq } from "drizzle-orm";
-import { count } from "drizzle-orm";
+import { coursesTable } from "~/db/schema";
+import { isAdminLoggedIn, isAuthenticated } from "~/lib/supabase-utils.server";
 
 // get all courses
 export async function getAllCourses(request: Request) {
@@ -22,12 +21,14 @@ export async function getAllCourses(request: Request) {
 }
 
 // get course by slug
+
 export async function getCourseBySlug(request: Request, slug: string) {
-    // auth check 
-    const { isLoggedIn } = await isAdminLoggedIn(request);
+    // TODO: auth check 
+    const { isLoggedIn } = await isAdminLoggedIn(request)
     if (!isLoggedIn) {
-        throw redirect("/admin/login");
+        throw redirect("/login")
     }
+
     try {
         const [course] = await db.select().from(coursesTable).where(eq(coursesTable.slug, slug)).limit(1);
         return { success: true, course };
