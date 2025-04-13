@@ -69,9 +69,9 @@ export function ElegantShape({
 }
 
 export default function Hero({
-  title1 = "Transform Your Classroom into",
-  title2 = "a Digital Classroom",
-  description ="You're a passionate teacher with expertise to share. Now, expand your impact beyond the four walls of your classroom. Our platform empowers you to create, market, and deliver engaging online courses to a global audience."
+  title1 = "Are you a teacher looking to increase",
+  title2 = " your income?",
+  description ="Our platform empowers you to create, market, and deliver engaging online courses to your students."
 }: {
   badge?: string
   title1?: string
@@ -92,90 +92,32 @@ export default function Hero({
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-var(--navbar-height))] w-full flex items-center justify-center overflow-hidden bg-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+    <div className="relative min-h-[calc(100dvh-var(--navbar-height))] w-full flex items-start pt-12 md:items-center justify-center overflow-hidden bg-white">
 
-      <div className="absolute inset-0 overflow-hidden">
-        <ElegantShape
-          delay={0.3}
-          width={600}
-          height={140}
-          rotate={12}
-          gradient="from-indigo-500/[0.5]"
-          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
-        />
 
-        <ElegantShape
-          delay={0.5}
-          width={500}
-          height={120}
-          rotate={-15}
-          gradient="from-rose-500/[0.5]"
-          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
-        />
-
-        <ElegantShape
-          delay={0.4}
-          width={300}
-          height={80}
-          rotate={-8}
-          gradient="from-violet-500/[0.5]"
-          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
-        />
-
-        <ElegantShape
-          delay={0.6}
-          width={200}
-          height={60}
-          rotate={20}
-          gradient="from-amber-500/[0.5]"
-          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
-        />
-
-        <ElegantShape
-          delay={0.7}
-          width={150}
-          height={40}
-          rotate={-25}
-          gradient="from-cyan-500/[0.5]"
-          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
-        />
-      </div>
-
-      <div className="relative z-10 container mx-auto px-4 md:px-6">
+      <div className="relative z-10 container mx-auto px-4  md:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          {/* <motion.div
-            custom={0}
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate="visible"
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black border border-white/[0.08] mb-8 md:mb-12"
-          >
-            <PrimaryLogo classNames={{img:"w-4 h-4"}} />
-            <span className="text-sm text-white tracking-wide">{badge}</span>
-          </motion.div> */}
 
           <motion.div custom={1} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 md:mb-8 tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-br from-gray-800 to-gray-800/80">{title1}</span>
-              <br />
-              <span
-                className={cn(
-                  "bg-clip-text text-transparent bg-gradient-to-r from-indigo-400  to-rose-400",
-                )}
-              >
-                {title2}
-              </span>
+            <h1 className="text-4xl sm:text-7xl  font-bold mb-6 md:mb-8 tracking-tight md:leading-[1.1]">
+              <span className="bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 to-gray-800/80">{title1} <br /> {title2}</span>
             </h1>
           </motion.div>
 
           <motion.div custom={2} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl text-gray-500 mb-8 leading-relaxed  tracking-wide max-w-xl mx-auto px-4">
               {description}
             </p>
           </motion.div>
           <motion.div custom={3} variants={fadeUpVariants} initial="hidden" animate="visible">
-            <Button className="cursor-pointer  bg-gradient-to-r from-indigo-400  to-rose-400 text-white">Book a Demo</Button>
+            <Button className="cursor-pointer inset-ring-2 inset-ring-indigo-300 bg-indigo-500 text-white hover:bg-indigo-600 hover:text-white">Book a Demo</Button>
+          </motion.div>
+          <motion.div custom={4} variants={fadeUpVariants} initial="hidden" animate="visible" className="py-4">
+            <img 
+              src="/images/marketing/students_dashboard.png" 
+              alt="dashboard students panel screenshot" 
+              className="w-full h-full object-cover rounded-lg shadow-[0_8px_30px_rgba(79,70,229,0.15)] bg-indigo-50 backdrop-blur-2xl" 
+            />
           </motion.div>
         </div>
       </div>
