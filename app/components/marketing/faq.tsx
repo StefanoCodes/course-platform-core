@@ -4,52 +4,36 @@ import { Accordion, Accordions } from "../ui/accordion"
 export default function FAQ() {
   const faqs = [
     {
-      title: "How does it work?",
-      content: "The student pays for the course fees and opts for the option of Platform me instead of joining in person/zoom lessons, then they will receive a password and email that will be created by the admin to have access to their own account where the course will take place to keep up with it at their own time and paste."
-    },
-    {
-      title: "What are some other features?",
-      content: "Some other features include showing analytics of how many students joined the course, and each student has their own details including their status. There is the ability of making the course private for the admins only."
-    },
-    {
-      title: "Are there any hidden costs?", 
-      content: "No, there are no hidden costs it is a one time payment, with no monthly ties, and 100% of revenue is yours."
-    },
-    {
-      title: "Do I need technical skills to run the platform?",
-      content: "No it's easy going very user friendly, and navigating with ease, by adding, editing deleting courses/ students."
-    },
-    {
-      title: "Can I personalize the platform?",
-      content: "Sure, we provide three templates to choose from"
-    },
-    {
-      title: "Do I own my content and can I remove it anytime?",
-      content: "Yes the content you upload is fully yours and no one but you has access to it, and you have the ability as as admin to remove it permanently."
-    },
-    {
-      title: "Is there customer support if something goes wrong?",
-      content: "Yes, our contractor supports you anytime if something goes wrong"
+      title: "What is PLAT4ME?",
+      content: "PLAT4ME is a online platform that allows teachers to upload their lessons for students to access to at anytime and anywhere, allowing teachers to expand their reach beyond timezones and conflicting schedule"
     },
     {
       title: "Can I use this platform even if I'm already teaching live classes?",
       content: "Of course, this platform is actually an addition to live classes, it is designed to meet the excess demand for teachers who cannot cater their time for extra zoom lessons and overwhelming amour of students"
     },
     {
-      title: "How do I upload my course content?",
-      content: "You go on the courses tab and press create course, then adding lesson by lesson including description"
+      title: "Do I own my content and can I remove it anytime?",
+      content: "Yes the content you upload is fully yours and no one but you has access to it, and you have the ability as as admin to remove it permanently."
+    },
+    {
+      title: "Can I edit or remove my course after it's been published?",
+      content: "Yes, editing and removing can both be done even after the course has been published you can either remove it permanently or private it, hence the student does not see it."
+    },
+    {
+      title: "Do I need technical skills to run the platform?",
+      content: "No it's easy going very user friendly, and navigating with ease, by adding, editing deleting courses/ students."
+    },
+    {
+      title: "Are there any hidden costs?",
+      content: "No, there are no hidden costs it is a one time payment, with no monthly ties, and 100% of revenue is yours."
     },
     {
       title: "Is there a limit to how many lessons or courses I can upload?",
       content: "No limits upload as many courses or lessons as you like."
     },
     {
-      title: "Can I edit or remove my course after it's been published?",
-      content: "Yes, editing and removing can both be done even after the course has been published removing the course removes it permanently from the students view"
-    },
-    {
-      title: "Can students leave questions or comments on lessons?",
-      content: "Yes they can, this is meant to make it easier for admin(s) to reposed to each student individually and privately."
+      title: "Is there a limit to how many students I enroll?",
+      content: "No, there is no limit on the amount of students enrolled"
     }
   ]
 
