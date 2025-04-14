@@ -4,7 +4,6 @@ import { Button } from "~/components/ui/button";
 import type { FetcherResponse } from "~/lib/types";
 import { cn } from "~/lib/utils";
 
-
 export function LogoutProvider({ children, className }: { children?: React.ReactNode, className?: string }) {
     const fetcher = useFetcher<FetcherResponse>({ key: "sign-out" });
     const isPending = fetcher.state !== "idle";

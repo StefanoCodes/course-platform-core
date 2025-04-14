@@ -4,24 +4,18 @@ import { Breadcrumbs } from "~/components/global/admin/breadcrumbs";
 import { DashboardSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { Separator } from "~/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-import { getAdminById } from "~/lib/admin/data-access/admin.server";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+
 import type { Route } from "./+types/_dashboard.dashboard";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const { isLoggedIn, adminId } = await isAdminLoggedIn(request);
-  if (!isLoggedIn || !adminId) {
-    return redirect('/admin/login')
-  }
-  // load data about the admin
-  const admin = await getAdminById(request);
-  if (!admin.success || !admin.admin) {
-    throw redirect('/admin/login')
-  }
-
-  return data({
-    admin: admin.admin,
-  })
+ const { isLoggedIn, admin } = await isAdminLoggedIn(request);
+ if (!isLoggedIn || !admin) {
+  return redirect("/admin/login")
+ }
+ return {
+  admin
+ }
 }
 
 export function useDashboardLayoutLoaderData() {

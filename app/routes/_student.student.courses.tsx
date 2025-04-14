@@ -2,10 +2,12 @@ import { BookOpen } from "lucide-react";
 import { Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
-import { getStudentCourses } from "~/lib/student/data-access/students.server";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+
 import type { Route } from "./+types/_student.student.courses";
+import { isStudentLoggedIn } from "~/lib/auth.server";
+import { getStudentCourses } from "~/lib/student/data-access/students.server";
 import type { Course } from "~/db/schema";
+
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isStudentLoggedIn(request);

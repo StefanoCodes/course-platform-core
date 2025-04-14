@@ -2,8 +2,8 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import { getCourseBySlug } from "./courses.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function getAllSegmentsForCourse(request: Request, courseSlug: string) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -24,8 +24,6 @@ export async function getAllSegmentsForCourse(request: Request, courseSlug: stri
         return { success: false, segments: [] };
     }
 }
-
-// get segment information based on the segment slug 
 export async function getSegmentBySlug(request: Request, segmentSlug: string, courseSlug: string) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
@@ -38,7 +36,6 @@ export async function getSegmentBySlug(request: Request, segmentSlug: string, co
         if (!course) {
             throw redirect("/dashboard/courses");
         }
-        // its important to have and here because potentially a user may name a segment the same for multiple videos such as video 1 => course 1 video 1 course 2 this would cause a problem so now we are chcking for both meaning only one will be returned
         const [segment] = await db.select().from(segmentsTable).where(and(eq(segmentsTable.slug, segmentSlug), eq(segmentsTable.courseId, course.id))).limit(1);
         return { success: true, segment };
     } catch (error) {

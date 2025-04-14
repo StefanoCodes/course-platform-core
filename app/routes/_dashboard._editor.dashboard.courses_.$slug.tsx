@@ -1,6 +1,6 @@
 import { Outlet, redirect } from "react-router";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
     // auth check

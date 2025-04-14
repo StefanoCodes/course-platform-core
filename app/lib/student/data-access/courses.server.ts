@@ -1,11 +1,11 @@
-import { isAuthenticated } from "~/lib/supabase-utils.server";
+import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { coursesTable } from "~/db/schema";
-import { eq } from "drizzle-orm";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 export async function getCourseBySlug(request: Request, slug: string) {
 
-    const { isLoggedIn } = await isAuthenticated(request)
+    const { isLoggedIn } = await isStudentLoggedIn(request)
     if (!isLoggedIn) {
         throw redirect("/login")
     }

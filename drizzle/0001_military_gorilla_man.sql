@@ -1,3 +1,13 @@
+CREATE TABLE "courses" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" varchar(255) NOT NULL,
+	"is_public" boolean DEFAULT false NOT NULL,
+	"slug" varchar(255) NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "students" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"student_id" uuid NOT NULL,
@@ -12,7 +22,7 @@ CREATE TABLE "students" (
 	CONSTRAINT "students_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-DROP INDEX "email_index";--> statement-breakpoint
+CREATE INDEX "course_name_index" ON "courses" USING btree ("name");--> statement-breakpoint
+CREATE INDEX "course_slug_index" ON "courses" USING btree ("slug");--> statement-breakpoint
 CREATE INDEX "student_email_index" ON "students" USING btree ("email");--> statement-breakpoint
-CREATE INDEX "student_id_index" ON "students" USING btree ("student_id");--> statement-breakpoint
-CREATE INDEX "admin_email_index" ON "admins" USING btree ("email");
+CREATE INDEX "student_id_index" ON "students" USING btree ("student_id");

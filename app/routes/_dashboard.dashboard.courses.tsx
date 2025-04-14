@@ -1,9 +1,9 @@
-import { redirect, useRouteLoaderData, type LoaderFunctionArgs } from "react-router";
+import { redirect, useRouteLoaderData } from "react-router";
+import { CoursesList } from "~/components/features/courses/courses-list";
 import { CreateCourse } from "~/components/features/courses/create-course";
 import { getAllCourses } from "~/lib/admin/data-access/courses.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard.dashboard.courses";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
-import { CoursesList } from "~/components/features/courses/courses-list";
 export async function loader({ request }: Route.LoaderArgs) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);

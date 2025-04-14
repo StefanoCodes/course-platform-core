@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { coursesTable, studentsTable } from "~/db/schema";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 
 export async function isStudentAccountActivated(email: string) {
 
@@ -19,7 +19,6 @@ export async function isStudentAccountActivated(email: string) {
     }
 }
 
-// get all public courses for a student
 export async function getStudentCourses(request: Request) {
     // auth check
     const { isLoggedIn } = await isStudentLoggedIn(request);
@@ -33,5 +32,21 @@ export async function getStudentCourses(request: Request) {
     } catch (error) {
         console.error(`Error fetching student courses: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return { courses: [] };
+    }
+}
+
+export async function getStudentById(request: Request, studentId: string) {
+    // auth check
+    const { isLoggedIn } = await isStudentLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect('/login');
+    }
+    // get student by id
+    try {
+        const [student] = await db.select().from(studentsTable).where(eq(studentsTable.studentId, studentId));
+        return { student };
+    } catch (error) {
+        console.error(`Error fetching student by id: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        return { student: null };
     }
 }

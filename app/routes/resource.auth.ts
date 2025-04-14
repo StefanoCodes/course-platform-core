@@ -1,5 +1,7 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleSignInAdmin, handleSignInStudent, handleSignOut } from "~/lib/admin/actions/auth/auth.server"
+import { handleSignInAdmin, handleSignInStudent } from "~/lib/admin/actions/auth/auth.server"
+import { handleSignOut } from "~/lib/auth.server"
+// import { handleSignInAdmin, handleSignInStudent, handleSignOut } from "~/lib/admin/actions/auth/auth.server"
 
 
 const intents = ["sign-in-admin", "sign-in-student", "sign-out"]

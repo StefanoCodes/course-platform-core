@@ -1,8 +1,8 @@
 import { redirect } from "react-router";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/login";
 import { PrimaryLogo } from "~/components/global/primary-logo";
 import LoginAuthForm from "~/components/global/admin/login-auth-form";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isStudentLoggedIn(request);

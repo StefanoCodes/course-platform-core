@@ -1,7 +1,7 @@
 import { redirect, useRouteLoaderData } from "react-router";
 import { StudentsList } from "~/components/features/students/students-list";
 import { GetAllStudents } from "~/lib/admin/data-access/students.server";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard.dashboard.students";
 
 export async function loader({ request }: Route.LoaderArgs) {

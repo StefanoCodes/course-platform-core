@@ -1,17 +1,17 @@
-import { eq } from "drizzle-orm";
-import { data } from "react-router";
-import db from "~/db/index.server";
-import { coursesTable, segmentsTable } from "~/db/schema";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { data, redirect } from "react-router";
+import { isAdminLoggedIn } from "~/lib/auth.server";
+import { createCourseSchema, updateCourseSchema } from "../../zod-schemas/course";
 import { titleToSlug } from "~/lib/utils";
-import { createCourseSchema, updateCourseSchema } from "~/lib/admin/zod-schemas/course";
 import { checkSlugUnique } from "../shared/shared.server";
+import { coursesTable, segmentsTable } from "~/db/schema";
+import db from "~/db/index.server";
+import { eq } from "drizzle-orm";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
-        return data({ success: false, message: 'Unauthorized' }, { status: 401 });
+        throw redirect("/admin/login")
     }
 
     const unavlidatedFields = createCourseSchema.safeParse(Object.fromEntries(formData));
@@ -132,7 +132,6 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
         return data({ success: false, message: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });
     }
 }
-
 export async function handleMakePublic(request: Request, formData: FormData) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -163,7 +162,6 @@ export async function handleMakePublic(request: Request, formData: FormData) {
         return data({ success: false, message: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });
     }
 }
-
 export async function handleMakePrivate(request: Request, formData: FormData) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);

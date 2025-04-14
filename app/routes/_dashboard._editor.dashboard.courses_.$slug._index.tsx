@@ -1,8 +1,7 @@
 import { FileText } from "lucide-react";
-import { Link, redirect } from "react-router";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { redirect } from "react-router";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug._index";
-import { Button } from "~/components/ui/button";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -14,7 +13,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     return { slug };
 }
 export default function CourseIndex({loaderData}:Route.ComponentProps) {
-    const { slug } = loaderData;
     
     return (
         <div className="flex flex-col h-full bg-gray-50 p-8 flex-1 border border-gray-200 border-l-0 border-t-0 justify-center items-center text-center">

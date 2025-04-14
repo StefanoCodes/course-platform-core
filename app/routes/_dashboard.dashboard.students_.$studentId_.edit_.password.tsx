@@ -1,4 +1,4 @@
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 import { data, Link, redirect, useFetcher } from "react-router";
 import { GetStudentById } from "~/lib/admin/data-access/students.server";

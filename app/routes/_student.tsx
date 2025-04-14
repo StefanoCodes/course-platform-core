@@ -1,19 +1,19 @@
 import { Outlet, redirect, useNavigation, useRouteLoaderData } from "react-router";
 import { StudentNavbar } from "~/components/global/student/navbar";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
-import type { Route } from "./+types/_student";
 import { CourseCardSkeleton } from "~/components/global/student/student-skeleton";
+import { isStudentLoggedIn } from "~/lib/auth.server";
+import { getStudentById } from "~/lib/student/data-access/students.server";
+import type { Route } from "./+types/_student";
+
 export async function loader({ request }: Route.LoaderArgs) {
     // student auth check
     const { isLoggedIn, student } = await isStudentLoggedIn(request);
-    if (!isLoggedIn || !student) {
+    if (!isLoggedIn || !student) {  
         throw redirect('/login');
     }
-    const dto = {
-        name: student.name,
-        isActivated: student.isActivated,
-    }
-    return dto;
+    // get studentbyid
+    const { student: studentById } = await getStudentById(request, student.id);
+    return { student: studentById };
 }
 export function useStudentLayoutData() {
     const data = useRouteLoaderData<typeof loader>("routes/_student");

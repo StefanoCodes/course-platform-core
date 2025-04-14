@@ -1,10 +1,9 @@
 
+import { redirect } from 'react-router';
 import LoginAuthForm from '~/components/global/admin/login-auth-form';
 import { PrimaryLogo } from '~/components/global/primary-logo';
-import { isAdminLoggedIn } from '~/lib/supabase-utils.server';
 import type { Route } from './+types/admin.login';
-import { redirect } from 'react-router';
-
+import { isAdminLoggedIn } from '~/lib/auth.server';
 export async function loader({ request }: Route.LoaderArgs) {
   const { isLoggedIn } = await isAdminLoggedIn(request);
   if (isLoggedIn) {

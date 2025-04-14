@@ -9,7 +9,7 @@ import { Separator } from "~/components/ui/separator";
 import { GetStudentById } from "~/lib/admin/data-access/students.server";
 import { formatDateToString } from "~/lib/utils";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // admin auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -98,7 +98,7 @@ export default function StudentProfilePage({ loaderData }: Route.ComponentProps)
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium text-muted-foreground">Joined</p>
-                                    <p className="text-base">{formatDateToString(new Date(student.created_at))}</p>
+                                    <p className="text-base">{formatDateToString(new Date(student.createdAt))}</p>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +127,7 @@ export default function StudentProfilePage({ loaderData }: Route.ComponentProps)
                             <div className="flex items-center justify-between">
                                 <span className="text-sm font-medium">Last Updated</span>
                                 <span className="text-sm text-muted-foreground">
-                                    {formatDateToString(new Date(student.updated_at))}
+                                    {formatDateToString(new Date(student.createdAt))}
                                 </span>
                             </div>
                         </div>

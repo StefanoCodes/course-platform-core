@@ -1,5 +1,5 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleCreateSegment, handleEditSegment, handleDeleteSegment, handleMakeSegmentPrivate, handleMakeSegmentPublic } from "~/lib/admin/actions/segment/segment.server"
+import { handleCreateSegment, handleDeleteSegment, handleEditSegment, handleMakeSegmentPrivate, handleMakeSegmentPublic } from "~/lib/admin/actions/segment/segment.server"
 
 
 const intents = ["create-segment", "edit-segment", "delete-segment", "make-segment-private", "make-segment-public"]

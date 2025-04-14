@@ -1,8 +1,9 @@
+
 import { count, desc, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { studentsTable } from "~/db/schema";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function GetAllStudents(request: Request) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -10,7 +11,7 @@ export async function GetAllStudents(request: Request) {
         throw redirect("/admin/login")
     }
     try {
-        const students = await db.select().from(studentsTable).orderBy(desc(studentsTable.created_at))
+        const students = await db.select().from(studentsTable).orderBy(desc(studentsTable.createdAt))
         return { success: true, students }
     } catch (e) {
         console.error("🔴Error fetching students from database:", e)

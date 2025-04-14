@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import type { Segment } from "~/db/schema";
 import { getCourseBySlug } from "~/lib/student/data-access/courses.server";
 import { getSegmentsByCourseId } from "~/lib/student/data-access/segments.server";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_student.student.courses_.$slug";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
