@@ -1,8 +1,8 @@
 import { redirect } from "react-router";
 import { CoursesAnalytics } from "~/components/features/courses/courses-analytics";
 import { StudentAnalytics } from "~/components/features/students/student-analytics";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
 import type { Route } from "./+types/_dashboard.dashboard";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const { isLoggedIn } = await isAdminLoggedIn(request);

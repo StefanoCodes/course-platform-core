@@ -1,5 +1,5 @@
 import { Outlet, redirect, useRouteLoaderData } from "react-router";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard.dashboard";
 import { GetStudentsAnalytics } from "~/lib/admin/data-access/students.server";
 import { GetCoursesAnalytics } from "~/lib/admin/data-access/courses.server";

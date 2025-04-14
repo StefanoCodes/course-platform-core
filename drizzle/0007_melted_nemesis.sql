@@ -1,1 +1,0 @@
-ALTER TABLE "segments" RENAME COLUMN "vimeo_link" TO "video_url";

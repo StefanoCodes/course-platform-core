@@ -2,28 +2,25 @@ import { count, desc, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { coursesTable } from "~/db/schema";
-import { isAdminLoggedIn, isAuthenticated } from "~/lib/supabase-utils.server";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
-// get all courses
+
 export async function getAllCourses(request: Request) {
-    // auth check 
+    // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
         throw redirect("/admin/login");
     }
     try {
-        const courses = await db.select().from(coursesTable).orderBy(desc(coursesTable.created_at));
+        const courses = await db.select().from(coursesTable).orderBy(desc(coursesTable.createdAt));
         return { success: true, courses };
     } catch (error) {
         console.error("🔴Error fetching courses from database:", error);
         return { success: false, courses: null };
     }
 }
-
-// get course by slug
-
 export async function getCourseBySlug(request: Request, slug: string) {
-    // TODO: auth check 
+    // TODO: auth check
     const { isLoggedIn } = await isAdminLoggedIn(request)
     if (!isLoggedIn) {
         throw redirect("/login")
@@ -37,9 +34,6 @@ export async function getCourseBySlug(request: Request, slug: string) {
         return { success: false, course: null };
     }
 }
-
-// get courses analytics
-
 export async function GetCoursesAnalytics(request: Request) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {

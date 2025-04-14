@@ -12,8 +12,7 @@ import { GetStudentById } from "~/lib/admin/data-access/students.server";
 import type { FetcherResponse } from "~/lib/types";
 import { updateStudentSchema, type UpdateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId_.edit";
-import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
-
+import { isAdminLoggedIn } from "~/lib/auth.server";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // admin auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);

@@ -3,7 +3,7 @@ import { Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import { getCourseBySlug } from "~/lib/student/data-access/courses.server";
 import { getSegmentBySlug } from "~/lib/student/data-access/segments.server";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 import { extractVideoId } from "~/lib/utils";
 import type { Route } from "./+types/_student.student.courses_.$slug_.$segment";
 

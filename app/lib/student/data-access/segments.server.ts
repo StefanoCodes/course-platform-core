@@ -2,9 +2,9 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";
-import { isStudentLoggedIn } from "~/lib/supabase-utils.server";
+import { isStudentLoggedIn } from "~/lib/auth.server";
 
-// Get segments for a specific course
+
 export async function getSegmentsByCourseId(request: Request, courseId: string) {
     const { isLoggedIn } = await isStudentLoggedIn(request);
     if (!isLoggedIn) {
@@ -23,7 +23,6 @@ export async function getSegmentsByCourseId(request: Request, courseId: string) 
     }
 }
 
-// Get a specific segment by slug
 export async function getSegmentBySlug(request: Request, segmentSlug: string, courseId: string) {
     const { isLoggedIn } = await isStudentLoggedIn(request);
     if (!isLoggedIn) {
