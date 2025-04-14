@@ -1,80 +1,91 @@
 import { motion } from "framer-motion";
 import { cn } from "~/lib/utils";
-import { X, Check } from "lucide-react";
-import { ElegantShape } from "./hero";
+import { Shield, Clock, Languages, Users, RefreshCcw, DollarSign } from "lucide-react";
 
 export const comparisonConfig = {
-    title: "Tired of traditional learning methods?",
+    title: "Tired of saying NO to students?",
     subtitle: "See how our platform transforms the learning experience",
     
-    traditional: {
-      title: "Traditional Learning",
-      className: "border-r-2 border-l-2 border-gray-200  pr-0 rounded-none",
-      titleColor: "text-red-600",
-      iconColor: "text-red-500",
-      items: [
-        {
-          text: "Fixed schedules and locations",
-        },
-        {
-          text: "Limited access to quality education",
-        },
-        {
-          text: "One-size-fits-all approach",
-        },
-        {
-          text: "High costs and commuting time",
-        },
-        {
-          text: "Limited interaction with experts",
-        },
-      ],
-    },
+    challenges: [
+      {
+        title: "Income Limitations",
+        description: "Cap your income — You only earn when you're actively teaching, with no passive revenue.",
+        icon: <Shield className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Capacity Constraints",
+        description: "Turn away eager students — Limited time slots mean saying no to learners who want to join.",
+        icon: <Clock className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Work-Life Imbalance",
+        description: "Face burnout — Managing high demand with no scalable tools leads to mental and physical exhaustion.",
+        icon: <Languages className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Limited Growth",
+        description: "Limited growth potential — You can only teach so many hours a day.",
+        icon: <Users className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Scheduling Conflicts",
+        description: "Struggle with scheduling — Conflicting time zones and calendars make it hard to fit everyone in.",
+        icon: <Clock className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Income Insecurity",
+        description: "Risk income gaps — If you take time off or fall sick, your earnings stop.",
+        icon: <DollarSign className="h-6 w-6 text-indigo-400" />
+      }
+    ],
     
-    platform: {
-      title: "Learning with Our Platform",
-    //   className: "bg-green-50/50 border-green-100",
-      titleColor: "text-green-600",
-      iconColor: "text-green-500",
-      items: [
-        {
-          text: "Learn at your own pace, anywhere",
-        },
-        {
-          text: "Access to world-class instructors",
-        },
-        {
-          text: "Personalized learning paths",
-        },
-        {
-          text: "Cost-effective and time-saving",
-        },
-        {
-          text: "Interactive and engaging content",
-        },
-      ],
-    },
+    benefits: [
+      {
+        title: "Global Reach",
+        description: "Expand globally — Make your expertise available to learners worldwide, across all time zones.",
+        icon: <Shield className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Passive Income",
+        description: "Generate passive income 24/7 — Create once and earn anytime, maximize your earnings even in the times you're offline or on break.",
+        icon: <Clock className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Full Ownership",
+        description: "Own your platform — Maintain full control over your content and avoid using third party platforms.",
+        icon: <Languages className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Unlimited Students",
+        description: "Grow without limits — Serve unlimited students without increasing your teaching hours.",
+        icon: <Users className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "100% Revenue",
+        description: "Keep 100% of your earnings — No monthly fees, no commissions, no revenue sharing.",
+        icon: <DollarSign className="h-6 w-6 text-indigo-400" />
+      },
+      {
+        title: "Future-Proof Business",
+        description: "Future-proof your income — Even if you stop live teaching, your lessons keep working for you.",
+        icon: <RefreshCcw className="h-6 w-6 text-indigo-400" />
+      }
+    ]
   }
 
-interface ComparisonCardProps {
+interface FeatureCardProps {
   title: string;
-  items: { text: string }[];
-  className?: string;
-  titleColor: string;
-  iconColor: string;
-  Icon: React.ReactNode;
+  description: string;
+  icon: React.ReactNode;
   customIndex: number;
 }
 
-function ComparisonCard({
+function FeatureCard({
   title,
-  items,
-  className,
-  titleColor,
-  iconColor,
-  Icon,
+  description,
+  icon,
   customIndex,
-}: ComparisonCardProps) {
+}: FeatureCardProps) {
   return (
     <motion.div
       variants={fadeUpVariants}
@@ -82,19 +93,17 @@ function ComparisonCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className={cn("rounded-3xl p-8 flex-1", className)}
+      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-lg p-6 flex flex-col shadow-[0_0_15px_rgba(79,70,229,0.15)] hover:shadow-[0_0_20px_rgba(79,70,229,0.25)] transition-all duration-300"
     >
-      <h3 className={cn("text-2xl font-bold mb-6", titleColor)}>
+      <div className="rounded-full bg-indigo-500/20 p-3 w-fit mb-4 border border-indigo-500/30">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-2 text-indigo-600">
         {title}
       </h3>
-      <ul className="space-y-4">
-        {items.map((item, index) => (
-          <li key={index} className="flex items-start gap-3">
-            {Icon}
-            <span className="text-gray-700">{item.text}</span>
-          </li>
-        ))}
-      </ul>
+      <p className="text-gray-700">
+        {description}
+      </p>
     </motion.div>
   );
 }
@@ -113,92 +122,50 @@ const fadeUpVariants = {
 };
 
 export default function Comparison() {
-  const { title, subtitle, traditional, platform } = comparisonConfig;
+  const { title, subtitle, challenges, benefits } = comparisonConfig;
 
   return (
-    <section className="py-24 px-4 relative overflow-hidden">
-         <div className="absolute inset-0 overflow-hidden">
-        <ElegantShape
-          delay={0.3}
-          width={600}
-          height={140}
-          rotate={12}
-          gradient="from-indigo-500/[0.2]"
-          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
-        />
-
-        <ElegantShape
-          delay={0.5}
-          width={500}
-          height={120}
-          rotate={-15}
-          gradient="from-rose-500/[0.2]"
-          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
-        />
-
-        <ElegantShape
-          delay={0.4}
-          width={300}
-          height={80}
-          rotate={-8}
-          gradient="from-violet-500/[0.2]"
-          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
-        />
-
-        <ElegantShape
-          delay={0.6}
-          width={200}
-          height={60}
-          rotate={20}
-          gradient="from-amber-500/[0.2]"
-          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
-        />
-
-        <ElegantShape
-          delay={0.7}
-          width={150}
-          height={40}
-          rotate={-25}
-          gradient="from-cyan-500/[0.2]"
-          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+    <section className="py-16 px-4 relative">
       <div className="container relative z-10">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <motion.h2 
-            variants={fadeUpVariants}
-            custom={0}
-            className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
-          >
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             {title}
-          </motion.h2>
-          <motion.p
-            variants={fadeUpVariants}
-            custom={1}
-            className="text-xl text-gray-600 max-w-2xl mx-auto"
-          >
-            {subtitle}
-          </motion.p>
-        </motion.div>
+          </h2>
+        </div>
 
-        <div className="flex flex-col gap-4 md:flex-row  max-w-5xl mx-auto ">
-          <ComparisonCard
-            {...traditional}
-            Icon={<X className="w-4 h-4 text-red-500 mt-1"/>}
-            customIndex={2}
-            
-          />
-          <ComparisonCard
-            {...platform}
-            Icon={<Check className="w-4 h-4 text-green-500 mt-1"/>}
-            customIndex={3}
-          />
+        <div className="space-y-16">
+          {/* Challenges Section */}
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {challenges.map((challenge, index) => (
+                <FeatureCard
+                  key={index}
+                  title={challenge.title}
+                  description={challenge.description}
+                  icon={challenge.icon}
+                  customIndex={index}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Benefits Section */}
+          <div className="flex flex-col items-center justify-center gap-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Say YES instead
+          </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {benefits.map((benefit, index) => (
+                <FeatureCard
+                  key={index}
+                  title={benefit.title}
+                  description={benefit.description}
+                  icon={benefit.icon}
+                  customIndex={index}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

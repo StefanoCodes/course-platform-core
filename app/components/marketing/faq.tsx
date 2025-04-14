@@ -4,28 +4,36 @@ import { Accordion, Accordions } from "../ui/accordion"
 export default function FAQ() {
   const faqs = [
     {
-      title: "How do I get started as a teacher?",
-      content: "Getting started is easy! Simply sign up for a teacher account, verify your credentials, and you can begin creating your first course. We provide comprehensive tools and guides to help you structure your content, set up assessments, and engage with students effectively."
+      title: "What is PLAT4ME?",
+      content: "PLAT4ME is a online platform that allows teachers to upload their lessons for students to access to at anytime and anywhere, allowing teachers to expand their reach beyond timezones and conflicting schedule"
     },
     {
-      title: "What types of courses can I create?",
-      content: "You can create courses in virtually any subject area. Whether you're teaching academic subjects, professional skills, creative arts, or personal development, our platform supports various content types including video lectures, interactive assignments, quizzes, and downloadable resources."
+      title: "Can I use this platform even if I'm already teaching live classes?",
+      content: "Of course, this platform is actually an addition to live classes, it is designed to meet the excess demand for teachers who cannot cater their time for extra zoom lessons and overwhelming amour of students"
     },
     {
-      title: "How does the payment system work?",
-      content: "We handle all payment processing securely. You set your course pricing, and when students enroll, we process the payment and transfer your earnings to your account. We offer flexible payout options and transparent revenue sharing, with teachers typically receiving 70-80% of course sales."
+      title: "Do I own my content and can I remove it anytime?",
+      content: "Yes the content you upload is fully yours and no one but you has access to it, and you have the ability as as admin to remove it permanently."
     },
     {
-      title: "Can I interact with my students?",
-      content: "Yes! Our platform offers multiple ways to engage with your students. You can participate in course discussions, host live sessions, provide direct feedback on assignments, and send announcements to your class. We believe in fostering an interactive learning environment."
+      title: "Can I edit or remove my course after it's been published?",
+      content: "Yes, editing and removing can both be done even after the course has been published you can either remove it permanently or private it, hence the student does not see it."
     },
     {
-      title: "What support do you offer to teachers?",
-      content: "We provide comprehensive support including technical assistance, course creation guidelines, marketing tips, and access to our teacher community. Our dedicated support team is available to help you with any questions or issues you encounter."
+      title: "Do I need technical skills to run the platform?",
+      content: "No it's easy going very user friendly, and navigating with ease, by adding, editing deleting courses/ students."
     },
     {
-      title: "How do I track my course's performance?",
-      content: "Our analytics dashboard provides detailed insights into your course performance, including student enrollment numbers, completion rates, revenue statistics, and student feedback. This data helps you understand your impact and optimize your teaching approach."
+      title: "Are there any hidden costs?",
+      content: "No, there are no hidden costs it is a one time payment, with no monthly ties, and 100% of revenue is yours."
+    },
+    {
+      title: "Is there a limit to how many lessons or courses I can upload?",
+      content: "No limits upload as many courses or lessons as you like."
+    },
+    {
+      title: "Is there a limit to how many students I enroll?",
+      content: "No, there is no limit on the amount of students enrolled"
     }
   ]
 
@@ -50,12 +58,13 @@ export default function FAQ() {
         </div>
 
         {/* FAQ Accordions */}
-        <Accordions className="max-w-3xl mx-auto flex flex-col gap-4 border-0">
+        {/* @ts-ignore */}
+        <Accordions className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2  gap-4 md:gap-x-8 border-0">
           {faqs.map((faq, index) => (
             <Accordion
               key={index}
               title={faq.title}
-              className="bg-white rounded-lg  border-0 border-b"
+              className="bg-white   border-0 border-b"
             >
               <p>{faq.content}</p>
             </Accordion>
@@ -69,7 +78,7 @@ export default function FAQ() {
           </p>
           <a
             href="/contact"
-            className="text-brand-primary hover:text-brand-primary/90 font-semibold"
+            className="text-indigo-500 hover:text-indigo-600 font-semibold"
           >
             Contact our support team →
           </a>

@@ -58,7 +58,7 @@ export const Accordion = forwardRef<
         className="not-prose flex flex-row items-center font-medium text-foreground"
       >
         <AccordionPrimitive.Trigger 
-          className="flex flex-1 items-center gap-2 p-4 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex flex-1 items-center gap-2 p-4 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
         >
           <ChevronRight 
             className="-ms-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/accordion:rotate-90" 
