@@ -19,6 +19,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Columns,
+  MoreVertical,
   Pencil,
   Trash
 } from 'lucide-react'
@@ -28,16 +29,20 @@ import { href, Link } from 'react-router'
 import { ActivateStudent } from '~/components/features/students/activate-student'
 import { CreateStudent } from '~/components/features/students/create-student'
 import { DeactivateStudent } from '~/components/features/students/deactivate-student'
+import { DeleteStudent } from '~/components/features/students/delete-student'
 import { StatusBadge } from '~/components/features/students/status-badge'
 
 import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
+  DropdownMenuSeparator,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger
 } from '~/components/ui/dropdown-menu'
 import { Label } from '~/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import {
   Select,
   SelectContent,
@@ -76,6 +81,7 @@ const columns: ColumnDef<Student>[] = [
     header: 'Phone',
   },
   {
+    id:"Status",
     accessorKey: 'isActivated',
     header: 'Status',
     cell: ({ row }) => (
@@ -83,23 +89,46 @@ const columns: ColumnDef<Student>[] = [
     ),
   },
   {
+    id:'Created at',
     accessorKey: 'created_at',
     header: 'Created At',
     cell: ({ row }) => (
-      <span className='text-muted-foreground'>{formatDateToString(row.original.created_at)}</span>
+      <span className='text-muted-foreground'>{formatDateToString(row.original.createdAt)}</span>
     ),
   },
   {
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => (
-      <div className='flex items-center gap-2'>
-        {!row.original.isActivated ? (
+      <Popover>
+      <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8 cursor-pointer"
+            size="icon"
+          >
+            <MoreVertical />
+            <span className="sr-only">Open menu</span>
+          </Button>
+          </PopoverTrigger>
+        <PopoverContent align="end" className="w-32">
+         <div className='flex flex-col gap-4'>
+
+          <Button type="button" variant="ghost" className="cursor-pointer" asChild><Link to={href(`/dashboard/students/:studentId/edit`, { studentId: row.original.studentId })}>Edit</Link></Button>
+          <DropdownMenuSeparator/>
+   {!row.original.isActivated ? (
           <ActivateStudent studentId={row.original.studentId} />
         ) : (
           <DeactivateStudent studentId={row.original.studentId} />
         )}
-      </div>
+       <DropdownMenuSeparator/>
+            <DeleteStudent studentId={row.original.studentId} />
+        </div>
+        </PopoverContent>
+      </Popover>
+      // <div className='flex items-center gap-2'>
+    
+      // </div>
     ),
   },
 ]

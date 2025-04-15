@@ -24,7 +24,7 @@ export function DeactivateStudent({ studentId }: { studentId: string }) {
                 action: "/resource/student"
             })
         }}>
-            <Button type="submit" disabled={isSubmitting} variant="outline" className="cursor-pointer">{isSubmitting ? "Deactivating..." : "Deactivate"}</Button>
+            <Button type="submit" disabled={isSubmitting} variant="ghost" className="cursor-pointer">{isSubmitting ? "Deactivating..." : "Deactivate"}</Button>
         </fetcher.Form>
     )
 }

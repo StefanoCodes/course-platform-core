@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin } from "better-auth/plugins/admin";
-import { data, redirect } from "react-router";
+import { data } from "react-router";
 import db from "~/db/index.server";
-import { user, session, account, verification } from "~/db/schema";
+import { account, session, user, verification } from "~/db/schema";
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -84,6 +84,25 @@ export async function handleSignOut(request: Request) {
             message: "Failed to sign out"
         }
     }
+    return data({
+        success: true,
+        message: "Signed out successfully"
+    })
+}
+
+export async function handleSignOutStudent(request: Request) {
+    const { success } = await auth.api.signOut({
+        headers: request.headers
+    })
+    if (!success) {
+        return {
+            success: false,
+            message: "Failed to sign out"
+        }
+    }
+
+    // TODO: REVOKE ALL SESSIONS FOR THE USER TO LOGOUT THEM OUT AND ON LOGIN REVOKE ALL SESSIONS FOR THE USER AND CREATE A NEW ONE
+
     return data({
         success: true,
         message: "Signed out successfully"

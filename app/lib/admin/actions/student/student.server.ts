@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { studentsTable } from '~/db/schema';
+import { account, session, studentsTable, user } from '~/db/schema';
 import { createStudentSchema, updateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import { auth, isAdminLoggedIn } from '~/lib/auth.server';
 import bcrypt from "bcrypt"
@@ -70,6 +70,41 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }
 
+}
+export async function handleDeleteStudent(request: Request, formData: FormData) {
+    // admin auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        return data({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+
+    const { studentId } = Object.fromEntries(formData);
+
+    if (!studentId || typeof studentId !== "string") {
+        return data({ success: false, message: "Student ID is required" }, { status: 400 })
+    }
+
+    // Deleteing their user sessions etc
+
+
+
+    try {
+        await db.transaction(async (tx) => {
+            // delete account for the user
+            await db.delete(account).where(eq(account.userId, studentId))
+            // delete user
+            await db.delete(user).where(eq(user.id, studentId))
+            // delete sessions for the user
+            await db.delete(session).where(eq(session.userId, studentId))
+            // Delete Student fron the studentsTable
+            await tx.delete(studentsTable).where(eq(studentsTable.studentId, studentId))
+        })
+
+        return data({ success: true, message: "Student deleted successfully" }, { status: 200 })
+    } catch (error) {
+        console.error(`Error deleting student:`, error)
+        return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
+    }
 }
 
 export async function handleActivateStudent(request: Request, formData: FormData) {

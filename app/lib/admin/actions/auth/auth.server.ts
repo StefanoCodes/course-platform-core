@@ -105,6 +105,9 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
             })
         }
 
+
+
+
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
@@ -113,6 +116,9 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
                 callbackURL: `${process.env.BASE_URL}/student/courses`
             }
         });
+
+        // revoke all sessions for the user excpet the new one to prevent multiple logins
+
 
         return data({
             success: true,
