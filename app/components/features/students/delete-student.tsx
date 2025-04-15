@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import type { FetcherResponse } from "~/lib/types"
 
-export function ActivateStudent({ studentId }: { studentId: string }) {
+export function DeleteStudent({ studentId }: { studentId: string }) {
     const fetcher = useFetcher<FetcherResponse>()
     const isSubmitting = fetcher.state === "submitting"
     useEffect(() => {
@@ -17,14 +17,14 @@ export function ActivateStudent({ studentId }: { studentId: string }) {
         }
     }, [fetcher.data])
     return (
-        <fetcher.Form method="POST" action="/resource/student" className="flex items-center gap-2" onSubmit={(e) => {
+        <fetcher.Form method="POST" action="/resource/student" className="flex gap-2" onSubmit={(e) => {
             e.preventDefault()
-            fetcher.submit({ studentId, intent: "activate-student" }, {
+            fetcher.submit({ studentId, intent: "delete-student" }, {
                 method: "POST",
                 action: "/resource/student"
             })
         }}>
-            <Button type="submit" disabled={isSubmitting} variant="ghost" className="cursor-pointer">{isSubmitting ? "Activating..." : "Activate"}</Button>
+            <Button type="submit" disabled={isSubmitting} variant="ghost" className="cursor-pointer hover:bg-white w-full text-red-400">{isSubmitting ? "Deleting..." : "Delete"}</Button>
         </fetcher.Form>
     )
 }
