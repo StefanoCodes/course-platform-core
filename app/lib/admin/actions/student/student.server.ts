@@ -202,7 +202,14 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
 
     const isEmailChanged = existingStudent.email !== validatedFields.email;
 
-
+    if (isEmailChanged) {
+        await auth.api.changeEmail({
+            body: {
+                newEmail: validatedFields.email
+            },
+            headers: request.headers
+        })
+    }
 
     try {
 
