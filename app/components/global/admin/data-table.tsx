@@ -123,7 +123,6 @@ const columns: ColumnDef<Student>[] = [
         )}
        <DropdownMenuSeparator/>
             <DeleteStudent studentId={row.original.studentId} />
-
         </div>
         </PopoverContent>
       </Popover>

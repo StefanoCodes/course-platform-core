@@ -4,8 +4,8 @@ import { Button } from "~/components/ui/button";
 import type { FetcherResponse } from "~/lib/types";
 import { cn } from "~/lib/utils";
 
-export function LogoutProvider({ children, className }: { children?: React.ReactNode, className?: string }) {
-    const fetcher = useFetcher<FetcherResponse>({ key: "sign-out" });
+export function LogoutProvider({ children, className, type }: { children?: React.ReactNode, className?: string, type: "admin" | "student" }) {
+    const fetcher = useFetcher<FetcherResponse>();
     const isPending = fetcher.state !== "idle";
     return (
         <fetcher.Form
@@ -14,7 +14,7 @@ export function LogoutProvider({ children, className }: { children?: React.React
                 e.preventDefault();
                 fetcher.submit(
                     {
-                        intent: "sign-out",
+                        intent: `sign-out-${type}`,
                     },
                     {
                         action: "/resource/auth",

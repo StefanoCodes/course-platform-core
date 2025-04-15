@@ -1,10 +1,10 @@
 import { data, type ActionFunctionArgs } from "react-router"
 import { handleSignInAdmin, handleSignInStudent } from "~/lib/admin/actions/auth/auth.server"
-import { handleSignOut } from "~/lib/auth.server"
+import { handleSignOut, handleSignOutStudent } from "~/lib/auth.server"
 // import { handleSignInAdmin, handleSignInStudent, handleSignOut } from "~/lib/admin/actions/auth/auth.server"
 
 
-const intents = ["sign-in-admin", "sign-in-student", "sign-out"]
+const intents = ["sign-in-admin", "sign-in-student", "sign-out-admin", "sign-out-student"]
 
 export async function loader() {
     return data('Not Allowed', { status: 405 })
@@ -22,7 +22,8 @@ export async function action({ request }: ActionFunctionArgs) {
         const handlers = {
             'sign-in-admin': handleSignInAdmin,
             'sign-in-student': handleSignInStudent,
-            'sign-out': handleSignOut,
+            'sign-out-admin': handleSignOut,
+            "sign-out-student": handleSignOutStudent,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]

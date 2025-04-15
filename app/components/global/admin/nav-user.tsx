@@ -86,7 +86,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <LogoutProvider>
+            <LogoutProvider type="admin">
               <DropdownMenuItem className="w-full">
                 <LogOut />
                 Log out
