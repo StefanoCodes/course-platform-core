@@ -1,5 +1,5 @@
 import { data, type ActionFunctionArgs } from "react-router"
-import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent, handleDeleteStudent, handleUpdateStudent } from "~/lib/admin/actions/student/student.server"
+import { handleActivateStudent, handleCreateStudent, handleDeactivateStudent, handleDeleteStudent, handleUpdateStudent, handleUpdateStudentPassword } from "~/lib/admin/actions/student/student.server"
 
 
 const intents = ["create-student", "delete-student", "activate-student", "deactivate-student", "update-student", "update-student-password"]
@@ -23,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
             'activate-student': handleActivateStudent,
             'deactivate-student': handleDeactivateStudent,
             'update-student': handleUpdateStudent,
-            // 'update-student-password': handleUpdateStudentPassword,
+            'update-student-password': handleUpdateStudentPassword,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]
