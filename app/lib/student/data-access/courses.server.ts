@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { coursesTable } from "~/db/schema";
@@ -11,7 +11,7 @@ export async function getCourseBySlug(request: Request, slug: string) {
     }
 
     try {
-        const [course] = await db.select().from(coursesTable).where(eq(coursesTable.slug, slug)).limit(1);
+        const [course] = await db.select().from(coursesTable).where(and(eq(coursesTable.slug, slug), eq(coursesTable.isPublic, true))).limit(1);
         return { success: true, course };
     } catch (error) {
         console.error("🔴Error fetching course from database:", error);

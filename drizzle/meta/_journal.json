@@ -29,6 +29,20 @@
       "when": 1744637367759,
       "tag": "0003_dusty_vision",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744891509011,
+      "tag": "0004_absurd_iron_monger",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1744904678717,
+      "tag": "0005_parched_vance_astro",
+      "breakpoints": true
     }
   ]
 }
