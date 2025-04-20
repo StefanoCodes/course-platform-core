@@ -1,8 +1,8 @@
 
-import { count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, inArray } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
-import { studentsTable } from "~/db/schema";
+import { coursesTable, studentCoursesTable, studentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "~/lib/auth.server";
 
 export async function GetAllStudents(request: Request) {
@@ -43,6 +43,28 @@ export async function GetStudentById(request: Request, studentId: string) {
     } catch (e) {
         console.error("🔴Error fetching student from database:", e)
         return { success: false, student: null }
+    }
+}
+
+export async function getCoursesStudentEnrolledIn(request: Request, studentId: string) {
+    // auth check
+    const { isLoggedIn, admin } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect('/login');
+    }
+    if (!admin) {
+        console.error('Student not found');
+        return { courses: [] };
+    }
+    try {
+        const studentCourses = await db.select().from(studentCoursesTable).where(eq(studentCoursesTable.studentId, studentId));
+        // find all the courses that the student is assigned to
+        const courses = await db.select().from(coursesTable).where(and(eq(coursesTable.isPublic, true), inArray(coursesTable.id, studentCourses.map(course => course.courseId))));
+
+        return { courses };
+    } catch (error) {
+        console.error(`Error fetching student courses: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        return { courses: [] };
     }
 }
 
