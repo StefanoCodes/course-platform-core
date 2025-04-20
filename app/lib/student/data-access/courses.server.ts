@@ -11,9 +11,10 @@ export async function getCourseBySlug(request: Request, slug: string) {
     }
 
     try {
-        const [coursesStudentHasAccessTo] = await db.select().from(studentCoursesTable).where(and(eq(studentCoursesTable.studentId, student?.id)))
+        const [coursesStudentHasAccessTo] = await db.select().from(studentCoursesTable).where(and(eq(studentCoursesTable.studentId, student.id)))
         // check if the student has access to the course
-        const [course] = await db.select().from(coursesTable).where(and(eq(coursesTable.id, coursesStudentHasAccessTo.courseId), eq(coursesTable.isPublic, true))).limit(1)
+        const [course] = await db.select().from(coursesTable).where(and(eq(coursesTable.id, coursesStudentHasAccessTo.courseId), eq(coursesTable.isPublic, true), eq(coursesTable.slug, slug))).limit(1)
+        console.log(course)
 
         return { success: true, course };
     } catch (error) {
