@@ -80,10 +80,11 @@ export async function isStudentLoggedIn(request: Request) {
 
 }
 export async function handleSignOut(request: Request) {
-    const { success } = await auth.api.signOut({
+    const { response, headers } = await auth.api.signOut({
+        returnHeaders: true,
         headers: request.headers
     })
-    if (!success) {
+    if (!response.success) {
         return {
             success: false,
             message: "Failed to sign out"
@@ -92,25 +93,7 @@ export async function handleSignOut(request: Request) {
     return data({
         success: true,
         message: "Signed out successfully"
-    })
+    }, { headers })
 }
 
-export async function handleSignOutStudent(request: Request) {
-    const { success } = await auth.api.signOut({
-        headers: request.headers
-    })
-    if (!success) {
-        return {
-            success: false,
-            message: "Failed to sign out"
-        }
-    }
-
-    // TODO: REVOKE ALL SESSIONS FOR THE USER TO LOGOUT THEM OUT AND ON LOGIN REVOKE ALL SESSIONS FOR THE USER AND CREATE A NEW ONE
-
-    return data({
-        success: true,
-        message: "Signed out successfully"
-    })
-}
 

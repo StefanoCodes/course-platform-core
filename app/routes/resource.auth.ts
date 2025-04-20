@@ -1,6 +1,6 @@
 import { data, type ActionFunctionArgs } from "react-router"
 import { handleSignInAdmin, handleSignInStudent } from "~/lib/admin/actions/auth/auth.server"
-import { handleSignOut, handleSignOutStudent } from "~/lib/auth.server"
+import { handleSignOut } from "~/lib/auth.server"
 // import { handleSignInAdmin, handleSignInStudent, handleSignOut } from "~/lib/admin/actions/auth/auth.server"
 
 
@@ -23,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
             'sign-in-admin': handleSignInAdmin,
             'sign-in-student': handleSignInStudent,
             'sign-out-admin': handleSignOut,
-            "sign-out-student": handleSignOutStudent,
+            "sign-out-student": handleSignOut,
         } as const
 
         const handler = handlers[intent as keyof typeof handlers]
