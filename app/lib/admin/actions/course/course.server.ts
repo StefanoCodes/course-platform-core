@@ -1,11 +1,11 @@
 import { data, redirect } from "react-router";
 import { isAdminLoggedIn } from "~/lib/auth.server";
-import { createCourseSchema, updateCourseSchema } from "../../zod-schemas/course";
+import { assignCourseSchema, createCourseSchema, updateCourseSchema } from "../../zod-schemas/course";
 import { titleToSlug } from "~/lib/utils";
 import { checkSlugUnique } from "../shared/shared.server";
-import { coursesTable, segmentsTable } from "~/db/schema";
+import { coursesTable, segmentsTable, studentCoursesTable } from "~/db/schema";
 import db from "~/db/index.server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
     // auth check
@@ -193,4 +193,53 @@ export async function handleMakePrivate(request: Request, formData: FormData) {
     }
 }
 
+export async function handleUpdateCourseAssignment(request: Request, formData: FormData) {
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/admin/login")
+    }
+
+    const isAssigned = formData.get("isAssigned") === "true" ? true : false;
+    const studentId = formData.get("studentId")
+    const courseId = formData.get("courseId");
+
+    const formDataObject = {
+        isAssigned,
+        studentId,
+        courseId,
+    }
+    const unavlidatedFields = assignCourseSchema.safeParse(formDataObject);
+
+    if (!unavlidatedFields.success) {
+        return data({ success: false, message: 'Invalid form data' }, { status: 400 });
+    }
+
+    const validatedFields = unavlidatedFields.data;
+
+    try {
+        // if we are setting the value to true then we create an entry in the studentCourseTable
+        if (validatedFields.isAssigned) {
+            const [insertedStudentCourseAssignment] = await db.insert(studentCoursesTable).values({
+                studentId: validatedFields.studentId,
+                courseId: validatedFields.courseId
+
+            }).returning({
+                id: studentCoursesTable.id
+            })
+            if (!insertedStudentCourseAssignment.id) {
+                return data({ success: false, message: 'Something went wrong inserting a new student course in the student course table' }, { status: 400 });
+            }
+            return data({ success: true, message: 'Success' }, { status: 200 });
+        }
+
+        // if false then we delete the entry in the studentCourseTable
+        if (!validatedFields.isAssigned) {
+            await db.delete(studentCoursesTable).where(and(eq(studentCoursesTable.studentId, validatedFields.studentId), eq(studentCoursesTable.courseId, validatedFields.courseId)))
+            return data({ success: true, message: 'Success' }, { status: 200 });
+        }
+    } catch (error) {
+        console.error(`Error updating student course assignment`, error);
+        return data({ success: false, message: error instanceof Error ? error.message : 'An unknown error occurred' }, { status: 500 });
+    }
+}
 

@@ -34,6 +34,20 @@ export async function getCourseBySlug(request: Request, slug: string) {
         return { success: false, course: null };
     }
 }
+export async function getAllPublicCourses(request: Request) {
+    // auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/admin/login");
+    }
+    try {
+        const courses = await db.select().from(coursesTable).where(eq(coursesTable.isPublic, true)).orderBy(desc(coursesTable.createdAt));
+        return { success: true, courses };
+    } catch (error) {
+        console.error("🔴Error fetching courses from database:", error);
+        return { success: false, courses: [] };
+    }
+}
 export async function GetCoursesAnalytics(request: Request) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
@@ -48,3 +62,4 @@ export async function GetCoursesAnalytics(request: Request) {
         return { success: false, totalCoursesCount: 0, totalPublicCourses: 0, totalPrivateCourses: 0 }
     }
 }
+
