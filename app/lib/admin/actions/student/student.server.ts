@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { account, session, studentsTable, user } from '~/db/schema';
+import { account, coursesTable, session, studentCoursesTable, studentsTable, user } from '~/db/schema';
 import { createStudentSchema, updateStudentPasswordSchema, updateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import { auth, isAdminLoggedIn } from '~/lib/auth.server';
 import bcrypt from "bcrypt"
@@ -9,17 +9,21 @@ import bcrypt from "bcrypt"
 export async function handleCreateStudent(request: Request, formData: FormData) {
     // admin auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
+
     if (!isLoggedIn) {
         return data({ success: false, message: "Unauthorized" }, { status: 401 })
     }
 
-    const { name, email, phoneNumber, password } = Object.fromEntries(formData);
+    const { name, email, phoneNumber, password, } = Object.fromEntries(formData);
+    const courses = formData.get("courses") as string
+    const coursesArray = courses.split(",")
     // validate the data
-    const unvalidatedFields = createStudentSchema.safeParse({ name, email, phoneNumber, password })
+    const unvalidatedFields = createStudentSchema.safeParse({ name, email, phoneNumber, password, courses: coursesArray })
 
     if (!unvalidatedFields.success) {
         return data({ success: false, message: "Invalid form data" }, { status: 400 })
     }
+
 
 
     const validatedFields = unvalidatedFields.data
@@ -45,9 +49,8 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
             })
 
 
-
             const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
-
+            // insert into students table
             const [insertedStudent] = await db.insert(studentsTable).values({
                 name: validatedFields.name,
                 email: validatedFields.email,
@@ -55,14 +58,24 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
                 password: hashedPassword,
                 studentId: user.id
             }).returning({
-                id: studentsTable.id,
+                id: studentsTable.studentId,
             })
+
+
 
             if (!insertedStudent) {
                 throw new Error("Something went wrong")
             }
 
-            // TODO: assign student to all courses that are existing & are public
+            // insert into studentCoursesTable
+            const valuesToInsert = coursesArray.map(courseId => ({
+                studentId: user.id,
+                courseId: courseId,
+            }));
+
+
+
+            await tx.insert(studentCoursesTable).values(valuesToInsert);
         })
 
         return data({ success: true, message: "Student created successfully" }, { status: 200 })

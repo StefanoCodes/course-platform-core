@@ -1,5 +1,7 @@
 import { boolean, index, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
+// AUTH RELATED
+
 export const user = pgTable("user", {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
@@ -52,6 +54,7 @@ export const verification = pgTable("verification", {
     updatedAt: timestamp('updated_at')
 });
 
+// BUSINESS LOGIC
 
 export const studentsTable = pgTable('students', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -64,6 +67,7 @@ export const studentsTable = pgTable('students', {
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => [index('student_email_index').on(t.email), index('student_id_index').on(t.studentId)]);
+
 
 export const coursesTable = pgTable('courses', {
     id: uuid('id').primaryKey().defaultRandom(),
@@ -88,14 +92,22 @@ export const segmentsTable = pgTable('segments', {
     updated_at: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => [index('segment_name_index').on(t.name), index('segment_slug_index').on(t.slug)]);
 
-// types
+export const studentCoursesTable = pgTable('student_courses', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    studentId: text('student_id').references(() => studentsTable.studentId).notNull(),
+    courseId: uuid('course_id').references(() => coursesTable.id).notNull(),
+    created_at: timestamp('created_at').notNull().defaultNow(),
+    updated_at: timestamp('updated_at').notNull().defaultNow(),
+}, (t) => [index('student_course_student_id_index').on(t.studentId), index('student_course_course_id_index').on(t.courseId)]);
 
+
+// types
 export type Student = typeof studentsTable.$inferSelect;
 export type Course = typeof coursesTable.$inferSelect;
 export type Segment = typeof segmentsTable.$inferSelect;
+export type StudentCourse = typeof studentCoursesTable.$inferSelect;
 // AUTH RELATED
 export type User = typeof user.$inferSelect;
 export type Session = typeof session.$inferSelect;
 export type Account = typeof account.$inferSelect;
 export type Verification = typeof verification.$inferSelect;
-

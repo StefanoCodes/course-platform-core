@@ -10,6 +10,7 @@ import { Button } from "~/components/ui/button";
 import { createStudentSchema, type CreateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import type { FetcherResponse } from "~/lib/types";
 import { generateRandomPassword } from "~/lib/utils";
+import { AssignStudentToCourse } from "./assign-student-to-course";
 
 export function CreateStudent() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -25,6 +26,7 @@ export function CreateStudent() {
             email: "",
             phoneNumber: "",
             password: "",
+            courses: [],
         },
     });
 
@@ -58,7 +60,7 @@ export function CreateStudent() {
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white">Add Student</Button>
+                <Button variant="outline" className="bg-brand-primary h-fit text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white">Add Student</Button>
             </DialogTrigger>
             {isSubmitted ? (
                 <SubmittedState email={form.getValues("email")} password={form.getValues("password")} setHasCopied={setHasCopied} />
@@ -121,7 +123,20 @@ export function CreateStudent() {
                                     </FormItem>
                                 )}
                             />
-
+                             <FormField
+                                control={form.control}
+                                name="courses"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Courses <span className="text-xs text-red-500">*</span></FormLabel>
+                                        <FormControl>
+                                            <AssignStudentToCourse form={form} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <div className="flex flex-col w-full gap-2">
                                 <FormField
                                     control={form.control}

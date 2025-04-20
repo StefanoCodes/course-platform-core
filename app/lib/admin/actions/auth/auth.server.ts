@@ -1,8 +1,11 @@
+import { desc, eq, inArray } from 'drizzle-orm';
 import { data } from "react-router";
 import { loginSchema } from "../../zod-schemas/auth";
 import authClient from "~/lib/auth-client.server";
 import { auth } from "~/lib/auth.server";
 import { isStudentAccountActivated } from "~/lib/student/data-access/students.server";
+import db from "~/db/index.server";
+import { session } from "~/db/schema";
 
 // Admin Login (create first account)
 export async function handleSignInAdmin(request: Request, formData: FormData) {
@@ -108,6 +111,8 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
 
 
 
+
+
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
@@ -117,8 +122,18 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
             }
         });
 
-        // revoke all sessions for the user excpet the new one to prevent multiple logins
 
+        const allExisitingSessionForLoggedInUser = await db.select().from(session).where(eq(session.userId, response.user.id)).orderBy(desc(session.createdAt))
+
+        const oldSessionsToDelete = allExisitingSessionForLoggedInUser.slice(1);
+
+        if (oldSessionsToDelete.length > 0) {
+            const sessionIdsToDelete = oldSessionsToDelete.map((session) => session.id);
+
+            await db
+                .delete(session)
+                .where(inArray(session.id, sessionIdsToDelete));
+        }
 
         return data({
             success: true,
