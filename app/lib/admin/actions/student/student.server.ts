@@ -174,9 +174,6 @@ export async function handleDeactivateStudent(request: Request, formData: FormDa
             throw new Error("Something went wrong")
         }
 
-        // TODO: Logout user out all existing sessions using supabase (sort of like banning them)
-
-
         return data({ success: true, message: "Student deactivated successfully" }, { status: 200 })
     } catch (error) {
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
