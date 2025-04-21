@@ -32,17 +32,17 @@ export const authNavItems: NavItem[] = [
         href: "/demo",
     },
 ];
+
 export const studentNavItems: NavItem[] = [
     {
         label: "Courses",
         href: "/student/courses",
         icon: BookOpen
     },
-    {
-        label: "Profile",
-        href: "/student/profile",
-        icon: User
-    },
-
+    // {
+    //     label: "Profile",
+    //     href: "/student/profile",
+    //     icon: User
+    // },
 ];
 

@@ -26,8 +26,8 @@ export function useCoursesLoaderData() {
 }
 export default function Page() {
     return (
-        <div className="flex flex-col gap-4 md:gap-8 h-full overflow-hidden py-4">
-            <div className="flex flex-row justify-between w-full ">
+        <div className="flex flex-col gap-8 md:gap-12 h-full overflow-hidden py-4">
+            <div className="flex flex-row justify-between items-center w-full ">
                 <h1>Courses</h1>
                 <CreateCourse />
             </div>
