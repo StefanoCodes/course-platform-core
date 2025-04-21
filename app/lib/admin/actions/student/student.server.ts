@@ -84,6 +84,7 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
     }
 
 }
+
 export async function handleDeleteStudent(request: Request, formData: FormData) {
     // admin auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -189,6 +190,7 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
         return data({ success: false, message: "Unauthorized" }, { status: 401 })
     }
 
+
     const { studentId, name, email, phoneNumber } = Object.fromEntries(formData);
 
     if (!studentId) {
@@ -203,26 +205,6 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
     }
 
     const validatedFields = unvalidatedFields.data
-
-    // Check if email is already in use by another student
-    const [alreadyExistingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.email, validatedFields.email)).limit(1)
-
-    if (alreadyExistingStudent && alreadyExistingStudent.studentId !== studentId) {
-        return data({ success: false, message: "Email already in use by another student" }, { status: 400 })
-    }
-    // at this point it means we can change the email since there is not a student with it already
-    const [existingStudent] = await db.select().from(studentsTable).where(eq(studentsTable.studentId, studentId as string)).limit(1)
-
-    const isEmailChanged = existingStudent.email !== validatedFields.email;
-
-    if (isEmailChanged) {
-        await auth.api.changeEmail({
-            body: {
-                newEmail: validatedFields.email
-            },
-            headers: request.headers
-        })
-    }
 
     try {
 
@@ -240,7 +222,7 @@ export async function handleUpdateStudent(request: Request, formData: FormData) 
                 studentId: studentsTable.studentId
             });
 
-        if (!updatedStudent) {
+        if (!updatedStudent.studentId) {
             throw new Error("Failed to update student")
         }
         return data({ success: true, message: "Student updated successfully" }, { status: 200 })
@@ -285,30 +267,3 @@ export async function handleUpdateStudentPassword(request: Request, formData: Fo
         return data({ success: false, message: error instanceof Error ? error.message : "Something went wrong" }, { status: 500 })
     }
 }
-
-// async function UpdateEmail(request: Request, email: string, studentId: string) {
-//     const { client } = createSupabaseAdminClient(request);
-
-//     const { data, error } = await client.auth.admin.updateUserById(studentId, {
-//         email,
-//     });
-//     if (error) {
-//         console.error(`Error updating email:`, error)
-//         return {
-//             success: false,
-//         }
-//     }
-//     try {
-//         await db.update(studentsTable).set({
-//             email,
-//         }).where(eq(studentsTable.studentId, studentId))
-//         return {
-//             success: true,
-//         }
-//     } catch (e) {
-//         console.error(`Error updating user email:`, e)
-//         return {
-//             success: false
-//         }
-//     }
-// }

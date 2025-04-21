@@ -129,12 +129,11 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
                                 control={form.control}
                                 name="email"
                                 defaultValue={student.email}
-                                disabled={isSubmitting}
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Email <span className="text-xs text-red-500">*</span></FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter student email" type="email" {...field} />
+                                            <Input disabled placeholder="Enter student email" type="email" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
