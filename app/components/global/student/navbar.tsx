@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Button } from "~/components/ui/button";
 import { studentNavItems } from "~/config/navigation";
@@ -41,73 +41,103 @@ export function StudentNavbar() {
     )
 }
 
-function HamburgerMenu( {pathname}: {pathname: string}) {
+function HamburgerMenu({pathname}: {pathname: string}) {
     const [isOpen, setIsOpen] = useState(false);
-    return (
-        <div className="md:hidden">
-                <Button
-                    variant="outline"
-                    className="border-none"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    <motion.div
-                        animate={isOpen ? "open" : "closed"}
-                        className="flex flex-col gap-1"
-                    >
-                        <motion.span
-                            variants={{
-                                closed: { rotate: 0, y: 0 },
-                                open: { rotate: 45, y: 4 },
-                            }}
-                            className="h-0.5 w-6 bg-black block origin-center"
-                        />
-                        <motion.span
-                            variants={{
-                                closed: { opacity: 1 },
-                                open: { opacity: 0 },
-                            }}
-                            className="h-0.5 w-6 bg-black block"
-                        />
-                        <motion.span
-                            variants={{
-                                closed: { rotate: 0, y: 0 },
-                                open: { rotate: -45, y: -4 },
-                            }}
-                            className="h-0.5 w-6 bg-black block origin-center"
-                        />
-                    </motion.div>
-                </Button>
+    
+    // Handle click outside to close menu
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (isOpen && !target.closest('.mobile-menu-container')) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isOpen]);
 
+    // Close menu on escape key
+    useEffect(() => {
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setIsOpen(false);
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, []);
+
+    return (
+        <div className="md:hidden mobile-menu-container">
+            <Button
+                variant="outline"
+                className="border-none"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-expanded={isOpen}
+                aria-label="Toggle navigation menu"
+                aria-controls="mobile-menu"
+            >
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{
-                        opacity: isOpen ? 1 : 0,
-                        y: isOpen ? 0 : -20,
-                        display: isOpen ? "flex" : "none",
-                    }}
-                    className="absolute top-[var(--navbar-height)] left-0 right-0 z-30 bg-[#333] flex-col gap-4 p-4"
+                    animate={isOpen ? "open" : "closed"}
+                    className="flex flex-col gap-1"
                 >
-                    {studentNavItems.map((link) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <Button
-                                key={link.href}
-                                variant={"outline"}
-                                className={cn(
-                                    "w-full hover:bg-brand-primary/80 border-none text-black",
-                                    isActive && "bg-brand-primary text-white"
-                                )}
-                                asChild
-                            >
-                                <Link className="cursor-pointer" to={link.href}>
-                                    {link.icon && <link.icon className="w-4 h-4" />}
-                                    <span>{link.label}</span>
-                                </Link>
-                            </Button>
-                        );
-                    })}
-                    <LogoutProvider className="w-full" type="student" />
+                    <motion.span
+                        variants={{
+                            closed: { rotate: 0, y: 0 },
+                            open: { rotate: 45, y: 6 },
+                        }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="h-0.5 w-6 bg-black block origin-center"
+                    />
+                    <motion.span
+                        variants={{
+                            closed: { opacity: 1 },
+                            open: { opacity: 0 },
+                        }}
+                        transition={{ duration: 0.2 }}
+                        className="h-0.5 w-6 bg-black block origin-center"
+                    />
+                    <motion.span
+                        variants={{
+                            closed: { rotate: 0, y: 0 },
+                            open: { rotate: -45, y: -6 },
+                        }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="h-0.5 w-6 bg-black block origin-center"
+                    />
                 </motion.div>
-            </div>
-    )
+            </Button>
+
+            <motion.div
+                id="mobile-menu"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{
+                    opacity: isOpen ? 1 : 0,
+                    y: isOpen ? 0 : -20,
+                    display: isOpen ? "flex" : "none",
+                }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-[var(--navbar-height)] left-0 right-0 z-30 bg-[#333] flex-col gap-4 p-4 shadow-lg"
+            >
+                {studentNavItems.map((link) => {
+                    const isActive = pathname === link.href;
+                    return (
+                        <Button
+                            key={link.href}
+                            variant={"outline"}
+                            className={cn(
+                                "w-full hover:bg-brand-primary/80 border-none text-white",
+                                isActive && "bg-brand-primary text-white"
+                            )}
+                            asChild
+                        >
+                            <Link className="cursor-pointer" to={link.href}>
+                                {link.icon && <link.icon className="w-4 h-4" />}
+                                <span>{link.label}</span>
+                            </Link>
+                        </Button>
+                    );
+                })}
+                <LogoutProvider className="w-full" type="student" />
+            </motion.div>
+        </div>
+    );
 }
