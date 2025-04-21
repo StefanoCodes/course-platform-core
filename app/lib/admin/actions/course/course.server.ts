@@ -120,6 +120,8 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
     try {
         // need to delete all the segments connected to the course aswell i belive with onCascade
         await db.transaction(async (tx) => {
+            // delete in the studentCoursesEntry
+            await tx.delete(studentCoursesTable).where(eq(studentCoursesTable.courseId, courseId))
             // delete all the segments connected to the course
             await tx.delete(segmentsTable).where(eq(segmentsTable.courseId, courseId));
             // delete the course
