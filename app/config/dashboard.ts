@@ -23,27 +23,22 @@ export const dashboardConfig = {
         icon: Users,
         url: "/dashboard/students",
       },
-      {
-        title: "Admins",
-        icon: Users,
-        url: "/dashboard/admins",
-      },
-      {
-        title: "Messages",
-        icon: MessageCircle,
-        url: "/dashboard/messages",
-      },
-      {
-        title: "Settings",
-        icon: Settings,
-        url: "/dashboard/settings",
-      },
+      // {
+      //   title: "Admins",
+      //   icon: Users,
+      //   url: "/dashboard/admins",
+      // },
+      // {
+      //   title: "Messages",
+      //   icon: MessageCircle,
+      //   url: "/dashboard/messages",
+      // },
+      // {
+      //   title: "Settings",
+      //   icon: Settings,
+      //   url: "/dashboard/settings",
+      // },
     ],
-    user: {
-      name: "Admin",
-      email: "admin@gmail.com",
-      avatar: "/assets/logo.webp",
-    },
   },
 }
 
