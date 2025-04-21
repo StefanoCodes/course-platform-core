@@ -6,7 +6,7 @@ export function DeleteCourse({ courseId }: { courseId: string }) {
         <DeleteDialog
             resourceRoute="/resource/course"
             hiddenInputs={[
-                { name: 'id', value: courseId },
+                { name: 'courseId', value: courseId },
                 { name: 'intent', value: 'delete-course' }
             ]}
             title="Delete Course"

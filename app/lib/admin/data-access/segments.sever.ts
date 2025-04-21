@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
 import { segmentsTable } from "~/db/schema";
@@ -17,7 +17,7 @@ export async function getAllSegmentsForCourse(request: Request, courseSlug: stri
         if (!course) {
             throw redirect("/dashboard/courses");
         }
-        const segments = await db.select().from(segmentsTable).where(eq(segmentsTable.courseId, course.id));
+        const segments = await db.select().from(segmentsTable).where(eq(segmentsTable.courseId, course.id)).orderBy(asc(segmentsTable.created_at));
         return { success: true, segments };
     } catch (error) {
         console.error("🔴Error fetching segments from database:", error);
