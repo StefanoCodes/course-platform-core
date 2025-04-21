@@ -1,5 +1,3 @@
-// get active status for a student based on their id
-
 import { and, eq, inArray } from "drizzle-orm";
 import { redirect } from "react-router";
 import db from "~/db/index.server";
@@ -7,11 +5,10 @@ import { coursesTable, studentCoursesTable, studentsTable } from "~/db/schema";
 import { isStudentLoggedIn } from "~/lib/auth.server";
 
 export async function isStudentAccountActivated(email: string) {
-
     // get active status for a student based on their id
     const [student] = await db.select().from(studentsTable).where(eq(studentsTable.email, email));
     // incase the admin ends up here the student will be undefined so we just return false if thats the case
-    if (!student) return {
+    if (!student.id) return {
         isStudentActivated: false,
     }
     return {

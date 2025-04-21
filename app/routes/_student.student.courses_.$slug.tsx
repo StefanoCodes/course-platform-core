@@ -47,19 +47,19 @@ export default function CourseDetails({ loaderData }: Route.ComponentProps) {
                         Back to Courses
                     </Link>
                 </Button>
-                <div className="flex items-center gap-3 mb-4">
+                {/* <div className="flex items-center gap-3 mb-4">
                     <div className="bg-brand-primary/10 p-3 rounded-full">
                         <BookOpen className="h-6 w-6 text-brand-primary" />
                     </div>
                     <h1 className="text-3xl font-bold">{name}</h1>
-                </div>
-                <p className="text-gray-600 text-lg max-w-3xl">{description}</p>
+                </div> */}
+                {/* <p className="text-gray-600 text-lg max-w-3xl">{description}</p> */}
             </div>
 
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold mb-4">Videos</h2>
                 {segments.length === 0 ? (
-                    <p className="text-gray-500">No segments available for this course yet.</p>
+                    <p className="text-gray-500">No videos available for this course yet.</p>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {segments.map((segment) => (

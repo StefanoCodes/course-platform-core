@@ -20,7 +20,7 @@ export async function getAllCourses(request: Request) {
     }
 }
 export async function getCourseBySlug(request: Request, slug: string) {
-    // TODO: auth check
+
     const { isLoggedIn } = await isAdminLoggedIn(request)
     if (!isLoggedIn) {
         throw redirect("/login")

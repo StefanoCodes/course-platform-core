@@ -1,11 +1,10 @@
 import { desc, eq, inArray } from 'drizzle-orm';
 import { data } from "react-router";
-import { loginSchema } from "../../zod-schemas/auth";
-import authClient from "~/lib/auth-client.server";
+import db from "~/db/index.server";
+import { session, user } from "~/db/schema";
 import { auth } from "~/lib/auth.server";
 import { isStudentAccountActivated } from "~/lib/student/data-access/students.server";
-import db from "~/db/index.server";
-import { session } from "~/db/schema";
+import { loginSchema } from "../../zod-schemas/auth";
 
 // Admin Login (create first account)
 export async function handleSignInAdmin(request: Request, formData: FormData) {
@@ -24,30 +23,6 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
     const validatedFields = unvalidatedFields.data;
 
     try {
-
-        // first time to login / create admins
-
-        // const { headers, response } = await auth.api.signUpEmail({
-        //     returnHeaders: true,
-        //     body: {
-        //         email: validatedFields.email,
-        //         password: validatedFields.password,
-        //         name: "Stefano",
-        //         role: "admin"
-        //     }
-        // });
-
-        // console.log(headers, response);
-
-        // if (!response.user.id) {
-        //     return data({
-        //         success: false,
-        //         message: "Something went wrong",
-        //     }, {
-        //         status: 403,
-        //     })
-        // }
-
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
@@ -58,6 +33,15 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
         });
 
 
+        const [signedInUser] = await db.select().from(user).where(eq(user.id, response.user.id)).limit(1)
+
+        if (signedInUser.role !== "admin") {
+            return data({
+                success: false,
+                message: "Not Allowed",
+                redirectTo: '/login'
+            }, { status: 403 })
+        }
 
         return data({
             success: true,
@@ -111,10 +95,6 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
         }
 
 
-
-
-
-
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
@@ -124,6 +104,15 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
             }
         });
 
+        const [signedInUser] = await db.select().from(user).where(eq(user.id, response.user.id)).limit(1)
+
+        if (signedInUser.role === "admin") {
+            return data({
+                success: false,
+                message: "Not Allowed",
+                redirectTo: '/admin/login'
+            }, { status: 403 })
+        }
 
         const allExisitingSessionForLoggedInUser = await db.select().from(session).where(eq(session.userId, response.user.id)).orderBy(desc(session.createdAt))
 

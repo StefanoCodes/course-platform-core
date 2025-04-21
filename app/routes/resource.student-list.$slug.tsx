@@ -17,7 +17,6 @@ export async function loader({ request,params }: Route.LoaderArgs) {
     }
     try {
         const [selectedCourse] = await db.select().from(coursesTable).where(eq(coursesTable.slug, slug)).limit(1)
-        console.log(selectedCourse)
         const studentsInCourse = await db.select().from(studentCoursesTable).where(eq(studentCoursesTable.courseId, selectedCourse.id))
         const studentIds = studentsInCourse.map((student) => student.studentId)
         const studentsList = await db.select().from(studentsTable).where(inArray(studentsTable.studentId,studentIds ))
