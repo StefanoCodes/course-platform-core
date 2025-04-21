@@ -1,9 +1,8 @@
 import { Outlet, redirect, useRouteLoaderData } from "react-router";
 import { CourseEditSidebar } from "~/components/features/courses/edit/course-edit-sidebar";
-import type { Route } from "./+types/_dashboard._editor";
-import { isAdminLoggedIn } from "~/lib/auth.server";
 import { getAllSegmentsForCourse } from "~/lib/admin/data-access/segments.sever";
-import { Button } from "~/components/ui/button";
+import { isAdminLoggedIn } from "~/lib/auth.server";
+import type { Route } from "./+types/_dashboard._editor";
 export async function loader({ request, params }: Route.LoaderArgs) {
 
     const { isLoggedIn } = await isAdminLoggedIn(request);
