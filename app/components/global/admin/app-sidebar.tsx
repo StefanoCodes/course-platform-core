@@ -1,6 +1,6 @@
 import { type LucideIcon } from 'lucide-react'
 import * as React from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { dashboardConfig } from '~/config/dashboard'
 import { Collapsible } from '../../ui/collapsible'
 import {
@@ -15,6 +15,7 @@ import {
 } from '../../ui/sidebar'
 import { NavUser } from './nav-user'
 import { PrimaryLogo } from '../primary-logo'
+import { cn } from '~/lib/utils'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -49,48 +50,33 @@ export function NavMain({
     disabled?: boolean
   }[]
 }) {
+  const {pathname} = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+        {items.map((item) => {
+          const isActive = pathname === item.url
+
+          return (
+            <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title} disabled={item.disabled}>
+              <SidebarMenuButton asChild tooltip={item.title} disabled={item.disabled} className='hover:bg-brand-primary hover:text-white'>
                 <Link
                   to={item.disabled ? '#' : item.url}
                   data-disabled={item.disabled}
-                  className="data-[disabled=true]:opacity-50"
+                  className={cn("data-[disabled=true]:opacity-50 transition-colors", isActive && `bg-brand-primary text-white`)}
                 >
-                  <item.icon className="text-muted-foreground" />
+                  <item.icon className={cn("text-muted-foreground",isActive && `text-white`)} />
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>
-              {/* {item.items?.length ? (
-                  <>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuAction className="data-[state=open]:rotate-90">
-                        <ChevronRight />
-                        <span className="sr-only">Toggle</span>
-                      </SidebarMenuAction>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </>
-                ) : null} */}
             </SidebarMenuItem>
           </Collapsible>
-        ))}
+          )
+        }
+      
+        )}
       </SidebarMenu>
     </SidebarGroup>
   )

@@ -3,6 +3,7 @@ import { CourseEditSidebar } from "~/components/features/courses/edit/course-edi
 import type { Route } from "./+types/_dashboard._editor";
 import { isAdminLoggedIn } from "~/lib/auth.server";
 import { getAllSegmentsForCourse } from "~/lib/admin/data-access/segments.sever";
+import { Button } from "~/components/ui/button";
 export async function loader({ request, params }: Route.LoaderArgs) {
 
     const { isLoggedIn } = await isAdminLoggedIn(request);
