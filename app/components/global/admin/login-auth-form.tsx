@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useFetcher } from "react-router";
+import { redirect, useFetcher, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import type { FetcherResponse } from "~/lib/types";
 
 
 export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
+	const navigate = useNavigate();
 	const config = type === "admin" ? {
 		action: "/resource/auth",
 		intent: "sign-in-admin",
@@ -44,6 +45,9 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 			}
 			if (fetcher.data.success === false) {
 				toast.error(fetcher.data.message);
+				if(fetcher.data.redirectTo) {
+					navigate(fetcher.data.redirectTo)
+				}
 			}
 		}
 	}, [fetcher.data]);

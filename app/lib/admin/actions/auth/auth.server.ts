@@ -1,7 +1,7 @@
 import { desc, eq, inArray } from 'drizzle-orm';
 import { data } from "react-router";
 import db from "~/db/index.server";
-import { session } from "~/db/schema";
+import { session, user } from "~/db/schema";
 import { auth } from "~/lib/auth.server";
 import { isStudentAccountActivated } from "~/lib/student/data-access/students.server";
 import { loginSchema } from "../../zod-schemas/auth";
@@ -23,7 +23,7 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
     const validatedFields = unvalidatedFields.data;
 
     try {
-        const { headers } = await auth.api.signInEmail({
+        const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
                 email: validatedFields.email,
@@ -33,6 +33,15 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
         });
 
 
+        const [signedInUser] = await db.select().from(user).where(eq(user.id, response.user.id)).limit(1)
+
+        if (signedInUser.role !== "admin") {
+            return data({
+                success: false,
+                message: "Not Allowed",
+                redirectTo: '/login'
+            }, { status: 403 })
+        }
 
         return data({
             success: true,
@@ -86,10 +95,6 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
         }
 
 
-
-
-
-
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {
@@ -99,6 +104,15 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
             }
         });
 
+        const [signedInUser] = await db.select().from(user).where(eq(user.id, response.user.id)).limit(1)
+
+        if (signedInUser.role === "admin") {
+            return data({
+                success: false,
+                message: "Not Allowed",
+                redirectTo: '/admin/login'
+            }, { status: 403 })
+        }
 
         const allExisitingSessionForLoggedInUser = await db.select().from(session).where(eq(session.userId, response.user.id)).orderBy(desc(session.createdAt))
 
