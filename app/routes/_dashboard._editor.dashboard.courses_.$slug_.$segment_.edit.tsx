@@ -16,9 +16,15 @@ import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug
 import { DeleteSegment } from "~/components/features/courses/edit/delete-segment";
 import { MarkSegmentAsPrivate } from "~/components/features/courses/edit/mark-segment-as-private";
 import { MarkSegmentAsPublic } from "~/components/features/courses/edit/mark-segment-as-public";
+import { isAdminLoggedIn } from "~/lib/auth.server";
 
 
 export async function loader({ request, params }: Route.LoaderArgs) {
+    // auth check
+    const { isLoggedIn } = await isAdminLoggedIn(request);
+    if (!isLoggedIn) {
+        throw redirect("/login");
+    }
     const { slug: courseSlug, segment } = params;
 
     // get segment information
@@ -26,6 +32,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     if (!success || !segmentData) {
         throw redirect("/dashboard/courses")
     }
+
 
     return {
         courseSlug,
