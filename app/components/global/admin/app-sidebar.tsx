@@ -11,7 +11,8 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  useSidebar
 } from '../../ui/sidebar'
 import { NavUser } from './nav-user'
 import { PrimaryLogo } from '../primary-logo'
@@ -51,7 +52,7 @@ export function NavMain({
   }[]
 }) {
   const {pathname} = useLocation();
-
+  const {setOpenMobile} = useSidebar()
   return (
     <SidebarGroup>
       <SidebarMenu>
@@ -61,8 +62,11 @@ export function NavMain({
           return (
             <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title} disabled={item.disabled} className='hover:bg-brand-primary hover:text-white'>
+              <SidebarMenuButton asChild tooltip={item.title} disabled={item.disabled} className='hover:bg-brand-primary hover:text-white'                 onClick={() => {
+                  setOpenMobile(false)
+                }}>
                 <Link
+
                   to={item.disabled ? '#' : item.url}
                   data-disabled={item.disabled}
                   className={cn("data-[disabled=true]:opacity-50 transition-colors", isActive && `bg-brand-primary text-white`)}

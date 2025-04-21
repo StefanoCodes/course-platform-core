@@ -63,7 +63,7 @@ export const studentsTable = pgTable('students', {
     email: varchar('email', { length: 255 }).notNull().unique(),
     phone: varchar('phone', { length: 255 }),
     password: varchar('password', { length: 255 }).notNull(),
-    isActivated: boolean('is_activated').notNull().default(false),
+    isActivated: boolean('is_activated').notNull().default(true),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (t) => [index('student_email_index').on(t.email), index('student_id_index').on(t.studentId)]);

@@ -48,7 +48,7 @@ export default function Page() {
             <Breadcrumbs />
           </div>
 
-          {isLoading ? <DashboardSkeleton /> : <div className="md:container md:mx-auto overflow-y-auto h-full"><Outlet /></div>}
+          {isLoading ? <DashboardSkeleton /> : <div className="overflow-y-auto h-full"><Outlet /></div>}
         </div>
       </SidebarInset>
     </SidebarProvider>
