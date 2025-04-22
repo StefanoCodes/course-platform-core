@@ -2,9 +2,11 @@ import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug
 import { href, Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import { getSegmentBySlug } from "~/lib/admin/data-access/segments.sever";
-import { extractVideoId, formatDateToString } from "~/lib/utils";
+import { extractYoutubeVideoId, formatDateToString } from "~/lib/utils";
 import { ArrowRightIcon } from "lucide-react";
 import { isAdminLoggedIn } from "~/lib/auth.server";
+import { VideoPlayer } from "~/components/features/video-players/video-player";
+import { dashboardConfig } from "~/config/dashboard";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -35,14 +37,7 @@ export default function CourseSegment({ loaderData }: Route.ComponentProps) {
             </Button>
             <p className="text-sm text-gray-500 self-end">Created at: {formatDateToString(segmentData.created_at)}</p>
         </div>
-        <div className="video-container">
-            <iframe
-                src={`https://www.youtube.com/embed/${extractVideoId(segmentData.videoUrl)}`}
-                frameBorder="0"
-                allowFullScreen
-            ></iframe>
-            {/* Title */}
-        </div>
+       <VideoPlayer type={dashboardConfig.videoPlayer} url={segmentData.videoUrl} />
 
         <h2>{segmentData.name}</h2>
 

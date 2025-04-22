@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { getCourseBySlug } from "~/lib/student/data-access/courses.server";
 import { getSegmentBySlug } from "~/lib/student/data-access/segments.server";
 import { isStudentLoggedIn } from "~/lib/auth.server";
-import { extractVideoId } from "~/lib/utils";
+import { extractYoutubeVideoId } from "~/lib/utils";
 import type { Route } from "./+types/_student.student.courses_.$slug_.$segment";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -36,7 +36,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 export default function SegmentDetails({ loaderData }: Route.ComponentProps) {
     const { course, segmentData } = loaderData;
     const { name, description, videoUrl } = segmentData;
-    const videoId = extractVideoId(videoUrl);
+    const videoId = extractYoutubeVideoId(videoUrl);
 
     return (
         <div className="container mx-auto pt-20 pb-8 px-4 md:px-8">

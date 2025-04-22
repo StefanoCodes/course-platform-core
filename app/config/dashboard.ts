@@ -1,6 +1,20 @@
-import { Book, Home, MessageCircle, Settings, Users } from "lucide-react";
+import { Book, Home, MessageCircle, Settings, Users, type LucideProps } from "lucide-react";
+type DahsboardConfig = {
+  sidebar: {
+    logo: {
+      src: string
+      alt: string
+    }
 
-export const dashboardConfig = {
+    items: {
+      title: string,
+      icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>,
+      url: string,
+    }[]
+  }
+  videoPlayer: "Youtube" | "Vimeo"
+}
+export const dashboardConfig: DahsboardConfig = {
   sidebar: {
     logo: {
       src: "/assets/logo.webp",
@@ -40,6 +54,7 @@ export const dashboardConfig = {
       // },
     ],
   },
+  videoPlayer: "Vimeo"
 }
 
 

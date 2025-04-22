@@ -32,7 +32,11 @@ export function titleToSlug(title: string) {
 }
 
 // extract the video id from a youtube url
-export function extractVideoId(url: string) {
+export function extractYoutubeVideoId(url: string) {
   const videoId = url.split('v=')[1];
   return videoId;
+}
+export function extractVimeoVideoId(url: string) {
+  const videoId = url.split("/").pop()
+  return videoId
 }
