@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/command";
 import type { Course } from "~/db/schema";
 import type { CreateStudentSchema } from "~/lib/admin/zod-schemas/student";
+import  LoadingInputShimmer from "../loading/input-skeleton";
 
 
 type FetcherResponse = {
@@ -72,7 +73,7 @@ export function AssignCourseToStudent({form}: {form: UseFormReturn<CreateStudent
   );
   return (
     <div>
-      {isLoading ? <div>Loading...</div> : <Command
+      {isLoading ? <LoadingInputShimmer/> : <Command
       onKeyDown={handleKeyDown}
       className="overflow-visible bg-transparent"
     >
