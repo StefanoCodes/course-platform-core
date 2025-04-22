@@ -105,13 +105,13 @@ export async function handleDeleteStudent(request: Request, formData: FormData) 
     try {
         await db.transaction(async (tx) => {
             // delete account for the user
-            await db.delete(account).where(eq(account.userId, studentId))
+            await tx.delete(account).where(eq(account.userId, studentId))
             // delete user
-            await db.delete(user).where(eq(user.id, studentId))
+            await tx.delete(user).where(eq(user.id, studentId))
             // delete sessions for the user
-            await db.delete(session).where(eq(session.userId, studentId))
+            await tx.delete(session).where(eq(session.userId, studentId))
             // delete from the studentsCoursesTable
-            await db.delete(studentCoursesTable).where(eq(session.userId, studentCoursesTable.studentId))
+            await tx.delete(studentCoursesTable).where(eq(session.userId, studentCoursesTable.studentId))
             // Delete Student fron the studentsTable
             await tx.delete(studentsTable).where(eq(studentsTable.studentId, studentId))
         })
