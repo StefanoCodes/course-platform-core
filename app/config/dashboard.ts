@@ -54,7 +54,7 @@ export const dashboardConfig: DahsboardConfig = {
       // },
     ],
   },
-  videoPlayer: "Vimeo"
+  videoPlayer: "Youtube"
 }
 
 

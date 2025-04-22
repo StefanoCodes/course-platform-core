@@ -6,6 +6,8 @@ import { getSegmentBySlug } from "~/lib/student/data-access/segments.server";
 import { isStudentLoggedIn } from "~/lib/auth.server";
 import { extractYoutubeVideoId } from "~/lib/utils";
 import type { Route } from "./+types/_student.student.courses_.$slug_.$segment";
+import { VideoPlayer } from "~/components/features/video-players/video-player";
+import { dashboardConfig } from "~/config/dashboard";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
     const { isLoggedIn } = await isStudentLoggedIn(request);
@@ -49,15 +51,7 @@ export default function SegmentDetails({ loaderData }: Route.ComponentProps) {
            
 {/* VIDEO PLAYER */}
             <div className="mb-6">
-                    <div className="aspect-video w-full max-w-4xl mx-auto">
-                        <iframe
-                            src={`https://www.youtube.com/embed/${videoId}`}
-                            title={name}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full rounded-lg"
-                        ></iframe>
-                    </div>
+                    <VideoPlayer type={dashboardConfig.videoPlayer} url={segmentData.videoUrl}/>
             </div>
 {/* VIDEO INFO */}
             <div className="mb-8 flex justify-center items-center flex-col">
