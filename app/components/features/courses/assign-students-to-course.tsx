@@ -1,7 +1,6 @@
 
-import { X } from "lucide-react";
 import * as React from "react";
-
+import { X } from "lucide-react";
 import { Command as CommandPrimitive } from "cmdk";
 import { useEffect, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -15,6 +14,7 @@ import {
 } from "~/components/ui/command";
 import type { Student } from "~/db/schema";
 import type { CreateCourseSchema } from "~/lib/admin/zod-schemas/course";
+import LoadingInputShimmer from "../loading/input-skeleton";
 
 
 type FetcherResponse = {
@@ -27,6 +27,7 @@ export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateCourseS
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Student[]>([]);
   const [inputValue, setInputValue] = React.useState("");
+  const [toggleSelectedAll, setToggleSelectedAll] = useState<boolean>(false)
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -42,16 +43,23 @@ export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateCourseS
   }, [fetcher.data]);
 
   const handleUnselect = React.useCallback((student: Student) => {
-    setSelected((prev) => prev.filter((s) => s.id !== student.studentId));
+    setSelected((prev) => prev.filter((s) => s.studentId !== student.studentId));
     // attach the ids of the selected students to the form
     form.setValue("students", form.getValues("students").filter((s) => s !== student.studentId));
   }, []);
 
   const handleSelectAll = React.useCallback(() => {
-  setSelected(() => students.map((student) => student))
-// setting the react hook form state to have all the student ids
-form.setValue("students", students.map((student) => student.studentId))
+  setSelected(students.map((student) => student))
+  form.setValue("students", students.map((student) => student.studentId))
+  setToggleSelectedAll(true)
   }, [])
+
+  const handleUnselectAll = React.useCallback(() => {
+    setSelected([])
+  // setting the react hook form state to have all the student ids
+  form.setValue("students", [])
+  setToggleSelectedAll(false)
+}, [])
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -81,11 +89,11 @@ form.setValue("students", students.map((student) => student.studentId))
   
   return (
     <div>
-      {isLoading ? <div>Loading...</div> : <Command
+      {isLoading ? <LoadingInputShimmer/> : <Command
       onKeyDown={handleKeyDown}
-      className="overflow-visible bg-transparent"
+      className="overflow-visible"
     >
-      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group rounded-md border border-input px-3 py-2 pl-0 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 relative">
         <div className="flex flex-wrap gap-1">
           {selected.map((student) => {
             return (
@@ -120,40 +128,72 @@ form.setValue("students", students.map((student) => student.studentId))
             className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
           />
         </div>
-      </div>
-      <div className="relative mt-2">
-        <CommandList>
-          <button type="button" onClick={handleSelectAll}>Select all students</button>
-          {open && selectables.length > 0 ? (
-            <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
-              <CommandGroup className="h-full overflow-auto">
-                {selectables.map((student) => {
-                  return (
-                    <CommandItem
-                      key={student.studentId}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      onSelect={(value) => {
-                        setInputValue("");
-                        setSelected((prev) => [...prev, student]);
-                        form.setValue("students", [...form.getValues("students"), student.studentId]);
+        <div className="absolute right-0 -top-7">   
+        {toggleSelectedAll === true ? <button type="button" className=" cursor-pointer" onClick={handleUnselectAll}>Remove All</button> : <button className=" cursor-pointer" type="button" onClick={handleSelectAll}>Select All</button> }
 
-                      }}
-                      className={"cursor-pointer"}
-                    >
-                      {student.name}
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </div>
-          ) : null}
+        </div>
+
+      </div>
+      <div className="relative mt-2 ">
+        <CommandList>
+        <SelectableStudentsList
+        form={form}
+        open={open}
+        selectables={selectables}
+        setInputValue={setInputValue}
+        setSelected={setSelected}
+        />
         </CommandList>
       </div>
     </Command> }
     </div>
     
   );
+}
+
+function SelectableStudentsList({open, selectables, setInputValue, setSelected,form}:{
+  open:boolean;
+  selectables:Student[],
+  setSelected:React.Dispatch<React.SetStateAction<{
+    id: string;
+    name: string;
+    studentId: string;
+    email: string;
+    phone: string | null;
+    password: string;
+    isActivated: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}[]>>
+setInputValue:React.Dispatch<React.SetStateAction<string>>
+form: UseFormReturn<CreateCourseSchema>
+}) {
+  return (
+    open && selectables.length > 0 && (
+      <div className="absolute top-0 z-[99] w-full rounded-md border h-[200px] overflow-x-auto bg-popover text-popover-foreground shadow-md outline-none animate-in">
+        <CommandGroup className="z-[99]">
+          {selectables.map((student) => {
+            return (
+              <CommandItem
+                key={student.studentId}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onSelect={(value) => {
+                  setInputValue("");
+                  setSelected((prev) => [...prev, student]);
+                  form.setValue("students", [...form.getValues("students"), student.studentId]);
+
+                }}
+                className={"cursor-pointer"}
+              >
+                {student.name}
+              </CommandItem>
+            );
+          })}
+        </CommandGroup>
+      </div>
+    )
+  )
 }

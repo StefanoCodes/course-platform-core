@@ -93,6 +93,12 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  @keyframes shimmer {
+    100% { 
+      transform: translateX(100%) 
+    }
+  }
+
 }
 
 @layer base {
