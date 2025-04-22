@@ -36,10 +36,9 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
 export default function CourseDetails({ loaderData }: Route.ComponentProps) {
     const { course, segments } = loaderData;
-    const { name, description } = course;
 
     return (
-        <div className="container mx-auto pt-20 px-4">
+        <div className="container mx-auto pt-20 pb-8 px-4">
             <div className="mb-8">
                 <Button variant="outline" asChild className="mb-4">
                     <Link to="/student/courses">

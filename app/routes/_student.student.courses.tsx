@@ -22,7 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function StudentCourses({loaderData}:Route.ComponentProps) {
     const {courses} = loaderData;
     return (
-        <div className="container mx-auto pt-20 px-4">
+        <div className="container mx-auto pt-20 pb-8 px-4">
             <h1 className="text-center text-3xl font-bold mb-8">Available Courses</h1>
             
             {courses.length === 0 ? (

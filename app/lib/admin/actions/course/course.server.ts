@@ -1,11 +1,11 @@
-import { data, redirect } from "react-router";
-import { isAdminLoggedIn } from "~/lib/auth.server";
-import { assignCourseSchema, createCourseSchema, updateCourseSchema } from "../../zod-schemas/course";
-import { titleToSlug } from "~/lib/utils";
-import { checkSlugUnique } from "../shared/shared.server";
-import { coursesTable, segmentsTable, studentCoursesTable } from "~/db/schema";
-import db from "~/db/index.server";
 import { and, eq } from "drizzle-orm";
+import { data, redirect } from "react-router";
+import db from "~/db/index.server";
+import { coursesTable, segmentsTable, studentCoursesTable } from "~/db/schema";
+import { isAdminLoggedIn } from "~/lib/auth.server";
+import { titleToSlug } from "~/lib/utils";
+import { assignCourseSchema, createCourseSchema, updateCourseSchema } from "../../zod-schemas/course";
+import { checkSlugUnique } from "../shared/shared.server";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
     // auth check
@@ -13,16 +13,19 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
     if (!isLoggedIn) {
         throw redirect("/admin/login")
     }
-
-    const unavlidatedFields = createCourseSchema.safeParse(Object.fromEntries(formData));
-
+    const studentsIds = (formData.get("students") as string).split(",")
+    const formDataObject = {
+        name: formData.get("name"),
+        description: formData.get("description"),
+        students: studentsIds
+    }
+    const unavlidatedFields = createCourseSchema.safeParse(formDataObject);
     if (!unavlidatedFields.success) {
         return data({ success: false, message: 'Invalid form data' }, { status: 400 });
     }
 
     const validatedFields = unavlidatedFields.data;
 
-    // insert course into database
 
     try {
         const slug = titleToSlug(validatedFields.name);
@@ -31,19 +34,28 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
         if (!isSlugUnique) {
             return data({ success: false, message: 'a course with this name already exists' }, { status: 400 });
         }
-        const [insertedCourse] = await db.insert(coursesTable).values({
-            name: validatedFields.name,
-            description: validatedFields.description,
-            slug: slug,
-        }).returning({
-            slug: coursesTable.slug,
-        });
+        const { slug: redirectToUrl } = await db.transaction(async (tx) => {
+            const [insertedCourse] = await tx.insert(coursesTable).values({
+                name: validatedFields.name,
+                description: validatedFields.description,
+                slug: slug,
+            }).returning({
+                slug: coursesTable.slug,
+                id: coursesTable.id,
+            });
+            // insert all the studentids + courseId in the studentCoursesTable so they are assigned to this course
 
-        if (!insertedCourse) {
-            return data({ success: false, message: 'Failed to create course' }, { status: 500 });
-        }
+            const valuesToInsert = validatedFields.students.map(student => ({
+                studentId: student,
+                courseId: insertedCourse.id,
+            }));
 
-        return data({ success: true, message: 'Course created successfully', courseSlug: insertedCourse.slug }, { status: 200 });
+            await tx.insert(studentCoursesTable).values(valuesToInsert)
+            return { slug }
+
+        })
+        return data({ success: true, message: 'Course created successfully', courseSlug: redirectToUrl }, { status: 200 });
+
     }
     catch (error) {
         console.error(error);

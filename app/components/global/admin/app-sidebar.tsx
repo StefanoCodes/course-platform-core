@@ -71,7 +71,7 @@ export function NavMain({
                   data-disabled={item.disabled}
                   className={cn("data-[disabled=true]:opacity-50 transition-colors", isActive && `bg-brand-primary text-white`)}
                 >
-                  <item.icon className={cn("text-muted-foreground",isActive && `text-white`)} />
+                  <item.icon className={cn("text-muted-foreground", isActive && `text-white`)} />
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

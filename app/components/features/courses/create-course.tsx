@@ -10,6 +10,7 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
 import { createCourseSchema, type CreateCourseSchema } from "~/lib/admin/zod-schemas/course";
+import { AssignStudentToCourse } from "./assign-students-to-course";
 type CreateCourseFetcherResponse = FetcherResponse & {
     courseSlug: string;
 }
@@ -23,6 +24,7 @@ export function CreateCourse() {
         defaultValues: {
             name: "",
             description: "",
+            students:[],
         },
     });
 
@@ -48,12 +50,14 @@ export function CreateCourse() {
                     <DialogTitle>Create Course</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
+                    
                     <fetcher.Form method="POST" action="/resource/course" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
                         fetcher.submit({ ...data, intent: "create-course" }, {
                             action: "/resource/course",
                             method: "POST"
                         })
                     })}>
+
                         <FormField
                             control={form.control}
                             name="name"
@@ -82,6 +86,22 @@ export function CreateCourse() {
                                 </FormItem>
                             )}
                         />
+
+<FormField
+                      control={form.control}
+                                name="students"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Students <span className="text-xs text-red-500">*</span></FormLabel>
+                                        <FormControl>
+                                            <AssignStudentToCourse form={form} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
 
                         {/* Submit button */}
                         <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Course..." : "Create Course"}</Button>

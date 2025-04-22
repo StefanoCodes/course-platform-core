@@ -29,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
         const handler = handlers[intent as keyof typeof handlers]
         return handler(request, formData)
     } catch (error) {
-        console.error('Action error:', error)
+        console.error('🔴Action error:', error)
         return data({ error: 'An unexpected error occurred' }, { status: 500 })
     }
 }

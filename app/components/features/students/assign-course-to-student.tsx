@@ -1,6 +1,10 @@
-import * as React from "react";
 import { X } from "lucide-react";
+import * as React from "react";
 
+import { Command as CommandPrimitive } from "cmdk";
+import { useEffect, useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import {
   Command,
@@ -8,19 +12,14 @@ import {
   CommandItem,
   CommandList,
 } from "~/components/ui/command";
-import { Command as CommandPrimitive } from "cmdk";
-import { useFetcher } from "react-router";
-import { useEffect } from "react";
-import { useState } from "react";
 import type { Course } from "~/db/schema";
-import type { Control, UseFormReturn } from "react-hook-form";
 import type { CreateStudentSchema } from "~/lib/admin/zod-schemas/student";
 
 
 type FetcherResponse = {
   courses: Course[];
 }
-export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateStudentSchema>}) {
+export function AssignCourseToStudent({form}: {form: UseFormReturn<CreateStudentSchema>}) {
   const fetcher = useFetcher<FetcherResponse>();
   const [courses,setCourses] = useState<Course[] | []>([]);
   const [isLoading,setIsLoading] = useState(true);
