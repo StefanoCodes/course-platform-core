@@ -51,7 +51,7 @@ export async function handleCreateStudent(request: Request, formData: FormData) 
 
             const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
             // insert into students table
-            const [insertedStudent] = await db.insert(studentsTable).values({
+            const [insertedStudent] = await tx.insert(studentsTable).values({
                 name: validatedFields.name,
                 email: validatedFields.email,
                 phone: validatedFields.phoneNumber,
