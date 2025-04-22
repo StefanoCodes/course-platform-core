@@ -39,7 +39,7 @@ export default function SegmentDetails({ loaderData }: Route.ComponentProps) {
     const videoId = extractVideoId(videoUrl);
 
     return (
-        <div className="container mx-auto pt-20 px-4 md:px-8">
+        <div className="container mx-auto pt-20 pb-8 px-4 md:px-8">
                 <Button variant="secondary" asChild className="mb-8">
                     <Link to={`/student/courses/${course.slug}`}>
                         <ArrowLeft className="mr-2 h-4 w-4" />

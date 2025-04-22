@@ -10,6 +10,7 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
 import { createCourseSchema, type CreateCourseSchema } from "~/lib/admin/zod-schemas/course";
+import { AssignStudentToCourse } from "./assign-students-to-course";
 type CreateCourseFetcherResponse = FetcherResponse & {
     courseSlug: string;
 }
@@ -23,7 +24,7 @@ export function CreateCourse() {
         defaultValues: {
             name: "",
             description: "",
-            students:[]
+            students:[],
         },
     });
 
@@ -85,6 +86,21 @@ export function CreateCourse() {
                                 </FormItem>
                             )}
                         />
+
+<FormField
+                      control={form.control}
+                                name="students"
+                                disabled={isSubmitting}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Students <span className="text-xs text-red-500">*</span></FormLabel>
+                                        <FormControl>
+                                            <AssignStudentToCourse form={form} {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
 
                         {/* Submit button */}

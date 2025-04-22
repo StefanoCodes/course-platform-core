@@ -1,16 +1,16 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { redirect, useFetcher, useSubmit } from "react-router";
+import { useFetcher } from "react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import { createStudentSchema, type CreateStudentSchema } from "~/lib/admin/zod-schemas/student";
 import type { FetcherResponse } from "~/lib/types";
 import { generateRandomPassword } from "~/lib/utils";
-import { AssignStudentToCourse } from "./assign-student-to-course";
+import { AssignCourseToStudent } from "./assign-course-to-student";
 
 export function CreateStudent() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -131,7 +131,7 @@ export function CreateStudent() {
                                     <FormItem>
                                         <FormLabel>Courses <span className="text-xs text-red-500">*</span></FormLabel>
                                         <FormControl>
-                                            <AssignStudentToCourse form={form} {...field} />
+                                            <AssignCourseToStudent form={form} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
