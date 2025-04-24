@@ -1,12 +1,12 @@
-import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment";
-import { href, Link, redirect } from "react-router";
-import { Button } from "~/components/ui/button";
-import { getSegmentBySlug } from "~/lib/admin/data-access/segments.sever";
-import { extractYoutubeVideoId, formatDateToString } from "~/lib/utils";
 import { ArrowRightIcon } from "lucide-react";
-import { isAdminLoggedIn } from "~/lib/auth.server";
+import { href, Link, redirect } from "react-router";
 import { VideoPlayer } from "~/components/features/video-players/video-player";
+import { Button } from "~/components/ui/button";
 import { dashboardConfig } from "~/config/dashboard";
+import { getSegmentBySlug } from "~/lib/admin/data-access/segments.sever";
+import { isAdminLoggedIn } from "~/lib/auth.server";
+import { formatDateToString } from "~/lib/utils";
+import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment";
 export async function loader({ request, params }: Route.LoaderArgs) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);

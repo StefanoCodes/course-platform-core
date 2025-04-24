@@ -83,16 +83,7 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
 
     try {
 
-        const { isStudentActivated } = await isStudentAccountActivated(validatedFields.email);
-
-        if (!isStudentActivated) {
-            return data({
-                success: false,
-                message: 'Student account is not activated contact your admin',
-            }, {
-                status: 403,
-            })
-        }
+      
 
 
         const { response, headers } = await auth.api.signInEmail({
@@ -103,6 +94,17 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
                 callbackURL: `${process.env.BASE_URL}/student/courses`
             }
         });
+
+        const { isStudentActivated } = await isStudentAccountActivated(validatedFields.email);
+
+        if (!isStudentActivated) {
+            return data({
+                success: false,
+                message: 'Student account is not activated contact your admin',
+            }, {
+                status: 403,
+            })
+        }
 
         const [signedInUser] = await db.select().from(user).where(eq(user.id, response.user.id)).limit(1)
 

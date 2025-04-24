@@ -25,7 +25,7 @@ export function CreateStudent() {
             name: "",
             email: "",
             phoneNumber: "",
-            password: "",
+            password: generateRandomPassword(),
             courses: [],
         },
     });
@@ -113,11 +113,7 @@ export function CreateStudent() {
                                     <FormItem>
                                         <FormLabel>Email <span className="text-xs text-red-500">*</span></FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter student email" type="email" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field}
-                                                onBlur={() => {
-                                                    const password = generateRandomPassword();
-                                                    form.setValue("password", password);
-                                                }} />
+                                            <Input placeholder="Enter student email" type="email" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -137,22 +133,6 @@ export function CreateStudent() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex flex-col w-full gap-2">
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    disabled={isSubmitting}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password <span className="text-xs text-red-500">*</span></FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Enter student password" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
                             {/* Submit button */}
                             <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Adding Student..." : "Add Student"}</Button>
                         </fetcher.Form>

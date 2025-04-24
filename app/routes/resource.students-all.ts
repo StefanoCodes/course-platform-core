@@ -4,6 +4,8 @@ import type { Route } from "./+types/resource.students-all"
 import db from "~/db/index.server"
 import { studentsTable } from "~/db/schema"
 import { desc } from "drizzle-orm"
+
+
 export async function loader({ request }: Route.LoaderArgs) {
     const { session } = await isAuthenticated(request)
     if (!session) {
@@ -18,3 +20,4 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
 
 }
+
