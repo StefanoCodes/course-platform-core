@@ -115,7 +115,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
                                     <FormItem>
                                         <FormLabel>Name <span className="text-xs text-red-500">*</span></FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter segment name" type="text" {...field} />
+                                            <Input placeholder="Enter lesson name" type="text" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

@@ -30,6 +30,8 @@ export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateCourseS
   const [toggleSelectedAll, setToggleSelectedAll] = useState<boolean>(false)
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+
+
   useEffect(() => {
     const isDataLoaded = students.length > 0;
     if(!isDataLoaded) {
@@ -49,7 +51,7 @@ export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateCourseS
   }, []);
 
   const handleSelectAll = React.useCallback(() => {
-  setSelected(students.map((student) => student))
+  setSelected(students)
   form.setValue("students", students.map((student) => student.studentId))
   setToggleSelectedAll(true)
   }, [])

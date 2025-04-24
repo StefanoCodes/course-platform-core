@@ -49,7 +49,7 @@ export function CreateSegment() {
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-8">
                 <DialogHeader>
-                    <DialogTitle>Create Segment</DialogTitle>
+                    <DialogTitle>Create Video</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <fetcher.Form method="POST" action="/resource/segment" className="flex flex-col gap-4" onSubmit={form.handleSubmit((data) => {
@@ -66,7 +66,7 @@ export function CreateSegment() {
                                 <FormItem>
                                     <FormLabel>Name <span className="text-xs text-red-500">*</span></FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter segment name" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
+                                        <Input placeholder="Enter lesson name" type="text" className="bg-white text-black focus-visible:ring-0 focus-visible:ring-offset-0" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -113,7 +113,7 @@ export function CreateSegment() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Segment..." : "Create Segment"}</Button>
+                        <Button type="submit" className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white" disabled={isSubmitting}>{isSubmitting ? "Creating Lesson..." : "Create Lesson"}</Button>
                     </fetcher.Form>
                 </Form>
             </DialogContent>

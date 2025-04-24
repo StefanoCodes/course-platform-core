@@ -22,7 +22,7 @@ function YoutubePlayer({url}:{
         src={`https://www.youtube.com/embed/${extractYoutubeVideoId(url)}`}
         frameBorder="0"
         allowFullScreen
-    />
+    ></iframe>
     )
 }
 
