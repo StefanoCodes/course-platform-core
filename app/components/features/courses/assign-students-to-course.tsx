@@ -51,17 +51,17 @@ export function AssignStudentToCourse({form}: {form: UseFormReturn<CreateCourseS
   }, []);
 
   const handleSelectAll = React.useCallback(() => {
-  setSelected(students)
-  form.setValue("students", students.map((student) => student.studentId))
-  setToggleSelectedAll(true)
-  }, [])
+    setSelected(students)
+    form.setValue("students", students.map((student) => student.studentId))
+    setToggleSelectedAll(true)
+  }, [students, form])
 
   const handleUnselectAll = React.useCallback(() => {
     setSelected([])
   // setting the react hook form state to have all the student ids
   form.setValue("students", [])
   setToggleSelectedAll(false)
-}, [])
+}, [form])
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
