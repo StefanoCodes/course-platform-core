@@ -101,7 +101,7 @@ export const studentCoursesTable = pgTable('student_courses', {
 }, (t) => [index('student_course_student_id_index').on(t.studentId), index('student_course_course_id_index').on(t.courseId)]);
 
 
-// types
+// TYPES
 export type Student = typeof studentsTable.$inferSelect;
 export type Course = typeof coursesTable.$inferSelect;
 export type Segment = typeof segmentsTable.$inferSelect;
