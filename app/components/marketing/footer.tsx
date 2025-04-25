@@ -150,7 +150,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 border-t border-gray-200 pt-8">
           <p className="text-base text-gray-500 xl:text-center">
-            &copy; {new Date().getFullYear()} PLAT4ME. All rights reserved.
+            &copy; {new Date().getFullYear()} PLATFORM4ME. All rights reserved.
           </p>
         </div>
       </div>

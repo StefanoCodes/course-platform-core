@@ -10,7 +10,7 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
 
             <img src="/assets/LOGO.png" width={32} height={32}/>
-            <p className="font-bold text-lg md:text-xl">PLATFORM 4 ME</p>
+            <p className="font-bold text-lg md:text-xl">PLATFORM 4ME</p>
           </div>
      
           <div className="flex items-center">
@@ -32,8 +32,11 @@ export default function Navbar() {
                 key={item.href}
                 variant="outline"
                 className="cursor-pointer inset-ring-2 inset-ring-indigo-300 bg-indigo-500 text-white hover:bg-indigo-600 hover:text-white"
-              >
+                asChild
+                >
+              <Link to={item.href} key={item.href}>
                 {item.label}
+                </Link>
               </Button>
             ))}
           </div>
