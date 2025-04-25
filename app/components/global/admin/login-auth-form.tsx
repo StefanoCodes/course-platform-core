@@ -26,7 +26,7 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 	} : {
 		action: "/resource/auth",
 		intent: "sign-in-student",
-		buttonStyles: "bg-gradient-to-br from-blue-500 to-blue-900 text-white cursor-pointer h-10 font-medium"
+		buttonStyles: "bg-gradient-to-br from-brand-primary to-brand-primary/90  text-white cursor-pointer h-10 font-medium"
 	}
 	const fetcher = useFetcher<FetcherResponse>();
 	const isPending = fetcher.state !== "idle";
@@ -54,7 +54,7 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 
 	return (
 
-		<div className="rounded-lg bg-gray-100 p-6 md:p-8">
+		<div className="rounded-lg bg-gray-100 p-6 md:p-8 inset-ring-border">
 			<Form {...form}>
 				<fetcher.Form
 					action={config.action}

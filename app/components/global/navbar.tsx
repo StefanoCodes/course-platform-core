@@ -14,7 +14,7 @@ export default function Navbar() {
           </div>
      
           <div className="flex items-center">
-            <nav className="hidden space-x-8 md:flex">
+            <nav className="hidden space-x-8 md:flex capitalize">
               {mainNavItems.map((item) => (
                 <Link
                   key={item.href}
@@ -26,7 +26,7 @@ export default function Navbar() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center space-x-4 md:min-w-[234px]">
+          <div className="flex items-center space-x-4 md:min-w-[205px]">
             {authNavItems.map((item) => (
               <Button
                 key={item.href}

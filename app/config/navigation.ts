@@ -9,21 +9,25 @@ export interface NavItem {
 
 export const mainNavItems: NavItem[] = [
     {
-        label: "Features",
-        href: "/features",
+        label: "Watch Demo",
+        href: "#demo",
     },
     {
         label: "How it works",
-        href: "/how-it-works",
+        href: "#how-it-works",
     },
     {
-        label: "Pricing",
-        href: "/pricing",
+        label: "Benefits",
+        href: "#benefits",
     },
-    {
-        label: "Contact",
-        href: "/contact",
-    },
+{
+    label: "FAQ's",
+    href: "#faqs",
+},
+{
+    label: "Contact Us",
+    href: "#contact",
+},
 ];
 
 export const authNavItems: NavItem[] = [

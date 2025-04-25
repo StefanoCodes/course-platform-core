@@ -17,7 +17,7 @@ type DahsboardConfig = {
 export const dashboardConfig: DahsboardConfig = {
   sidebar: {
     logo: {
-      src: "/assets/logo.webp",
+      src: "/assets/LOGO.png",
       alt: "Logo",
     },
     items: [
