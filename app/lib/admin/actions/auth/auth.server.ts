@@ -82,10 +82,7 @@ export async function handleSignInStudent(request: Request, formData: FormData) 
     const validatedFields = unvalidatedFields.data;
 
     try {
-
       
-
-
         const { response, headers } = await auth.api.signInEmail({
             returnHeaders: true,
             body: {

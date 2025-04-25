@@ -7,11 +7,14 @@ export default function Navbar() {
     <div className="w-full sticky top-0 z-40 h-[var(--navbar-height)]  border-b border-gray-300 text-black backdrop-blur-xl">
       <header className=" px-6 lg:px-0 py-4 mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-indigo-500 text-2xl font-bold">
-            PLAT4ME
-          </Link>
+          <div className="flex items-center gap-4">
+
+            <img src="/assets/LOGO.png" width={32} height={32}/>
+            <p className="font-bold text-lg md:text-xl">PLATFORM 4 ME</p>
+          </div>
+     
           <div className="flex items-center">
-            <nav className="hidden ml-12 space-x-8 md:flex">
+            <nav className="hidden space-x-8 md:flex">
               {mainNavItems.map((item) => (
                 <Link
                   key={item.href}
@@ -23,7 +26,7 @@ export default function Navbar() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 md:min-w-[234px]">
             {authNavItems.map((item) => (
               <Button
                 key={item.href}

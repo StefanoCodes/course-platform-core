@@ -3,8 +3,9 @@ import { CourseEditSidebar } from "~/components/features/courses/edit/course-edi
 import { getAllSegmentsForCourse } from "~/lib/admin/data-access/segments.sever";
 import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard._editor";
-export async function loader({ request, params }: Route.LoaderArgs) {
 
+
+export async function loader({ request, params }: Route.LoaderArgs) {
     const { isLoggedIn } = await isAdminLoggedIn(request);
     if (!isLoggedIn) {
         throw redirect("/admin/login")
@@ -17,6 +18,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     const { segments } = await getAllSegmentsForCourse(request, courseSlug);
     return { courseSlug, segments };
 }
+
 export function useEditorLoaderData() {
     const data = useRouteLoaderData<typeof loader>("routes/_dashboard._editor");
     if (!data) {
@@ -24,6 +26,7 @@ export function useEditorLoaderData() {
     }
     return data;
 }
+
 export default function CourseEditorLayout() {
     return (
         <div className="flex flex-col gap-4 h-full overflow-hidden">

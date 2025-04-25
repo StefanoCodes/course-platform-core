@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { cn } from "~/lib/utils"
 import { Button } from "../ui/button"
+import { Link } from "react-router"
 
 export function ElegantShape({
   className,
@@ -110,7 +111,9 @@ export default function Hero({
             </p>
           </motion.div>
           <motion.div custom={3} variants={fadeUpVariants} initial="hidden" animate="visible">
+          <Link to="https://cal.com/seif-platform/15min" target="_blank" className="w-full">
             <Button className="cursor-pointer inset-ring-2 inset-ring-indigo-300 bg-indigo-500 text-white hover:bg-indigo-600 hover:text-white">Book a Demo</Button>
+          </Link>
           </motion.div>
           <motion.div custom={4} variants={fadeUpVariants} initial="hidden" animate="visible" className="py-4">
             <img 

@@ -29,7 +29,7 @@ export const mainNavItems: NavItem[] = [
 export const authNavItems: NavItem[] = [
     {
         label: "Book a Demo",
-        href: "/demo",
+        href: "https://cal.com/seif-platform/15min",
     },
 ];
 
