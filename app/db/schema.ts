@@ -9,7 +9,7 @@ export const user = pgTable("user", {
     emailVerified: boolean('email_verified').notNull(),
     image: text('image'),
     createdAt: timestamp('created_at').notNull(),
-    updatedAt: timestamp('updated_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
     role: text('role').notNull(),
     banned: boolean('banned'),
     banReason: text('ban_reason'),
@@ -22,7 +22,7 @@ export const session = pgTable("session", {
     expiresAt: timestamp('expires_at').notNull(),
     token: text('token').notNull().unique(),
     createdAt: timestamp('created_at').notNull(),
-    updatedAt: timestamp('updated_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
     userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
@@ -42,7 +42,7 @@ export const account = pgTable("account", {
     scope: text('scope'),
     password: text('password'),
     createdAt: timestamp('created_at').notNull(),
-    updatedAt: timestamp('updated_at').notNull()
+    updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
 });
 
 export const verification = pgTable("verification", {
@@ -51,7 +51,7 @@ export const verification = pgTable("verification", {
     value: text('value').notNull(),
     expiresAt: timestamp('expires_at').notNull(),
     createdAt: timestamp('created_at'),
-    updatedAt: timestamp('updated_at')
+    updatedAt: timestamp('updated_at').$onUpdate(() => new Date()),
 });
 
 // BUSINESS LOGIC
@@ -65,7 +65,7 @@ export const studentsTable = pgTable('students', {
     password: varchar('password', { length: 255 }).notNull(),
     isActivated: boolean('is_activated').notNull().default(true),
     createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 }, (t) => [index('student_email_index').on(t.email), index('student_id_index').on(t.studentId)]);
 
 
@@ -76,7 +76,7 @@ export const coursesTable = pgTable('courses', {
     isPublic: boolean('is_public').notNull().default(false),
     slug: varchar('slug', { length: 255 }).notNull(),
     createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 }, (t) => [index('course_name_index').on(t.name), index('course_slug_index').on(t.slug)]);
 
 
@@ -89,15 +89,15 @@ export const segmentsTable = pgTable('segments', {
     slug: varchar('slug', { length: 255 }).notNull(),
     courseId: uuid('course_id').references(() => coursesTable.id).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
-    updated_at: timestamp('updated_at').notNull().defaultNow(),
+    updated_at: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 }, (t) => [index('segment_name_index').on(t.name), index('segment_slug_index').on(t.slug)]);
 
 export const studentCoursesTable = pgTable('student_courses', {
     id: uuid('id').primaryKey().defaultRandom(),
-    studentId: text('student_id').references(() => studentsTable.studentId).notNull(),
+    studentId: text('student_id').references(() => studentsTable.studentId, {onDelete:"cascade"}).notNull(),
     courseId: uuid('course_id').references(() => coursesTable.id).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
-    updated_at: timestamp('updated_at').notNull().defaultNow(),
+    updated_at: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 }, (t) => [index('student_course_student_id_index').on(t.studentId), index('student_course_course_id_index').on(t.courseId)]);
 
 

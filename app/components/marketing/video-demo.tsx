@@ -18,7 +18,7 @@ export default function VideoDemo() {
           <div className="max-w-7xl mx-auto">
             {/* section title */}
             <h2 className="text-4xl md:text-5xl font-bold text-gray-800 text-center mb-8">
-                Watch a demo
+                Watch It In Action
             </h2>
             {/* Browser Window Mockup */}
             <div className="rounded-xl overflow-hidden bg-zinc-900/50 shadow-2xl border border-white/5">
@@ -32,7 +32,7 @@ export default function VideoDemo() {
                 <div className="flex-1  flex justify-center ">
                   <div className="bg-black/40 self-center rounded-md py-1.5 px-3 text-xs  text-zinc-500 max-w-[300px] flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-zinc-800" />
-                    my-new-online-course-platform.com
+                    your-new-platofrm.com
                   </div>
                 </div>
               </div>
@@ -41,7 +41,7 @@ export default function VideoDemo() {
               <div className="aspect-[16/9] relative">
                 {isPlaying ? (
                   <iframe
-                    src={`https://player.vimeo.com/video/1055784280?h=your_hash_here&autoplay=1&title=0&byline=0&portrait=0`}
+                    src={`https://player.vimeo.com/video/1079021706?h=a783068d5f&autoplay=1&title=0&byline=0&portrait=0`}
                     className="w-full h-full"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
