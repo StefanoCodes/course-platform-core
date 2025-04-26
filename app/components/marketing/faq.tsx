@@ -39,7 +39,7 @@ export default function FAQ() {
 
   return (
     <motion.section
-      id="faq"
+      id="faqs"
       className="py-16 px-4"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}

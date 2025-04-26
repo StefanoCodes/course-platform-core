@@ -14,16 +14,21 @@ export default function Navbar() {
           </div>
      
           <div className="flex items-center">
-            <nav className="hidden space-x-8 md:flex capitalize">
+            <nav className="hidden md:flex capitalize">
+              <ul className="flex items-center gap-8">
+
               {mainNavItems.map((item) => (
+                <li key={item.href}>
                 <Link
-                  key={item.href}
-                  to={item.href}
-                  className="transition-colors hover:text-indigo-500"
+                key={item.href}
+                to={item.href}
+                className="transition-colors hover:text-indigo-500"
                 >
                   {item.label}
                 </Link>
+              </li>
               ))}
+              </ul>
             </nav>
           </div>
           <div className="flex items-center space-x-4 md:min-w-[205px]">
