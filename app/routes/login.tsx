@@ -35,7 +35,7 @@ export default function AuthenticationPage() {
               <p className="text-lg">
                 &ldquo;We are a team of educators who are passionate about creating a better future for everyone.&rdquo;
               </p>
-              <footer className="text-sm">Company Name</footer>
+              <footer className="text-sm">PLATFORM 4ME</footer>
             </blockquote>
           </div>
         </div>
