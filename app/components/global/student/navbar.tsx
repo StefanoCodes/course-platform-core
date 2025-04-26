@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Button } from "~/components/ui/button";
 import { studentNavItems } from "~/config/navigation";
-import { cn } from "~/lib/utils";
+import { cn, displayName } from "~/lib/utils";
 import { useStudentLayoutData } from "~/routes/_student";
 import { LogoutProvider } from "../admin/logout";
 
@@ -12,11 +12,12 @@ export function StudentNavbar() {
     const { student} = useStudentLayoutData();
     const location = useLocation();
     const pathname = location.pathname;
+    const display_name = displayName(student.name)
     return(
         <nav className="bg-[#333] sticky top-0 z-20 h-[var(--navbar-height)] [--widest-el:11.375rem]">
             <div className="flex items-center h-full justify-between px-4 container mx-auto">
                 <div className="flex items-center gap-2">
-                    <p className="text-white">Welcome Back {student?.name}</p>
+                    <p className="text-white">Welcome Back {display_name}</p>
                     <Heart className="w-4 h-4 text-red-300" />
                 </div>
                 <div className="hidden md:flex items-center gap-2">

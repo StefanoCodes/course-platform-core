@@ -1,12 +1,11 @@
-import { data, Outlet, redirect, useLoaderData, useNavigation, useRouteLoaderData } from "react-router";
+import { Outlet, redirect, useNavigation, useRouteLoaderData } from "react-router";
+import { DashboardSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { AppSidebar } from "~/components/global/admin/app-sidebar";
 import { Breadcrumbs } from "~/components/global/admin/breadcrumbs";
-import { DashboardSkeleton } from "~/components/features/loading/dashboard-skeleton";
 import { Separator } from "~/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-
-import type { Route } from "./+types/_dashboard.dashboard";
 import { isAdminLoggedIn } from "~/lib/auth.server";
+import type { Route } from "./+types/_dashboard.dashboard";
 
 export async function loader({ request }: Route.LoaderArgs) {
  const { isLoggedIn, admin } = await isAdminLoggedIn(request);
@@ -54,4 +53,7 @@ export default function Page() {
     </SidebarProvider>
   );
 }
+
+
+
 

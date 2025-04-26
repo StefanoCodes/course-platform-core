@@ -1,10 +1,11 @@
 import { FileText } from "lucide-react";
 import { redirect } from "react-router";
+import { StudentEnrolledList } from "~/components/features/courses/students-enrolled";
+import { Separator } from "~/components/ui/separator";
 import { isAdminLoggedIn } from "~/lib/auth.server";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug._index";
-import { Separator } from "~/components/ui/separator";
-import { Button } from "~/components/ui/button";
-import { StudentEnrolledList } from "~/components/features/courses/students-enrolled";
+
+
 export async function loader({ request, params }: Route.LoaderArgs) {
     // auth check
     const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -15,8 +16,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
    
     return { slug };
 }
-export default function CourseIndex({loaderData}:Route.ComponentProps) {
-    
+
+export default function CourseIndex({loaderData}:Route.ComponentProps) {  
     return (
         <div className="flex flex-col h-full bg-gray-50 p-8 flex-1 border border-gray-200 border-l-0 border-t-0 justify-center items-center text-center">
 

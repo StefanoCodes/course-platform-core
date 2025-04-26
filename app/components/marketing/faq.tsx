@@ -4,8 +4,8 @@ import { Accordion, Accordions } from "../ui/accordion"
 export default function FAQ() {
   const faqs = [
     {
-      title: "What is PLAT4ME?",
-      content: "PLAT4ME is a online platform that allows teachers to upload their lessons for students to access to at anytime and anywhere, allowing teachers to expand their reach beyond timezones and conflicting schedule"
+      title: "What is PLATFORM 4ME?",
+      content: "PLATFORM 4ME is a online platform that allows teachers to upload their lessons for students to access to at anytime and anywhere, allowing teachers to expand their reach beyond timezones and conflicting schedule"
     },
     {
       title: "Can I use this platform even if I'm already teaching live classes?",
@@ -39,7 +39,7 @@ export default function FAQ() {
 
   return (
     <motion.section
-      id="faq"
+      id="faqs"
       className="py-16 px-4"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}

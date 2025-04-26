@@ -133,9 +133,9 @@ export default function Comparison() {
           </h2>
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-16 max-w-7xl mx-auto">
           {/* Challenges Section */}
-          <div>
+          
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {challenges.map((challenge, index) => (
                 <FeatureCard
@@ -147,7 +147,6 @@ export default function Comparison() {
                 />
               ))}
             </div>
-          </div>
 
           {/* Benefits Section */}
           <div className="flex flex-col items-center justify-center gap-4">

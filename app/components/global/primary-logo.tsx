@@ -6,7 +6,7 @@ export function PrimaryLogo({classNames, children}:{classNames?:{
 }, children?:React.ReactNode}) {
     return (
         <Link to={"/"} className={cn(`flex items-center justify-center gap-2`, classNames?.link)}>
-            <img src={"/assets/logo.webp"} alt="Kalon Logo" className={cn("w-10 h-10 rounded-full", classNames?.img)} />
+            <img src={"/assets/LOGO.png"} alt="Brand Logo" className={cn("w-10 h-10 rounded-full", classNames?.img)} />
             {children}
         </Link>
     )

@@ -13,11 +13,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
     // get studentbyid
     const { student: studentById } = await getStudentById(request, student.id);
+    if(!studentById) {
+        throw redirect("/login")
+    }
     return { student: studentById };
 }
 export function useStudentLayoutData() {
     const data = useRouteLoaderData<typeof loader>("routes/_student");
-    if( !data) {
+    if(!data) {
         throw new Error("Cannot use student layout data outside of the student layout context the route must be a child of the student layout");
     }
     return data;
