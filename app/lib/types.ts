@@ -1,5 +1,5 @@
 export type FetcherResponse = {
-    success: boolean;
-    message: string;
-    redirectTo?: string;
-}
+	success: boolean;
+	message: string;
+	redirectTo?: string;
+};

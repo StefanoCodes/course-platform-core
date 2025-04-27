@@ -12,22 +12,26 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { loginSchema } from "~/lib/admin/zod-schemas/auth";
-import type { LoginSchema } from "~/lib/admin/zod-schemas/auth";
+import { loginSchema } from "~/lib/zod-schemas/auth";
+import type { LoginSchema } from "~/lib/zod-schemas/auth";
 import type { FetcherResponse } from "~/lib/types";
 
-
-export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
+export default function LoginAuthForm({ type }: { type: "admin" | "student" }) {
 	const navigate = useNavigate();
-	const config = type === "admin" ? {
-		action: "/resource/auth",
-		intent: "sign-in-admin",
-		buttonStyles: "bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white cursor-pointer h-10 font-medium"
-	} : {
-		action: "/resource/auth",
-		intent: "sign-in-student",
-		buttonStyles: "bg-gradient-to-br from-brand-primary to-brand-primary/90  text-white cursor-pointer h-10 font-medium"
-	}
+	const config =
+		type === "admin"
+			? {
+					action: "/resource/auth",
+					intent: "sign-in-admin",
+					buttonStyles:
+						"bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white cursor-pointer h-10 font-medium",
+				}
+			: {
+					action: "/resource/auth",
+					intent: "sign-in-student",
+					buttonStyles:
+						"bg-gradient-to-br from-brand-primary to-brand-primary/90  text-white cursor-pointer h-10 font-medium",
+				};
 	const fetcher = useFetcher<FetcherResponse>();
 	const isPending = fetcher.state !== "idle";
 	const form = useForm<LoginSchema>({
@@ -45,15 +49,14 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 			}
 			if (fetcher.data.success === false) {
 				toast.error(fetcher.data.message);
-				if(fetcher.data.redirectTo) {
-					navigate(fetcher.data.redirectTo)
+				if (fetcher.data.redirectTo) {
+					navigate(fetcher.data.redirectTo);
 				}
 			}
 		}
 	}, [fetcher.data]);
 
 	return (
-
 		<div className="rounded-lg bg-gray-100 p-6 md:p-8 inset-ring-border">
 			<Form {...form}>
 				<fetcher.Form
@@ -68,7 +71,7 @@ export default function LoginAuthForm({type}: {type: "admin" | "student"}) {
 							{
 								action: config.action,
 								method: "POST",
-							}
+							},
 						);
 					})}
 				>
