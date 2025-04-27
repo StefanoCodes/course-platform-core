@@ -20,11 +20,14 @@ function YoutubePlayer({
 	url: VideoPlayerProps["url"];
 }) {
 	return (
-		<iframe
-			src={`https://www.youtube.com/embed/${extractYoutubeVideoId(url)}`}
-			frameBorder="0"
-			allowFullScreen
-		></iframe>
+		<>
+			<iframe
+				src={`https://www.youtube.com/embed/${extractYoutubeVideoId(url)}?modestbranding=1&rel=0&showinfo=0&controls=1`}
+				frameBorder="0"
+				allowFullScreen
+				title="My Video"
+			/>
+		</>
 	);
 }
 

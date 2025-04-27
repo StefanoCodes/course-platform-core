@@ -85,6 +85,7 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
 		);
 	}
 }
+
 export async function handleEditCourse(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -143,7 +144,7 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 		.set({
 			name: validatedFields.name,
 			description: validatedFields.description,
-			slug: slug,
+			slug: newSlug,
 		})
 		.where(eq(coursesTable.id, courseId))
 		.returning({
@@ -166,8 +167,8 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 		{ status: 200 },
 	);
 }
+
 export async function handleDeleteCourse(request: Request, formData: FormData) {
-	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
 		return data({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -183,19 +184,7 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
 	}
 
 	try {
-		// need to delete all the segments connected to the course aswell i belive with onCascade
-		await db.transaction(async (tx) => {
-			// delete in the studentCoursesEntry
-			await tx
-				.delete(studentCoursesTable)
-				.where(eq(studentCoursesTable.courseId, courseId));
-			// delete all the segments connected to the course
-			await tx
-				.delete(segmentsTable)
-				.where(eq(segmentsTable.courseId, courseId));
-			// delete the course
-			await tx.delete(coursesTable).where(eq(coursesTable.id, courseId));
-		});
+		await db.delete(coursesTable).where(eq(coursesTable.id, courseId));
 
 		return data(
 			{ success: true, message: "Course deleted successfully" },
@@ -213,6 +202,7 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
 		);
 	}
 }
+
 export async function handleMakePublic(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
