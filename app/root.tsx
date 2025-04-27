@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				{children}
 				<Toaster position="top-center" richColors />
 				<ScrollRestoration />
-				<script src="https://player.vimeo.com/api/player.js"></script>
+				<script src="https://player.vimeo.com/api/player.js" />
 				<Scripts />
 			</body>
 		</html>

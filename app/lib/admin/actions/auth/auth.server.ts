@@ -77,6 +77,7 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
 		);
 	}
 }
+
 // Student Login (role:student)
 export async function handleSignInStudent(
 	request: Request,
@@ -109,22 +110,6 @@ export async function handleSignInStudent(
 			},
 		});
 
-		const { isStudentActivated } = await isStudentAccountActivated(
-			validatedFields.email,
-		);
-
-		if (!isStudentActivated) {
-			return data(
-				{
-					success: false,
-					message: "Student account is not activated contact your admin",
-				},
-				{
-					status: 403,
-				},
-			);
-		}
-
 		const [signedInUser] = await db
 			.select()
 			.from(user)
@@ -142,22 +127,26 @@ export async function handleSignInStudent(
 			);
 		}
 
-		const allExisitingSessionForLoggedInUser = await db
-			.select()
-			.from(session)
-			.where(eq(session.userId, response.user.id))
-			.orderBy(desc(session.createdAt));
+		const { isStudentActivated } = await isStudentAccountActivated(
+			validatedFields.email,
+		);
 
-		const oldSessionsToDelete = allExisitingSessionForLoggedInUser.slice(1);
-
-		if (oldSessionsToDelete.length > 0) {
-			const sessionIdsToDelete = oldSessionsToDelete.map(
-				(session) => session.id,
+		if (!isStudentActivated) {
+			return data(
+				{
+					success: false,
+					message: "Student account is not activated contact your admin",
+				},
+				{
+					status: 403,
+				},
 			);
-
-			await db.delete(session).where(inArray(session.id, sessionIdsToDelete));
 		}
 
+		const { success } = await LogUserOutOfAllSessions(response.user.id);
+		if (!success) {
+			throw new Error("Error logging out user from all sessions");
+		}
 		return data(
 			{
 				success: true,
@@ -181,5 +170,31 @@ export async function handleSignInStudent(
 				status: 500,
 			},
 		);
+	}
+}
+
+// Logout user from all sessions
+async function LogUserOutOfAllSessions(userId: string) {
+	try {
+		const allExisitingSessionForLoggedInUser = await db
+			.select()
+			.from(session)
+			.where(eq(session.userId, userId))
+			.orderBy(desc(session.createdAt));
+
+		const oldSessionsToDelete = allExisitingSessionForLoggedInUser.slice(1);
+
+		if (oldSessionsToDelete.length > 0) {
+			const sessionIdsToDelete = oldSessionsToDelete.map(
+				(session) => session.id,
+			);
+			await db.delete(session).where(inArray(session.id, sessionIdsToDelete));
+		}
+		return {
+			success: true,
+		};
+	} catch (error) {
+		console.error("🔴Error logging out user from all sessions", error);
+		return { success: false };
 	}
 }

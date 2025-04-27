@@ -27,6 +27,7 @@ import {
 	type UpdateCourseSchema,
 	updateCourseSchema,
 } from "~/lib/zod-schemas/course";
+
 export function EditCourse({
 	name,
 	description,

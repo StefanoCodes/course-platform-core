@@ -142,7 +142,11 @@ export async function handleDeleteStudent(
 
 	try {
 		await db.transaction(async (tx) => {
-			await tx.delete(user).where(eq(user.id, studentId));
+			await auth.api.removeUser({
+				body: {
+					userId: studentId,
+				},
+			});
 		});
 
 		return data(
@@ -150,7 +154,7 @@ export async function handleDeleteStudent(
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error(`Error deleting student:`, error);
+		console.error("Error deleting student:", error);
 		return data(
 			{
 				success: false,
@@ -305,7 +309,6 @@ export async function handleUpdateStudent(
 				name: validatedFields.name,
 				email: validatedFields.email,
 				phone: validatedFields.phoneNumber,
-				updatedAt: new Date(),
 			})
 			.where(eq(studentsTable.studentId, studentId as string))
 			.returning({

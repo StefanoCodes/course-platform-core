@@ -4,6 +4,7 @@ import {
 	pgTable,
 	text,
 	timestamp,
+	unique,
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
@@ -78,7 +79,9 @@ export const studentsTable = pgTable(
 	"students",
 	{
 		id: uuid("id").primaryKey().defaultRandom(),
-		studentId: text("student_id").unique().notNull(),
+		studentId: text("student_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
 		name: varchar("name", { length: 255 }).notNull(),
 		email: varchar("email", { length: 255 }).notNull().unique(),
 		phone: varchar("phone", { length: 255 }),
@@ -126,7 +129,7 @@ export const segmentsTable = pgTable(
 		isPublic: boolean("is_public").notNull().default(true),
 		slug: varchar("slug", { length: 255 }).notNull(),
 		courseId: uuid("course_id")
-			.references(() => coursesTable.id)
+			.references(() => coursesTable.id, { onDelete: "cascade" })
 			.notNull(),
 		created_at: timestamp("created_at").notNull().defaultNow(),
 		updated_at: timestamp("updated_at")
@@ -145,10 +148,10 @@ export const studentCoursesTable = pgTable(
 	{
 		id: uuid("id").primaryKey().defaultRandom(),
 		studentId: text("student_id")
-			.references(() => studentsTable.studentId, { onDelete: "cascade" })
+			.references(() => user.id, { onDelete: "cascade" })
 			.notNull(),
 		courseId: uuid("course_id")
-			.references(() => coursesTable.id)
+			.references(() => coursesTable.id, { onDelete: "cascade" })
 			.notNull(),
 		created_at: timestamp("created_at").notNull().defaultNow(),
 		updated_at: timestamp("updated_at")
@@ -159,6 +162,7 @@ export const studentCoursesTable = pgTable(
 	(t) => [
 		index("student_course_student_id_index").on(t.studentId),
 		index("student_course_course_id_index").on(t.courseId),
+		unique("student_course_unique").on(t.studentId, t.courseId),
 	],
 );
 
@@ -167,6 +171,7 @@ export type Student = typeof studentsTable.$inferSelect;
 export type Course = typeof coursesTable.$inferSelect;
 export type Segment = typeof segmentsTable.$inferSelect;
 export type StudentCourse = typeof studentCoursesTable.$inferSelect;
+
 // AUTH RELATED
 export type User = typeof user.$inferSelect;
 export type Session = typeof session.$inferSelect;
