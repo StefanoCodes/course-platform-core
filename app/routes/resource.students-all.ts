@@ -17,7 +17,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 			.orderBy(desc(studentsTable.createdAt));
 		return data({ students }, { status: 200 });
 	} catch (error) {
-		console.error(`🔴Error fetching all the students`, error);
+		console.error("🔴Error fetching all the students", error);
 		return data(
 			error instanceof Error ? error.message : "Something went wrong",
 			{ status: 500 },
