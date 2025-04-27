@@ -1,1 +1,0 @@
-ALTER TABLE "students" ALTER COLUMN "is_activated" SET DEFAULT true;

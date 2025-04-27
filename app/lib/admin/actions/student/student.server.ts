@@ -95,12 +95,14 @@ export async function handleCreateStudent(
 			}
 
 			// insert into studentCoursesTable
-			const valuesToInsert = coursesArray.map((courseId) => ({
-				studentId: user.id,
-				courseId: courseId,
-			}));
-
-			await tx.insert(studentCoursesTable).values(valuesToInsert);
+			console.log(coursesArray.length, "coursesArray");
+			if (coursesArray.length > 1) {
+				const valuesToInsert = coursesArray.map((courseId) => ({
+					studentId: user.id,
+					courseId: courseId,
+				}));
+				await tx.insert(studentCoursesTable).values(valuesToInsert);
+			}
 		});
 
 		return data(

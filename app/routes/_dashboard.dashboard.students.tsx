@@ -29,7 +29,7 @@ export function useStudentsLoaderData() {
 }
 export default function Page() {
 	return (
-		<div className="flex flex-col gap-4 h-full overflow-y-auto py-4 [scrollbar-width:thin]">
+		<div className="flex flex-col gap-4 h-full overflow-hidden py-4 [scrollbar-width:thin]">
 			<StudentsList />
 		</div>
 	);
