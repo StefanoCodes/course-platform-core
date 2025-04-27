@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Calendar, Edit, Mail, Phone, User } from "lucide-react";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { useForm } from "react-hook-form";
-import { data, Link, redirect, useFetcher, useLoaderData } from "react-router";
+import { Link, data, redirect, useFetcher, useLoaderData } from "react-router";
 import { ActivateStudent } from "~/components/features/students/activate-student";
 import { DeactivateStudent } from "~/components/features/students/deactivate-student";
 import { StatusBadge } from "~/components/features/students/status-badge";
@@ -29,15 +29,15 @@ import {
 import type { Course } from "~/db/schema";
 import { getAllPublicCourses } from "~/lib/admin/data-access/courses.server";
 import {
-	getCoursesStudentEnrolledIn,
 	GetStudentById,
+	getCoursesStudentEnrolledIn,
 } from "~/lib/admin/data-access/students.server";
-import {
-	assignCourseSchema,
-	type AssignCourseShema,
-} from "~/lib/zod-schemas/course";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import { formatDateToString } from "~/lib/utils";
+import {
+	type AssignCourseShema,
+	assignCourseSchema,
+} from "~/lib/zod-schemas/course";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -76,7 +76,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	);
 }
 
-export default function StudentProfilePage({}: Route.ComponentProps) {
+export default function StudentProfilePage() {
 	return (
 		<div className="flex flex-col gap-6 py-4">
 			<div className="flex items-center gap-2">

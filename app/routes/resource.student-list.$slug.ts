@@ -32,7 +32,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 			.where(inArray(studentsTable.studentId, studentIds));
 		return { students: studentsList };
 	} catch (error) {
-		console.error(`Error fetching students list:`, error);
+		console.error("Error fetching students list:", error);
 		return data(
 			error instanceof Error ? error.message : "Something went wrong",
 			{ status: 500 },

@@ -87,7 +87,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 				form.reset();
 			}
 		}
-	}, [fetcher.data]);
+	}, [fetcher.data, courseSlug, form.reset, navigate, segmentData.slug]);
 
 	return (
 		<div className="p-4 flex flex-col gap-4">
