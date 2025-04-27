@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFetcher, useNavigate } from "react-router";
@@ -23,10 +24,9 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
 import {
-	createCourseSchema,
-	type CreateCourseSchema,
+	type UpdateCourseSchema,
+	updateCourseSchema,
 } from "~/lib/zod-schemas/course";
-import { Pencil } from "lucide-react";
 export function EditCourse({
 	name,
 	description,
@@ -41,8 +41,8 @@ export function EditCourse({
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const fetcher = useFetcher<FetcherResponse>();
 	const isSubmitting = fetcher.state === "submitting";
-	const form = useForm<CreateCourseSchema>({
-		resolver: zodResolver(createCourseSchema),
+	const form = useForm<UpdateCourseSchema>({
+		resolver: zodResolver(updateCourseSchema),
 		defaultValues: {
 			name: name,
 			description: description,
