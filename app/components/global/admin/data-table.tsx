@@ -199,95 +199,98 @@ export function DataTable({ initialData }: { initialData: any }) {
 	}, [initialData]);
 
 	return (
-		<div className="w-full flex flex-col gap-6">
+		<div className="w-full flex flex-col justify-between h-full gap-6 overflow-hidden">
 			{/* Header */}
-			<div className="flex items-center justify-between">
-				{/* Customize Columns */}
-				<div className="flex items-center gap-2">
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="outline" size="sm">
-								<Columns />
-								<span className="hidden lg:inline">Customize Columns</span>
-								<span className="lg:hidden">Columns</span>
-								<ChevronDown />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end" className="w-56">
-							{table
-								.getAllColumns()
-								.filter(
-									(column) =>
-										typeof column.accessorFn !== "undefined" &&
-										column.getCanHide(),
-								)
-								.map((column) => {
-									return (
-										<DropdownMenuCheckboxItem
-											key={column.id}
-											className="capitalize"
-											checked={column.getIsVisible()}
-											onCheckedChange={(value) =>
-												column.toggleVisibility(!!value)
-											}
-										>
-											{column.id}
-										</DropdownMenuCheckboxItem>
-									);
-								})}
-						</DropdownMenuContent>
-					</DropdownMenu>
+			<div className="flex flex-col gap-6 overflow-hidden">
+				<div className="flex items-center justify-between">
+					{/* Customize Columns */}
+					<div className="flex items-center gap-2">
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="outline" size="sm">
+									<Columns />
+									<span className="hidden lg:inline">Customize Columns</span>
+									<span className="lg:hidden">Columns</span>
+									<ChevronDown />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end" className="w-56">
+								{table
+									.getAllColumns()
+									.filter(
+										(column) =>
+											typeof column.accessorFn !== "undefined" &&
+											column.getCanHide(),
+									)
+									.map((column) => {
+										return (
+											<DropdownMenuCheckboxItem
+												key={column.id}
+												className="capitalize"
+												checked={column.getIsVisible()}
+												onCheckedChange={(value) =>
+													column.toggleVisibility(!!value)
+												}
+											>
+												{column.id}
+											</DropdownMenuCheckboxItem>
+										);
+									})}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+					<CreateStudent />
+					{/* Add student button */}
 				</div>
-				<CreateStudent />
-				{/* Add student button */}
-			</div>
-			{/* Table */}
-			<div className="rounded-lg border">
-				<Table>
-					<TableHeader className="bg-muted sticky top-0 z-10">
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id} colSpan={header.colSpan}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
-										</TableHead>
-									);
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody className="**:data-[slot=table-cell]:first:w-8">
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow key={row.id}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
+				{/* Table */}
+
+				<div className="rounded-lg border overflow-y-auto [scrollbar-width:thin]">
+					<Table>
+						<TableHeader className="bg-muted sticky top-0 z-10">
+							{table.getHeaderGroups().map((headerGroup) => (
+								<TableRow key={headerGroup.id}>
+									{headerGroup.headers.map((header) => {
+										return (
+											<TableHead key={header.id} colSpan={header.colSpan}>
+												{header.isPlaceholder
+													? null
+													: flexRender(
+															header.column.columnDef.header,
+															header.getContext(),
+														)}
+											</TableHead>
+										);
+									})}
 								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
+							))}
+						</TableHeader>
+						<TableBody className="**:data-[slot=table-cell]:first:w-8">
+							{table.getRowModel().rows?.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow key={row.id}>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell key={cell.id}>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										No results.
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
+				</div>
 			</div>
 			{/* Pagination */}
 			<div className="flex items-center justify-between px-4">

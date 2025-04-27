@@ -17,9 +17,7 @@ export const createStudentSchema = z.object({
 		.string()
 		.min(8, { message: "Password must be at least 8 characters long" })
 		.trim(),
-	courses: z
-		.array(z.string())
-		.min(1, { message: "At least one course is required" }),
+	courses: z.array(z.string()).optional(),
 });
 export const updateStudentSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),

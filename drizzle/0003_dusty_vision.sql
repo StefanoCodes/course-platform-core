@@ -1,1 +1,0 @@
-ALTER TABLE "students" ALTER COLUMN "student_id" SET DATA TYPE text;

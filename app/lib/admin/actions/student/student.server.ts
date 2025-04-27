@@ -95,12 +95,14 @@ export async function handleCreateStudent(
 			}
 
 			// insert into studentCoursesTable
-			const valuesToInsert = coursesArray.map((courseId) => ({
-				studentId: user.id,
-				courseId: courseId,
-			}));
-
-			await tx.insert(studentCoursesTable).values(valuesToInsert);
+			console.log(coursesArray.length, "coursesArray");
+			if (coursesArray.length > 1) {
+				const valuesToInsert = coursesArray.map((courseId) => ({
+					studentId: user.id,
+					courseId: courseId,
+				}));
+				await tx.insert(studentCoursesTable).values(valuesToInsert);
+			}
 		});
 
 		return data(
@@ -142,11 +144,16 @@ export async function handleDeleteStudent(
 
 	try {
 		await db.transaction(async (tx) => {
-			await auth.api.removeUser({
-				body: {
-					userId: studentId,
-				},
-			});
+			// erase user data across the system complety
+			await db.delete(user).where(eq(user.id, studentId));
+			await db.delete(account).where(eq(account.userId, studentId));
+			await db.delete(session).where(eq(session.userId, studentId));
+			await db
+				.delete(studentCoursesTable)
+				.where(eq(studentCoursesTable.studentId, studentId));
+			await db
+				.delete(studentsTable)
+				.where(eq(studentsTable.studentId, studentId));
 		});
 
 		return data(
