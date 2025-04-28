@@ -13,7 +13,7 @@ export function PrimaryLogo({
 	return (
 		<Link
 			to={"/"}
-			className={cn(`flex items-center justify-center gap-2`, classNames?.link)}
+			className={cn("flex items-center justify-center gap-2", classNames?.link)}
 		>
 			<img
 				src={"/assets/LOGO.png"}

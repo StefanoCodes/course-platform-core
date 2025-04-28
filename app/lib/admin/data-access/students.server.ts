@@ -67,7 +67,6 @@ export async function GetStudentById(request: Request, studentId: string) {
 		return { success: false, student: null };
 	}
 }
-
 export async function getCoursesStudentEnrolledIn(
 	request: Request,
 	studentId: string,

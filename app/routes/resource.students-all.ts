@@ -1,13 +1,13 @@
 import { data } from "react-router";
-import { isAuthenticated } from "~/lib/auth/auth.server";
+import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/resource.students-all";
 import db from "~/db/index.server";
 import { studentsTable } from "~/db/schema";
 import { desc } from "drizzle-orm";
 
 export async function loader({ request }: Route.LoaderArgs) {
-	const { session } = await isAuthenticated(request);
-	if (!session) {
+	const { isLoggedIn } = await isAdminLoggedIn(request);
+	if (!isLoggedIn) {
 		return data("Not Allowed", { status: 405 });
 	}
 	try {

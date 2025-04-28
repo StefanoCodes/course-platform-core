@@ -23,12 +23,8 @@ export async function isStudentAccountActivated(email: string) {
 export async function getStudentCourses(request: Request) {
 	// auth check
 	const { isLoggedIn, student } = await isStudentLoggedIn(request);
-	if (!isLoggedIn) {
+	if (!isLoggedIn || !student) {
 		throw redirect("/login");
-	}
-	if (!student) {
-		console.error("Student not found");
-		return { courses: [] };
 	}
 	try {
 		const studentCourses = await db

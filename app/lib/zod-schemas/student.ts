@@ -37,7 +37,6 @@ export const updateStudentPasswordSchema = z.object({
 		.string()
 		.min(8, { message: "Password must be at least 8 characters long" }),
 });
-
 export const assignStudentToCourseSchema = z.object({
 	studentId: z.string().min(1, { message: "Student ID is required" }),
 	courseId: z.string().min(1, { message: "Course ID is required" }),
@@ -45,6 +44,7 @@ export const assignStudentToCourseSchema = z.object({
 		.array(z.string())
 		.min(1, { message: "At least one student must be assigned to the course" }),
 });
+
 // types
 export type CreateStudentSchema = z.infer<typeof createStudentSchema>;
 export type UpdateStudentSchema = z.infer<typeof updateStudentSchema>;

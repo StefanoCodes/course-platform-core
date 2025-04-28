@@ -34,28 +34,30 @@ export async function handleCreateSegment(
 		throw redirect("/admin/login");
 	}
 
-	// validation
 	const unvalidatedFields = createSegmentSchema.safeParse(
 		Object.fromEntries(formData),
 	);
+
 	if (!unvalidatedFields.success) {
 		return data(
 			{ success: false, message: "Invalid form data" },
 			{ status: 400 },
 		);
 	}
+
 	const { courseSlug, name, description, videoUrl } = unvalidatedFields.data;
 
 	try {
 		// check the slug created is unique in all the other courses
 
 		// getting the course where the segment will be created
-		const { success: courseSuccess, course } = await getCourseBySlug(
+
+		const { success: courseResponse, course } = await getCourseBySlug(
 			request,
 			courseSlug,
 		);
 
-		if (!courseSuccess || !course) {
+		if (!courseResponse || !course) {
 			return data(
 				{ success: false, message: "Course not found" },
 				{ status: 404 },
@@ -118,7 +120,6 @@ export async function handleCreateSegment(
 		);
 	}
 }
-
 export async function handleEditSegment(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -142,13 +143,13 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 	const validatedFields = unvalidatedFields.data;
 
 	try {
-		// getting the course where the segment will be created
-		const { success: courseSuccess, course } = await getCourseBySlug(
+		// getting the course where the segment is being edited into
+		const { success: courseResponse, course } = await getCourseBySlug(
 			request,
 			validatedFields.courseSlug,
 		);
 
-		if (!courseSuccess || !course) {
+		if (!courseResponse || !course) {
 			return data(
 				{ success: false, message: "Course not found" },
 				{ status: 404 },
@@ -160,7 +161,7 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 			validatedFields.segmentSlug,
 			segmentsTable,
 		);
-		// check that the name currently sent back and the one in the database are not the same
+		// check that the name currently sent and the one in the database are not the same
 		const isCourseNameChanged =
 			validatedFields.segmentSlug !== titleToSlug(validatedFields.name);
 		if (!isSlugUnique && isCourseNameChanged) {
@@ -237,13 +238,13 @@ export async function handleDeleteSegment(
 	}
 
 	try {
-		// getting the course where the segment is created in
-		const { success: courseSuccess, course } = await getCourseBySlug(
+		// getting the course where the segment is being deleted from
+		const { success: courseResponse, course } = await getCourseBySlug(
 			request,
 			courseSlug,
 		);
 
-		if (!courseSuccess || !course) {
+		if (!courseResponse || !course) {
 			return data(
 				{ success: false, message: "Course not found" },
 				{ status: 404 },
@@ -263,7 +264,10 @@ export async function handleDeleteSegment(
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error("Error deleting segment:", error);
+		console.error(
+			"Error deleting segment:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -276,7 +280,6 @@ export async function handleDeleteSegment(
 		);
 	}
 }
-
 export async function handleMakeSegmentPrivate(
 	request: Request,
 	formData: FormData,
@@ -287,6 +290,7 @@ export async function handleMakeSegmentPrivate(
 	if (!isLoggedIn) {
 		throw redirect("/admin/login");
 	}
+
 	const segmentId = formData.get("id") as string;
 	const courseSlug = formData.get("courseSlug") as string;
 
@@ -298,7 +302,7 @@ export async function handleMakeSegmentPrivate(
 	}
 
 	try {
-		// getting the course where the segment is created in
+		// getting the course where the segment is being made private into
 		const { success: courseSuccess, course } = await getCourseBySlug(
 			request,
 			courseSlug,
@@ -327,7 +331,10 @@ export async function handleMakeSegmentPrivate(
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error("Error making segment private:", error);
+		console.error(
+			"Error making segment private:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -361,7 +368,7 @@ export async function handleMakeSegmentPublic(
 	}
 
 	try {
-		// getting the course where the segment is created in
+		// getting the course where the segment is being made public in
 		const { success: courseSuccess, course } = await getCourseBySlug(
 			request,
 			courseSlug,
@@ -390,7 +397,10 @@ export async function handleMakeSegmentPublic(
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error("Error making segment public:", error);
+		console.error(
+			"Error making segment public:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,

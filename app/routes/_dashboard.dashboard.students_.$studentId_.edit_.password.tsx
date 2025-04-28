@@ -73,7 +73,7 @@ export default function EditPasswordPage({ loaderData }: Route.ComponentProps) {
 				form.reset();
 			}
 		}
-	}, [fetcher.data]);
+	}, [fetcher.data, form.reset]);
 	useEffect(() => {
 		if (hasCopied) {
 			toast.success("Copied to clipboard");
@@ -95,7 +95,7 @@ export default function EditPasswordPage({ loaderData }: Route.ComponentProps) {
 				<Form {...form}>
 					<fetcher.Form
 						className="flex flex-col gap-4"
-						action={`/resource/student`}
+						action={"/resource/student"}
 						method="POST"
 						onSubmit={form.handleSubmit((data) => {
 							fetcher.submit(
@@ -106,7 +106,7 @@ export default function EditPasswordPage({ loaderData }: Route.ComponentProps) {
 								},
 								{
 									method: "POST",
-									action: `/resource/student`,
+									action: "/resource/student",
 								},
 							);
 						})}

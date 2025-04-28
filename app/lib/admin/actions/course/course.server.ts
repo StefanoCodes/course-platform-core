@@ -52,9 +52,9 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
 					slug: slug,
 				})
 				.returning({
-					slug: coursesTable.slug,
 					id: coursesTable.id,
 				});
+
 			// insert all the studentids + courseId in the studentCoursesTable so they are assigned to this course
 
 			const valuesToInsert = validatedFields.students.map((student) => ({
@@ -90,9 +90,10 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 	const courseId = formData.get("id") as string;
+	const slug = formData.get("slug") as string;
 
 	if (!courseId) {
 		return data(
@@ -100,7 +101,6 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 			{ status: 400 },
 		);
 	}
-	const slug = formData.get("slug") as string;
 
 	if (!slug) {
 		return data(
@@ -125,53 +125,67 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 
 	// check if the slug is unique
 	const newSlug = titleToSlug(validatedFields.name);
-	const currentSlug = slug; // Assuming the current slug is passed in form data
+	const currentSlug = slug;
 
 	// Only check uniqueness if the slug would actually change
-	if (newSlug !== currentSlug) {
-		const isSlugUnique = await checkSlugUnique(newSlug, coursesTable);
-		if (!isSlugUnique) {
+	try {
+		if (newSlug !== currentSlug) {
+			const isSlugUnique = await checkSlugUnique(newSlug, coursesTable);
+			if (!isSlugUnique) {
+				return data(
+					{ success: false, message: "a course with this name already exists" },
+					{ status: 400 },
+				);
+			}
+		}
+
+		// update the course
+		const [updatedCourse] = await db
+			.update(coursesTable)
+			.set({
+				name: validatedFields.name,
+				description: validatedFields.description,
+				slug: newSlug,
+			})
+			.where(eq(coursesTable.id, courseId))
+			.returning({
+				slug: coursesTable.slug,
+			});
+
+		if (!updatedCourse) {
 			return data(
-				{ success: false, message: "a course with this name already exists" },
-				{ status: 400 },
+				{ success: false, message: "Failed to update course" },
+				{ status: 500 },
 			);
 		}
-	}
-
-	// update the course
-	const [updatedCourse] = await db
-		.update(coursesTable)
-		.set({
-			name: validatedFields.name,
-			description: validatedFields.description,
-			slug: newSlug,
-		})
-		.where(eq(coursesTable.id, courseId))
-		.returning({
-			slug: coursesTable.slug,
-		});
-
-	if (!updatedCourse) {
 		return data(
-			{ success: false, message: "Failed to update course" },
+			{
+				success: true,
+				message: "Course updated successfully",
+				courseSlug: updatedCourse.slug,
+			},
+			{ status: 200 },
+		);
+	} catch (error) {
+		console.error(
+			"🔴Error updating course details:",
+			error instanceof Error && error.message,
+		);
+		return data(
+			{
+				success: false,
+				message:
+					error instanceof Error ? error.message : "An unknown error occurred",
+			},
 			{ status: 500 },
 		);
 	}
-
-	return data(
-		{
-			success: true,
-			message: "Course updated successfully",
-			courseSlug: updatedCourse.slug,
-		},
-		{ status: 200 },
-	);
 }
 
 export async function handleDeleteCourse(request: Request, formData: FormData) {
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const courseId = formData.get("courseId") as string;
@@ -184,6 +198,10 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
 	}
 
 	try {
+		await db
+			.delete(studentCoursesTable)
+			.where(eq(studentCoursesTable.courseId, courseId));
+		await db.delete(segmentsTable).where(eq(segmentsTable.courseId, courseId));
 		await db.delete(coursesTable).where(eq(coursesTable.id, courseId));
 
 		return data(
@@ -191,7 +209,10 @@ export async function handleDeleteCourse(request: Request, formData: FormData) {
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			"🔴Error Deleting course:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -207,7 +228,7 @@ export async function handleMakePublic(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const courseId = formData.get("courseId") as string;
@@ -246,7 +267,10 @@ export async function handleMakePublic(request: Request, formData: FormData) {
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			"🔴Error updating the course status to public:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -257,11 +281,12 @@ export async function handleMakePublic(request: Request, formData: FormData) {
 		);
 	}
 }
+
 export async function handleMakePrivate(request: Request, formData: FormData) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const courseId = formData.get("courseId") as string;
@@ -300,7 +325,10 @@ export async function handleMakePrivate(request: Request, formData: FormData) {
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			"🔴Error changing course status to private:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -317,11 +345,12 @@ export async function handleUpdateCourseAssignment(
 	formData: FormData,
 ) {
 	const { isLoggedIn } = await isAdminLoggedIn(request);
+
 	if (!isLoggedIn) {
 		throw redirect("/admin/login");
 	}
 
-	const isAssigned = formData.get("isAssigned") === "true" ? true : false;
+	const isAssigned = formData.get("isAssigned") === "true";
 	const studentId = formData.get("studentId");
 	const courseId = formData.get("courseId");
 
@@ -353,7 +382,7 @@ export async function handleUpdateCourseAssignment(
 				.returning({
 					id: studentCoursesTable.id,
 				});
-			if (!insertedStudentCourseAssignment.id) {
+			if (!insertedStudentCourseAssignment) {
 				return data(
 					{
 						success: false,
@@ -363,6 +392,7 @@ export async function handleUpdateCourseAssignment(
 					{ status: 400 },
 				);
 			}
+
 			return data({ success: true, message: "Success" }, { status: 200 });
 		}
 
@@ -379,7 +409,10 @@ export async function handleUpdateCourseAssignment(
 			return data({ success: true, message: "Success" }, { status: 200 });
 		}
 	} catch (error) {
-		console.error(`Error updating student course assignment`, error);
+		console.error(
+			"Error updating student course assignment",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,

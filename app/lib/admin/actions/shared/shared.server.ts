@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import db from "~/db/index.server";
-import { coursesTable, segmentsTable } from "~/db/schema";
+import type { coursesTable, segmentsTable } from "~/db/schema";
 
 export async function checkSlugUnique(
 	slug: string,

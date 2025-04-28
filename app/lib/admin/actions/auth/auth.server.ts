@@ -6,7 +6,7 @@ import { auth } from "~/lib/auth/auth.server";
 import { isStudentAccountActivated } from "~/lib/student/data-access/students.server";
 import { loginSchema } from "../../../zod-schemas/auth";
 
-// Admin Login (create first account)
+// Admin Login
 export async function handleSignInAdmin(request: Request, formData: FormData) {
 	const loginData = {
 		email: formData.get("email"),
@@ -26,6 +26,8 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
 	const validatedFields = unvalidatedFields.data;
 
 	try {
+		// [insert for first time admin creations]
+
 		const { response, headers } = await auth.api.signInEmail({
 			returnHeaders: true,
 			body: {
@@ -77,7 +79,6 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
 		);
 	}
 }
-
 // Student Login (role:student)
 export async function handleSignInStudent(
 	request: Request,
@@ -143,7 +144,9 @@ export async function handleSignInStudent(
 			);
 		}
 
-		const { success } = await LogUserOutOfAllSessions(response.user.id);
+		const { success } = await LogUserOutOfAllSessionsExceptMostActiveOne(
+			response.user.id,
+		);
 		if (!success) {
 			throw new Error("Error logging out user from all sessions");
 		}
@@ -172,16 +175,16 @@ export async function handleSignInStudent(
 		);
 	}
 }
-
-// Logout user from all sessions
-async function LogUserOutOfAllSessions(userId: string) {
+// Logout user from all sessions except the new one
+export async function LogUserOutOfAllSessionsExceptMostActiveOne(
+	userId: string,
+) {
 	try {
 		const allExisitingSessionForLoggedInUser = await db
 			.select()
 			.from(session)
 			.where(eq(session.userId, userId))
 			.orderBy(desc(session.createdAt));
-
 		const oldSessionsToDelete = allExisitingSessionForLoggedInUser.slice(1);
 
 		if (oldSessionsToDelete.length > 0) {
@@ -196,5 +199,26 @@ async function LogUserOutOfAllSessions(userId: string) {
 	} catch (error) {
 		console.error("🔴Error logging out user from all sessions", error);
 		return { success: false };
+	}
+}
+
+export async function DeleteAllExistingAuthSessions(userId: string) {
+	try {
+		await db.delete(session).where(eq(session.userId, userId));
+	} catch (error) {
+		console.error(
+			"🔴Error deleting all existing user auth sessions:",
+			error instanceof Error ? error.message : error,
+		);
+		return data(
+			{
+				success: false,
+				message:
+					error instanceof Error ? error.message : "Something went wrong",
+			},
+			{
+				status: 500,
+			},
+		);
 	}
 }

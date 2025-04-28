@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function generateRandomPassword() {
 	return Math.random().toString(36).substring(2, 10);
 }
+
 export const formatDateToString = (
 	date: Date,
 	options?: Intl.DateTimeFormatOptions,
