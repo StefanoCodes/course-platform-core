@@ -63,7 +63,6 @@ CREATE TABLE "students" (
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"phone" varchar(255),
-	"password" varchar(255) NOT NULL,
 	"is_activated" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,

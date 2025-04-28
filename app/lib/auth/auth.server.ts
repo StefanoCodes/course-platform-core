@@ -41,7 +41,7 @@ export const auth = betterAuth({
 	},
 });
 
-// utils
+// auth-utils
 export async function isAuthenticated(request: Request) {
 	const session = await auth.api.getSession({
 		headers: request.headers,
@@ -53,6 +53,7 @@ export async function isAuthenticated(request: Request) {
 
 	return { session: session.user };
 }
+
 export async function isAdminLoggedIn(request: Request) {
 	const { session } = await isAuthenticated(request);
 	if (!session)
@@ -60,12 +61,13 @@ export async function isAdminLoggedIn(request: Request) {
 			isLoggedIn: false,
 			admin: null,
 		};
-	const isAdminLoggedIn = session.role === "admin" ? true : false;
+	const isAdminLoggedIn = session.role === "admin";
 	return {
 		isLoggedIn: isAdminLoggedIn,
 		admin: session,
 	};
 }
+
 export async function isStudentLoggedIn(request: Request) {
 	const { session } = await isAuthenticated(request);
 	if (!session)
@@ -73,12 +75,13 @@ export async function isStudentLoggedIn(request: Request) {
 			isLoggedIn: false,
 			student: null,
 		};
-	const isStudentLoggedIn = session.role === "user" ? true : false;
+	const isStudentLoggedIn = session.role === "user";
 	return {
 		isLoggedIn: isStudentLoggedIn,
 		student: session,
 	};
 }
+
 export async function handleSignOut(request: Request) {
 	const { response, headers } = await auth.api.signOut({
 		returnHeaders: true,

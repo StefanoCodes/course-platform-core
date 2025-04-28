@@ -71,7 +71,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 				form.reset();
 			}
 		}
-	}, [fetcher.data]);
+	}, [fetcher.data, form.reset]);
 
 	return (
 		<div className="flex flex-col gap-6 py-4">
@@ -174,7 +174,6 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 										</FormLabel>
 										<FormControl>
 											<Input
-												disabled
 												placeholder="Enter student email"
 												type="email"
 												{...field}

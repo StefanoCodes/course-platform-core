@@ -1,9 +1,8 @@
 import { eq } from "drizzle-orm";
-import { data } from "react-router";
+import { data, redirect } from "react-router";
 import db from "~/db/index.server";
 import {
 	account,
-	coursesTable,
 	session,
 	studentCoursesTable,
 	studentsTable,
@@ -15,7 +14,7 @@ import {
 	updateStudentSchema,
 } from "~/lib/zod-schemas/student";
 import { auth, isAdminLoggedIn } from "~/lib/auth/auth.server";
-import bcrypt from "bcrypt";
+import { DeleteAllExistingAuthSessions } from "../auth/auth.server";
 
 export async function handleCreateStudent(
 	request: Request,
@@ -25,7 +24,7 @@ export async function handleCreateStudent(
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const { name, email, phoneNumber, password } = Object.fromEntries(formData);
@@ -49,13 +48,13 @@ export async function handleCreateStudent(
 
 	const validatedFields = unvalidatedFields.data;
 	// check if the email is already in use
-	const [potentialStudent] = await db
+	const [existingStudent] = await db
 		.select()
 		.from(studentsTable)
 		.where(eq(studentsTable.email, validatedFields.email))
 		.limit(1);
 
-	if (potentialStudent) {
+	if (existingStudent) {
 		return data(
 			{ success: false, message: "Email already in use" },
 			{ status: 400 },
@@ -63,7 +62,6 @@ export async function handleCreateStudent(
 	}
 
 	try {
-		// transaction to ensure that the student is created in the db and the auth session is created
 		await db.transaction(async (tx) => {
 			// create user with better auth
 			const { user } = await auth.api.createUser({
@@ -75,7 +73,6 @@ export async function handleCreateStudent(
 				},
 			});
 
-			const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
 			// insert into students table
 			const [insertedStudent] = await tx
 				.insert(studentsTable)
@@ -83,7 +80,6 @@ export async function handleCreateStudent(
 					name: validatedFields.name,
 					email: validatedFields.email,
 					phone: validatedFields.phoneNumber,
-					password: hashedPassword,
 					studentId: user.id,
 				})
 				.returning({
@@ -94,8 +90,7 @@ export async function handleCreateStudent(
 				throw new Error("Something went wrong");
 			}
 
-			// insert into studentCoursesTable
-			console.log(coursesArray.length, "coursesArray");
+			// insert into studentCoursesTable (if they have courses assgiend to from the frontend)
 			if (coursesArray.length > 1) {
 				const valuesToInsert = coursesArray.map((courseId) => ({
 					studentId: user.id,
@@ -128,7 +123,7 @@ export async function handleDeleteStudent(
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const { studentId } = Object.fromEntries(formData);
@@ -144,14 +139,14 @@ export async function handleDeleteStudent(
 
 	try {
 		await db.transaction(async (tx) => {
-			// erase user data across the system complety
-			await db.delete(user).where(eq(user.id, studentId));
-			await db.delete(account).where(eq(account.userId, studentId));
-			await db.delete(session).where(eq(session.userId, studentId));
-			await db
+			// erase user data across the system
+			await tx.delete(user).where(eq(user.id, studentId));
+			await tx.delete(account).where(eq(account.userId, studentId));
+			await tx.delete(session).where(eq(session.userId, studentId));
+			await tx
 				.delete(studentCoursesTable)
 				.where(eq(studentCoursesTable.studentId, studentId));
-			await db
+			await tx
 				.delete(studentsTable)
 				.where(eq(studentsTable.studentId, studentId));
 		});
@@ -161,7 +156,10 @@ export async function handleDeleteStudent(
 			{ status: 200 },
 		);
 	} catch (error) {
-		console.error("Error deleting student:", error);
+		console.error(
+			"🔴Error deleting student:",
+			error instanceof Error && error.message,
+		);
 		return data(
 			{
 				success: false,
@@ -180,11 +178,11 @@ export async function handleActivateStudent(
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 	const { studentId } = Object.fromEntries(formData);
 
-	if (!studentId) {
+	if (!studentId || typeof studentId !== "string") {
 		return data(
 			{ success: false, message: "Student ID is required" },
 			{ status: 400 },
@@ -197,13 +195,13 @@ export async function handleActivateStudent(
 			.set({
 				isActivated: true,
 			})
-			.where(eq(studentsTable.studentId, studentId as string))
+			.where(eq(studentsTable.studentId, studentId))
 			.returning({
 				studentId: studentsTable.studentId,
 			});
 
 		if (!updatedStudent) {
-			throw new Error("Something went wrong");
+			throw new Error("Something went wrong activating the student");
 		}
 
 		return data(
@@ -211,6 +209,10 @@ export async function handleActivateStudent(
 			{ status: 200 },
 		);
 	} catch (error) {
+		console.error(
+			"🔴Error activating student:",
+			error instanceof Error ? error.message : error,
+		);
 		return data(
 			{
 				success: false,
@@ -229,12 +231,12 @@ export async function handleDeactivateStudent(
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const { studentId } = Object.fromEntries(formData);
 
-	if (!studentId) {
+	if (!studentId || typeof studentId !== "string") {
 		return data(
 			{ success: false, message: "Student ID is required" },
 			{ status: 400 },
@@ -247,13 +249,13 @@ export async function handleDeactivateStudent(
 			.set({
 				isActivated: false,
 			})
-			.where(eq(studentsTable.studentId, studentId as string))
+			.where(eq(studentsTable.studentId, studentId))
 			.returning({
 				id: studentsTable.id,
 			});
 
 		if (!updatedStudent) {
-			throw new Error("Something went wrong");
+			throw new Error("Something went wrong deactivating student");
 		}
 
 		return data(
@@ -261,6 +263,10 @@ export async function handleDeactivateStudent(
 			{ status: 200 },
 		);
 	} catch (error) {
+		console.error(
+			"🔴Error deactivating student:",
+			error instanceof Error ? error.message : error,
+		);
 		return data(
 			{
 				success: false,
@@ -279,19 +285,18 @@ export async function handleUpdateStudent(
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 
 	const { studentId, name, email, phoneNumber } = Object.fromEntries(formData);
 
-	if (!studentId) {
+	if (!studentId || typeof studentId !== "string") {
 		return data(
 			{ success: false, message: "Student ID is required" },
 			{ status: 400 },
 		);
 	}
 
-	// validate the data using updateStudentSchema
 	const unvalidatedFields = updateStudentSchema.safeParse({
 		name,
 		email,
@@ -308,28 +313,58 @@ export async function handleUpdateStudent(
 	const validatedFields = unvalidatedFields.data;
 
 	try {
-		// updated in the better auth tables
-		// Update student in the database
-		const [updatedStudent] = await db
-			.update(studentsTable)
-			.set({
-				name: validatedFields.name,
-				email: validatedFields.email,
-				phone: validatedFields.phoneNumber,
+		// get student from db
+		const [existingStudent] = await db
+			.select({
+				email: studentsTable.email,
 			})
-			.where(eq(studentsTable.studentId, studentId as string))
-			.returning({
-				studentId: studentsTable.studentId,
-			});
+			.from(studentsTable)
+			.where(eq(studentsTable.studentId, studentId));
+		await db.transaction(async (tx) => {
+			const hasEmailChanged = existingStudent.email !== validatedFields.email;
 
-		if (!updatedStudent.studentId) {
-			throw new Error("Failed to update student");
-		}
+			if (hasEmailChanged) {
+				const [updatedUser] = await tx
+					.update(user)
+					.set({
+						email: validatedFields.email,
+					})
+					.where(eq(user.id, studentId))
+					.returning({ id: user.id });
+				const [updatedStudent] = await tx
+					.update(studentsTable)
+					.set({
+						email: validatedFields.email,
+					})
+					.where(eq(studentsTable.studentId, studentId));
+
+				// logout student of all sessions existing
+				await DeleteAllExistingAuthSessions(updatedUser.id);
+			}
+
+			if (!hasEmailChanged) {
+				const [updatedStudent] = await tx
+					.update(studentsTable)
+					.set({
+						name: validatedFields.name,
+						phone: validatedFields.phoneNumber,
+					})
+					.where(eq(studentsTable.studentId, studentId));
+				return data(
+					{ success: true, message: "Student updated successfully" },
+					{ status: 200 },
+				);
+			}
+		});
 		return data(
 			{ success: true, message: "Student updated successfully" },
 			{ status: 200 },
 		);
 	} catch (error) {
+		console.error(
+			"🔴Error updating student:",
+			error instanceof Error ? error.message : error,
+		);
 		return data(
 			{
 				success: false,
@@ -340,7 +375,6 @@ export async function handleUpdateStudent(
 		);
 	}
 }
-
 export async function handleUpdateStudentPassword(
 	request: Request,
 	formData: FormData,
@@ -348,7 +382,7 @@ export async function handleUpdateStudentPassword(
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
 	if (!isLoggedIn) {
-		return data({ success: false, message: "Unauthorized" }, { status: 401 });
+		throw redirect("/admin/login");
 	}
 	const { studentId, password } = Object.fromEntries(formData);
 	if (!studentId || typeof studentId !== "string") {
@@ -371,24 +405,18 @@ export async function handleUpdateStudentPassword(
 			const ctx = await auth.$context;
 			const hash = await ctx.password.hash(validatedFields.password);
 			await ctx.internalAdapter.updatePassword(studentId, hash);
-			const [updatedStudent] = await tx
-				.update(studentsTable)
-				.set({
-					password: hash,
-				})
-				.where(eq(studentsTable.studentId, studentId))
-				.returning({
-					studentId: studentsTable.studentId,
-				});
-			if (!updatedStudent) {
-				throw new Error("Failed to update password");
-			}
+			await DeleteAllExistingAuthSessions(studentId);
 		});
+
 		return data(
-			{ success: true, message: "Password updated successfully" },
+			{ success: true, message: "Student's Password updated successfully" },
 			{ status: 200 },
 		);
 	} catch (error) {
+		console.error(
+			"🔴Error updating student's password:",
+			error instanceof Error ? error.message : error,
+		);
 		return data(
 			{
 				success: false,

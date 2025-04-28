@@ -2,13 +2,13 @@ import { eq, inArray } from "drizzle-orm";
 import { data } from "react-router";
 import db from "~/db/index.server";
 import { coursesTable, studentCoursesTable, studentsTable } from "~/db/schema";
-import { isAuthenticated } from "~/lib/auth/auth.server";
+import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/resource.student-list.$slug";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
 	// load all the courses in the database
-	const { session } = await isAuthenticated(request);
-	if (!session) {
+	const { isLoggedIn } = await isAdminLoggedIn(request);
+	if (!isLoggedIn) {
 		return data("Not Allowed", { status: 405 });
 	}
 	const { slug } = params;

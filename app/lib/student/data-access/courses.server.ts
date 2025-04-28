@@ -11,15 +11,6 @@ export async function getCourseBySlug(request: Request, slug: string) {
 	}
 
 	try {
-		const coursesStudentHasAccessTo = await db
-			.select()
-			.from(studentCoursesTable)
-			.where(eq(studentCoursesTable.studentId, student.id));
-
-		// check if the student has access to the course
-		// changed this line of code
-		const courseIds = coursesStudentHasAccessTo.map((c) => c.courseId);
-
 		const [course] = await db
 			.select()
 			.from(coursesTable)

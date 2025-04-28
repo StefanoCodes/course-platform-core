@@ -1,5 +1,5 @@
 {
-  "id": "f0bd1ace-a6b4-4e10-bf88-3ed441191567",
+  "id": "6774a2ac-37b0-447a-a7a3-c8d1157c01b2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -542,12 +542,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
-        },
-        "password": {
-          "name": "password",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
         },
         "is_activated": {
           "name": "is_activated",
