@@ -1,27 +1,16 @@
-// import { and, eq } from "drizzle-orm";
-// import { data, redirect } from "react-router";
-// import db from "~/db/index.server";
-// import { segmentsTable } from "~/db/schema";
-// import { getCourseBySlug } from "~/lib/admin/data-access/courses.server";
-// import { isAdminLoggedIn } from "~/lib/supabase-utils.server";
-// import { titleToSlug } from "~/lib/utils";
-// import { createSegmentSchema, editSegmentSchema } from "~/lib/admin/zod-schemas/segment";
-// import { checkSlugUnique } from "../shared/shared.server";
-
 import { data } from "react-router";
-
+import { and, eq } from "drizzle-orm";
 import { redirect } from "react-router";
+import db from "~/db/index.server";
+import { segmentsTable } from "~/db/schema";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
+import { titleToSlug } from "~/lib/utils";
 import {
 	createSegmentSchema,
 	editSegmentSchema,
 } from "../../../zod-schemas/segment";
 import { getCourseBySlug } from "../../data-access/courses.server";
-import { checkSlugUnique } from "../shared/shared.server";
-import { titleToSlug } from "~/lib/utils";
-import { segmentsTable } from "~/db/schema";
-import db from "~/db/index.server";
-import { and, eq } from "drizzle-orm";
+import { checkSegmentSlugUnique } from "../shared/shared.server";
 
 export async function handleCreateSegment(
 	request: Request,
@@ -68,7 +57,7 @@ export async function handleCreateSegment(
 		const slug = titleToSlug(name);
 
 		// check the slug created is unique in all the other courses
-		const isSlugUnique = await checkSlugUnique(slug, segmentsTable);
+		const isSlugUnique = await checkSegmentSlugUnique(slug, course.id);
 		if (!isSlugUnique) {
 			return data(
 				{ success: false, message: "a segment with this name already exists" },
@@ -128,6 +117,15 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 		throw redirect("/admin/login");
 	}
 
+	const existingSlug = formData.get("segmentSlug")
+
+	if (!existingSlug || typeof existingSlug !== "string") {
+		return data(
+			{ success: false, message: "Slug is required" },
+			{ status: 400 },
+		);
+	}
+
 	// validation
 	const unvalidatedFields = editSegmentSchema.safeParse(
 		Object.fromEntries(formData),
@@ -157,14 +155,10 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 		}
 
 		// check the slug created is unique in all the other courses
-		const isSlugUnique = await checkSlugUnique(
-			validatedFields.segmentSlug,
-			segmentsTable,
-		);
-		// check that the name currently sent and the one in the database are not the same
-		const isCourseNameChanged =
-			validatedFields.segmentSlug !== titleToSlug(validatedFields.name);
-		if (!isSlugUnique && isCourseNameChanged) {
+		const slug = titleToSlug(validatedFields.name);
+		const isSlugUnique = await checkSegmentSlugUnique(slug, course.id);
+
+		if (!isSlugUnique) {
 			return data(
 				{ success: false, message: "a segment with this name already exists" },
 				{ status: 400 },
@@ -177,11 +171,11 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 				name: validatedFields.name,
 				description: validatedFields.description,
 				videoUrl: validatedFields.videoUrl,
-				slug: validatedFields.segmentSlug,
+				slug,
 			})
 			.where(
 				and(
-					eq(segmentsTable.slug, validatedFields.segmentSlug),
+					eq(segmentsTable.slug, existingSlug),
 					eq(segmentsTable.courseId, course.id),
 				),
 			)
@@ -199,7 +193,7 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 			{
 				success: true,
 				message: "Segment updated successfully",
-				segmentSlug: updatedSegment.slug,
+				redirectTo: updatedSegment.slug,
 			},
 			{ status: 200 },
 		);

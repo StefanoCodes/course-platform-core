@@ -7,6 +7,7 @@ import { getSegmentBySlug } from "~/lib/admin/data-access/segments.sever";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import { formatDateToString } from "~/lib/utils";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment";
+
 export async function loader({ request, params }: Route.LoaderArgs) {
 	// auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -20,7 +21,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	const { success, segment: segmentData } = await getSegmentBySlug(
 		request,
 		segment,
-		courseSlug,
+		courseSlug
 	);
 	if (!success || !segmentData) {
 		throw redirect("/dashboard/courses");

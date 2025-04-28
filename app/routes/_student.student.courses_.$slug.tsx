@@ -1,18 +1,17 @@
-import { ArrowLeft, BookOpen, PlayCircle } from "lucide-react";
+import { ArrowLeft, PlayCircle } from "lucide-react";
 import { Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "~/components/ui/card";
 import type { Segment } from "~/db/schema";
+import { isStudentLoggedIn } from "~/lib/auth/auth.server";
 import { getCourseBySlug } from "~/lib/student/data-access/courses.server";
 import { getSegmentsByCourseId } from "~/lib/student/data-access/segments.server";
-import { isStudentLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/_student.student.courses_.$slug";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -35,7 +34,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	// Get segments for this course
 	const { success: segmentsSuccess, segments } = await getSegmentsByCourseId(
 		request,
-		course.id,
+		course.id
 	);
 	if (!segmentsSuccess) {
 		return { course, segments: [] };
@@ -90,7 +89,10 @@ export default function CourseDetails({ loaderData }: Route.ComponentProps) {
 function SegmentCard({
 	segment,
 	courseSlug,
-}: { segment: Segment; courseSlug: string }) {
+}: {
+	segment: Segment;
+	courseSlug: string;
+}) {
 	return (
 		<Card className="overflow-hidden">
 			<CardHeader>

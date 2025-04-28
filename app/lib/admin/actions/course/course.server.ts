@@ -9,7 +9,7 @@ import {
 	createCourseSchema,
 	updateCourseSchema,
 } from "../../../zod-schemas/course";
-import { checkSlugUnique } from "../shared/shared.server";
+import { checkCourseSlugUnique } from "../shared/shared.server";
 
 export async function handleCreateCourse(request: Request, formData: FormData) {
 	// auth check
@@ -36,7 +36,7 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
 	try {
 		const slug = titleToSlug(validatedFields.name);
 		// check the slug created is unique in all the other courses
-		const isSlugUnique = await checkSlugUnique(slug, coursesTable);
+		const isSlugUnique = await checkCourseSlugUnique(slug);
 		if (!isSlugUnique) {
 			return data(
 				{ success: false, message: "a course with this name already exists" },
@@ -130,7 +130,7 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 	// Only check uniqueness if the slug would actually change
 	try {
 		if (newSlug !== currentSlug) {
-			const isSlugUnique = await checkSlugUnique(newSlug, coursesTable);
+			const isSlugUnique = await checkCourseSlugUnique(newSlug);
 			if (!isSlugUnique) {
 				return data(
 					{ success: false, message: "a course with this name already exists" },
@@ -158,6 +158,7 @@ export async function handleEditCourse(request: Request, formData: FormData) {
 				{ status: 500 },
 			);
 		}
+
 		return data(
 			{
 				success: true,
