@@ -1,11 +1,26 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import db from "~/db/index.server";
-import type { coursesTable, segmentsTable } from "~/db/schema";
+import { coursesTable, segmentsTable } from "~/db/schema";
 
-export async function checkSlugUnique(
-	slug: string,
-	table: typeof coursesTable | typeof segmentsTable,
-) {
-	const [course] = await db.select().from(table).where(eq(table.slug, slug));
+
+export async function checkCourseSlugUnique(slug: string) {
+	const [course] = await db
+		.select()
+		.from(coursesTable)
+		.where(eq(coursesTable.slug, slug));
 	return course ? false : true;
+}
+
+// For checking segment slug uniqueness within a course
+export async function checkSegmentSlugUnique(slug: string, courseId: string) {
+	const [segment] = await db
+		.select()
+		.from(segmentsTable)
+		.where(
+			and(
+				eq(segmentsTable.slug, slug),
+				eq(segmentsTable.courseId, courseId)
+			)
+		);
+	return segment ? false : true;
 }

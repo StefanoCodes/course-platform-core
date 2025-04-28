@@ -43,7 +43,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	const { success, segment: segmentData } = await getSegmentBySlug(
 		request,
 		segment,
-		courseSlug,
+		courseSlug
 	);
 	if (!success || !segmentData) {
 		throw redirect("/dashboard/courses");
@@ -77,9 +77,9 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 				toast.success(fetcher.data.message);
 				navigate(
 					href("/dashboard/courses/:slug/:segment", {
-						segment: segmentData.slug,
+						segment: fetcher.data.redirectTo ?? "",
 						slug: courseSlug,
-					}),
+					})
 				);
 			}
 			if (!fetcher.data.success) {
@@ -137,7 +137,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 									{
 										action: "/resource/segment",
 										method: "POST",
-									},
+									}
 								);
 							})}
 						>
