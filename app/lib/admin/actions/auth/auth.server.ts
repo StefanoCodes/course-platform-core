@@ -28,6 +28,16 @@ export async function handleSignInAdmin(request: Request, formData: FormData) {
 	try {
 		// [insert for first time admin creations]
 
+		// await auth.api.signUpEmail({
+		// 	returnHeaders: true,
+		// 	body: {
+		// 		email: validatedFields.email,
+		// 		password: validatedFields.password,
+		// 		role: "admin",
+		// 		name: "Admin",
+		// 	},
+		// });
+
 		const { response, headers } = await auth.api.signInEmail({
 			returnHeaders: true,
 			body: {
