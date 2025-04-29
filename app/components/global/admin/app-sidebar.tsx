@@ -15,7 +15,7 @@ import {
 	useSidebar,
 } from "../../ui/sidebar";
 import { NavUser } from "./nav-user";
-import { PrimaryLogo } from "../primary-logo";
+import { PrimaryLogo } from "../brand/primary-logo";
 import { cn } from "~/lib/utils";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -75,13 +75,13 @@ export function NavMain({
 										data-disabled={item.disabled}
 										className={cn(
 											"data-[disabled=true]:opacity-50 transition-colors",
-											isActive && `bg-brand-primary text-white`,
+											isActive && `bg-brand-primary text-white`
 										)}
 									>
 										<item.icon
 											className={cn(
 												"text-muted-foreground",
-												isActive && `text-white`,
+												isActive && `text-white`
 											)}
 										/>
 										<span>{item.title}</span>

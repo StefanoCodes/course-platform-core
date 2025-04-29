@@ -1,5 +1,5 @@
 import { Outlet, redirect, useRouteLoaderData } from "react-router";
-import { CourseEditSidebar } from "~/components/features/courses/edit/course-edit-sidebar";
+import { CourseEditSidebar } from "~/components/features/courses/editor/course-edit-sidebar";
 import { getAllSegmentsForCourse } from "~/lib/admin/data-access/segments.sever";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/_dashboard._editor";
@@ -22,7 +22,7 @@ export function useEditorLoaderData() {
 	const data = useRouteLoaderData<typeof loader>("routes/_dashboard._editor");
 	if (!data) {
 		throw new Error(
-			"Editor Loader needs to be used within a EditorLoader context, the route needs to be a child of the Editor route",
+			"Editor Loader needs to be used within a EditorLoader context, the route needs to be a child of the Editor route"
 		);
 	}
 	return data;
@@ -30,12 +30,10 @@ export function useEditorLoaderData() {
 
 export default function CourseEditorLayout() {
 	return (
-		<div className="flex flex-col gap-4 h-full overflow-hidden">
-			<div className="flex flex-col md:flex-row h-full overflow-hidden">
-				<CourseEditSidebar />
-				<div className="flex-1">
-					<Outlet />
-				</div>
+		<div className="flex flex-col-reverse gap-8 md:flex-row h-full overflow-hidden">
+			<CourseEditSidebar />
+			<div className="flex-1">
+				<Outlet />
 			</div>
 		</div>
 	);

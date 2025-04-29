@@ -54,6 +54,7 @@ import {
 	assignCourseSchema,
 } from "~/lib/zod-schemas/course";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId";
+import PrimaryButton from "~/components/global/brand/primary-button";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
 	// admin auth check
@@ -67,11 +68,11 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	const publicCourses = getAllPublicCourses(request);
 	const coursesStudentAssignedTo = getCoursesStudentEnrolledIn(
 		request,
-		studentId,
+		studentId
 	);
 	const { success, student } = await GetStudentById(
 		request,
-		studentId as string,
+		studentId as string
 	);
 	if (!success || !student) {
 		throw redirect("/dashboard/students");
@@ -85,7 +86,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 			courses: publicCourses,
 			coursesStudentAssignedTo: coursesStudentAssignedTo,
 		},
-		{ status: 200 },
+		{ status: 200 }
 	);
 }
 
@@ -218,10 +219,10 @@ function CoursesStudentAssignedTo() {
 	const studentId = data.student.studentId;
 	const { courses: allPublicCourses } = React.use(data.courses);
 	const { courses: coursesStudentAssignedTo } = React.use(
-		data.coursesStudentAssignedTo,
+		data.coursesStudentAssignedTo
 	);
 	const assignedCourseIds = new Set(
-		coursesStudentAssignedTo.map((course) => course.id),
+		coursesStudentAssignedTo.map((course) => course.id)
 	);
 	const columns: {
 		header: string;
@@ -298,12 +299,9 @@ function CoursesStudentAssignedTo() {
 						No public courses available.
 					</p>
 					<Link to={href("/dashboard/courses")}>
-						<Button
-							variant="outline"
-							className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
-						>
+						<PrimaryButton variant="outline">
 							Go to Courses <ArrowRight className="h-4 w-4 ml-2" />
-						</Button>
+						</PrimaryButton>
 					</Link>
 				</div>
 			)}
@@ -356,7 +354,7 @@ function StudentCourseAssigmentCheckbox({
 											{
 												action: "/resource/course",
 												method: "POST",
-											},
+											}
 										);
 									}}
 								/>

@@ -1,6 +1,6 @@
 import { redirect, useRouteLoaderData } from "react-router";
-import { CoursesList } from "~/components/features/courses/courses-list";
-import { CreateCourse } from "~/components/features/courses/create-course";
+import { CoursesList } from "~/components/features/courses/courses/courses-list";
+import { CreateCourse } from "~/components/features/courses/courses/create-course";
 import { getAllCourses } from "~/lib/admin/data-access/courses.server";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/_dashboard.dashboard.courses";
@@ -19,11 +19,11 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function useCoursesLoaderData() {
 	const data = useRouteLoaderData<typeof loader>(
-		"routes/_dashboard.dashboard.courses",
+		"routes/_dashboard.dashboard.courses"
 	);
 	if (!data) {
 		throw new Error(
-			"Courses Loader needs to be used within a CoursesLoader context, the route needs to be a child of the Courses route",
+			"Courses Loader needs to be used within a CoursesLoader context, the route needs to be a child of the Courses route"
 		);
 	}
 	return data;

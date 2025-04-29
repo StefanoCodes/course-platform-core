@@ -1,5 +1,5 @@
 import { redirect } from "react-router";
-import { CoursesAnalytics } from "~/components/features/courses/courses-analytics";
+import { CoursesAnalytics } from "~/components/features/courses/courses/courses-analytics";
 import { StudentAnalytics } from "~/components/features/students/student-analytics";
 import type { Route } from "./+types/_dashboard.dashboard";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";

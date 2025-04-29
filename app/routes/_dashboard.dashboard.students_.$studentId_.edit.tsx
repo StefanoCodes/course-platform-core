@@ -29,6 +29,7 @@ import {
 } from "~/lib/zod-schemas/student";
 import type { Route } from "./+types/_dashboard.dashboard.students_.$studentId_.edit";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
+import PrimaryButton from "~/components/global/brand/primary-button";
 export async function loader({ request, params }: Route.LoaderArgs) {
 	// admin auth check
 	const { isLoggedIn } = await isAdminLoggedIn(request);
@@ -116,7 +117,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 									{
 										action: "/resource/student",
 										method: "POST",
-									},
+									}
 								);
 							})}
 						>
@@ -194,13 +195,12 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 								>
 									<Link to={`/dashboard/students/${student.id}`}>Cancel</Link>
 								</Button>
-								<Button
+								<PrimaryButton
 									type="submit"
-									className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
 									disabled={isSubmitting || !isThereAnyChanges}
 								>
 									{isSubmitting ? "Saving Changes..." : "Save Changes"}
-								</Button>
+								</PrimaryButton>
 							</div>
 						</fetcher.Form>
 					</Form>

@@ -26,10 +26,11 @@ import type { FetcherResponse } from "~/lib/types";
 import type { EditSegmentSchema } from "~/lib/zod-schemas/segment";
 import { editSegmentSchema } from "~/lib/zod-schemas/segment";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug_.$segment_.edit";
-import { DeleteSegment } from "~/components/features/courses/edit/delete-segment";
-import { MarkSegmentAsPrivate } from "~/components/features/courses/edit/mark-segment-as-private";
-import { MarkSegmentAsPublic } from "~/components/features/courses/edit/mark-segment-as-public";
+import { DeleteSegment } from "~/components/features/courses/segments/delete-segment";
+import { MarkSegmentAsPrivate } from "~/components/features/courses/segments/mark-segment-as-private";
+import { MarkSegmentAsPublic } from "~/components/features/courses/segments/mark-segment-as-public";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
+import PrimaryButton from "~/components/global/brand/primary-button";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
 	// auth check
@@ -43,7 +44,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	const { success, segment: segmentData } = await getSegmentBySlug(
 		request,
 		segment,
-		courseSlug,
+		courseSlug
 	);
 	if (!success || !segmentData) {
 		throw redirect("/dashboard/courses");
@@ -79,7 +80,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 					href("/dashboard/courses/:slug/:segment", {
 						segment: fetcher.data.redirectTo ?? "",
 						slug: courseSlug,
-					}),
+					})
 				);
 			}
 			if (!fetcher.data.success) {
@@ -137,7 +138,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 									{
 										action: "/resource/segment",
 										method: "POST",
-									},
+									}
 								);
 							})}
 						>
@@ -223,13 +224,9 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 										Cancel
 									</Link>
 								</Button>
-								<Button
-									type="submit"
-									className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
-									disabled={isSubmitting}
-								>
+								<PrimaryButton type="submit" disabled={isSubmitting}>
 									{isSubmitting ? "Saving Changes..." : "Save Changes"}
-								</Button>
+								</PrimaryButton>
 							</div>
 						</fetcher.Form>
 					</Form>

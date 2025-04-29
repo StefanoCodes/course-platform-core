@@ -20,7 +20,9 @@ type FetcherResponse = {
 };
 export function AssignStudentToCourse({
 	form,
-}: { form: UseFormReturn<CreateCourseSchema> }) {
+}: {
+	form: UseFormReturn<CreateCourseSchema>;
+}) {
 	const fetcher = useFetcher<FetcherResponse>();
 	const [students, setStudents] = useState<Student[] | []>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -44,12 +46,12 @@ export function AssignStudentToCourse({
 
 	const handleUnselect = React.useCallback((student: Student) => {
 		setSelected((prev) =>
-			prev.filter((s) => s.studentId !== student.studentId),
+			prev.filter((s) => s.studentId !== student.studentId)
 		);
 		// attach the ids of the selected students to the form
 		form.setValue(
 			"students",
-			form.getValues("students").filter((s) => s !== student.studentId),
+			form.getValues("students").filter((s) => s !== student.studentId)
 		);
 	}, []);
 
@@ -57,7 +59,7 @@ export function AssignStudentToCourse({
 		setSelected(students);
 		form.setValue(
 			"students",
-			students.map((student) => student.studentId),
+			students.map((student) => student.studentId)
 		);
 		setToggleSelectedAll(true);
 	}, [students, form]);
@@ -88,7 +90,7 @@ export function AssignStudentToCourse({
 				}
 			}
 		},
-		[],
+		[]
 	);
 
 	const selectables = students.filter((student) => !selected.includes(student));
@@ -188,7 +190,6 @@ function SelectableStudentsList({
 				studentId: string;
 				email: string;
 				phone: string | null;
-				password: string;
 				isActivated: boolean;
 				createdAt: Date;
 				updatedAt: Date;

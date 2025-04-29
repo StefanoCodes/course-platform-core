@@ -1,6 +1,6 @@
 import { FileText } from "lucide-react";
 import { redirect } from "react-router";
-import { StudentEnrolledList } from "~/components/features/courses/students-enrolled";
+import { StudentEnrolledList } from "~/components/features/students/students-enrolled";
 import { Separator } from "~/components/ui/separator";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 import type { Route } from "./+types/_dashboard._editor.dashboard.courses_.$slug._index";

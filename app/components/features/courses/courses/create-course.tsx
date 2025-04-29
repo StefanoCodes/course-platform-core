@@ -1,10 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFetcher, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { Button } from "~/components/ui/button";
+import PrimaryButton from "~/components/global/brand/primary-button";
 import {
 	Dialog,
 	DialogContent,
@@ -24,29 +23,24 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { FetcherResponse } from "~/lib/types";
 import {
-	type UpdateCourseSchema,
-	updateCourseSchema,
+	createCourseSchema,
+	type CreateCourseSchema,
 } from "~/lib/zod-schemas/course";
-
-export function EditCourse({
-	name,
-	description,
-	courseId,
-	slug,
-}: {
-	name: string;
-	description: string;
-	courseId: string;
-	slug: string;
-}) {
+import { AssignStudentToCourse } from "../../students/assign-students-to-course";
+type CreateCourseFetcherResponse = FetcherResponse & {
+	courseSlug: string;
+};
+export function CreateCourse() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const fetcher = useFetcher<FetcherResponse>();
+	const fetcher = useFetcher<CreateCourseFetcherResponse>();
 	const isSubmitting = fetcher.state === "submitting";
-	const form = useForm<UpdateCourseSchema>({
-		resolver: zodResolver(updateCourseSchema),
+	const navigate = useNavigate();
+	const form = useForm<CreateCourseSchema>({
+		resolver: zodResolver(createCourseSchema),
 		defaultValues: {
-			name: name,
-			description: description,
+			name: "",
+			description: "",
+			students: [],
 		},
 	});
 
@@ -54,7 +48,9 @@ export function EditCourse({
 		if (fetcher.data) {
 			if (fetcher.data.success) {
 				toast.success(fetcher.data.message);
-				setIsDialogOpen(false);
+				if (fetcher.data.courseSlug) {
+					navigate(`/dashboard/courses/${fetcher.data.courseSlug}`);
+				}
 			}
 			if (!fetcher.data.success) {
 				toast.error(fetcher.data.message);
@@ -64,13 +60,11 @@ export function EditCourse({
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger asChild>
-				<div className="w-6 h-6 flex items-center cursor-pointer justify-center rounded-full bg-gray-200">
-					<Pencil className="w-4 h-4 text-gray-500  hover:text-gray-700" />
-				</div>
+				<PrimaryButton>Add Course</PrimaryButton>
 			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-8">
 				<DialogHeader>
-					<DialogTitle>Edit Course</DialogTitle>
+					<DialogTitle>Create Course</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>
 					<fetcher.Form
@@ -79,11 +73,11 @@ export function EditCourse({
 						className="flex flex-col gap-4"
 						onSubmit={form.handleSubmit((data) => {
 							fetcher.submit(
-								{ ...data, intent: "edit-course", id: courseId, slug: slug },
+								{ ...data, intent: "create-course" },
 								{
 									action: "/resource/course",
 									method: "POST",
-								},
+								}
 							);
 						})}
 					>
@@ -129,14 +123,27 @@ export function EditCourse({
 							)}
 						/>
 
-						{/* Submit button */}
-						<Button
-							type="submit"
-							className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
+						<FormField
+							control={form.control}
+							name="students"
 							disabled={isSubmitting}
-						>
-							{isSubmitting ? "Editing Course..." : "Edit Course"}
-						</Button>
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Students <span className="text-xs text-red-500">*</span>
+									</FormLabel>
+									<FormControl>
+										<AssignStudentToCourse form={form} {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						{/* Submit button */}
+						<PrimaryButton type="submit" disabled={isSubmitting}>
+							{isSubmitting ? "Creating Course..." : "Create Course"}
+						</PrimaryButton>
 					</fetcher.Form>
 				</Form>
 			</DialogContent>

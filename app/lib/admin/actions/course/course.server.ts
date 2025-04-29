@@ -23,15 +23,15 @@ export async function handleCreateCourse(request: Request, formData: FormData) {
 		description: formData.get("description"),
 		students: studentsIds,
 	};
-	const unavlidatedFields = createCourseSchema.safeParse(formDataObject);
-	if (!unavlidatedFields.success) {
+	const unvalidatedFields = createCourseSchema.safeParse(formDataObject);
+	if (!unvalidatedFields.success) {
 		return data(
 			{ success: false, message: "Invalid form data" },
 			{ status: 400 },
 		);
 	}
 
-	const validatedFields = unavlidatedFields.data;
+	const validatedFields = unvalidatedFields.data;
 
 	try {
 		const slug = titleToSlug(validatedFields.name);

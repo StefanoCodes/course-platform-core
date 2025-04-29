@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import LoginAuthForm from "~/components/global/admin/login-auth-form";
-import { PrimaryLogo } from "~/components/global/primary-logo";
+import { PrimaryLogo } from "~/components/global/brand/primary-logo";
 import type { Route } from "./+types/admin.login";
 import { isAdminLoggedIn } from "~/lib/auth/auth.server";
 

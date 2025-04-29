@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFetcher } from "react-router";
 import { toast } from "sonner";
+import PrimaryButton from "~/components/global/brand/primary-button";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -20,12 +21,12 @@ import {
 	FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import type { FetcherResponse } from "~/lib/types";
+import { generateRandomPassword } from "~/lib/utils";
 import {
 	createStudentSchema,
 	type CreateStudentSchema,
 } from "~/lib/zod-schemas/student";
-import type { FetcherResponse } from "~/lib/types";
-import { generateRandomPassword } from "~/lib/utils";
 import { AssignCourseToStudent } from "./assign-course-to-student";
 
 export function CreateStudent() {
@@ -106,7 +107,7 @@ export function CreateStudent() {
 									{
 										action: "/resource/student",
 										method: "POST",
-									},
+									}
 								);
 							})}
 						>
@@ -191,13 +192,9 @@ export function CreateStudent() {
 								)}
 							/>
 							{/* Submit button */}
-							<Button
-								type="submit"
-								className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
-								disabled={isSubmitting}
-							>
+							<PrimaryButton type="submit" disabled={isSubmitting}>
 								{isSubmitting ? "Adding Student..." : "Add Student"}
-							</Button>
+							</PrimaryButton>
 						</fetcher.Form>
 					</Form>
 				</DialogContent>
@@ -230,7 +227,7 @@ function SubmittedState({
 				className="cursor-pointer"
 				onClick={() => {
 					navigator.clipboard.writeText(
-						`Email: ${email}\nPassword: ${password}`,
+						`Email: ${email}\nPassword: ${password}`
 					);
 					setHasCopied(true);
 				}}
