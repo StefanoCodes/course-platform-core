@@ -244,20 +244,18 @@ export async function handleDeactivateStudent(
 	}
 
 	try {
-		const [updatedStudent] = await db
-			.update(studentsTable)
-			.set({
-				isActivated: false,
-			})
-			.where(eq(studentsTable.studentId, studentId))
-			.returning({
-				id: studentsTable.id,
-			});
-
-		if (!updatedStudent) {
-			throw new Error("Something went wrong deactivating student");
-		}
-
+		await db.transaction(async (tx) => {
+			await tx
+				.update(studentsTable)
+				.set({
+					isActivated: false,
+				})
+				.where(eq(studentsTable.studentId, studentId))
+				.returning({
+					id: studentsTable.id,
+				});
+			await DeleteAllExistingAuthSessions(studentId);
+		});
 		return data(
 			{ success: true, message: "Student deactivated successfully" },
 			{ status: 200 },

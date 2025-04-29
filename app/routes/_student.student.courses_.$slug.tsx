@@ -34,7 +34,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	// Get segments for this course
 	const { success: segmentsSuccess, segments } = await getSegmentsByCourseId(
 		request,
-		course.id
+		course.id,
 	);
 	if (!segmentsSuccess) {
 		return { course, segments: [] };
@@ -47,7 +47,7 @@ export default function CourseDetails({ loaderData }: Route.ComponentProps) {
 	const { course, segments } = loaderData;
 
 	return (
-		<div className="container mx-auto pt-20 pb-8 px-4">
+		<div className="max-w-7xl mx-auto pt-8 md:pt-12 lg:pt-20 pb-8 px-4 xl:px-0">
 			<div className="mb-8">
 				<Button variant="outline" asChild className="mb-4">
 					<Link to="/student/courses">

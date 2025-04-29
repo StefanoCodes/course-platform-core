@@ -8,6 +8,8 @@ import { cn, displayName } from "~/lib/utils";
 import { useStudentLayoutData } from "~/routes/_student";
 import { LogoutProvider } from "../admin/logout";
 
+const BASE_STUDENT_URL = "/student/courses";
+
 export function StudentNavbar() {
 	const { student } = useStudentLayoutData();
 	const location = useLocation();
@@ -15,20 +17,20 @@ export function StudentNavbar() {
 	const display_name = displayName(student.name);
 	return (
 		<nav className="bg-[#333] sticky top-0 z-20 h-[var(--navbar-height)] [--widest-el:11.375rem]">
-			<div className="flex items-center h-full justify-between px-4 container mx-auto">
+			<div className="flex items-center h-full justify-between px-4 max-w-7xl mx-auto xl:px-0">
 				<div className="flex items-center gap-2">
 					<p className="text-white">Welcome Back {display_name}</p>
 					<Heart className="w-4 h-4 text-red-300" />
 				</div>
 				<div className="hidden md:flex items-center gap-2">
 					{studentNavItems.map((link) => {
-						const isActive = pathname.startsWith(link.href);
+						const isActive = pathname.includes(BASE_STUDENT_URL);
 						return (
 							<Button
 								key={link.href}
 								variant={"outline"}
 								className={cn(
-									"hover:bg-brand-primary/80 border-none   text-black",
+									"hover:bg-brand-primary/80 border-none  bg-brand-primary  text-black",
 									isActive && "bg-brand-primary text-white",
 								)}
 								asChild
@@ -127,7 +129,7 @@ function HamburgerMenu({ pathname }: { pathname: string }) {
 				className="absolute top-[var(--navbar-height)] left-0 right-0 z-30 bg-[#333] flex-col gap-4 p-4 shadow-lg"
 			>
 				{studentNavItems.map((link) => {
-					const isActive = pathname === link.href;
+					const isActive = pathname.includes(BASE_STUDENT_URL);
 					return (
 						<Button
 							key={link.href}

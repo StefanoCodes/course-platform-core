@@ -20,12 +20,11 @@ import {
 	ChevronsRight,
 	Columns,
 	MoreVertical,
-	Pencil,
-	Trash,
+	X,
 } from "lucide-react";
 import * as React from "react";
 import { useEffect } from "react";
-import { href, Link } from "react-router";
+import { Link, href } from "react-router";
 import { ActivateStudent } from "~/components/features/students/activate-student";
 import { CreateStudent } from "~/components/features/students/create-student";
 import { DeactivateStudent } from "~/components/features/students/deactivate-student";
@@ -36,9 +35,8 @@ import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
-	DropdownMenuSeparator,
 	DropdownMenuContent,
-	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Label } from "~/components/ui/label";
@@ -64,7 +62,7 @@ import {
 } from "~/components/ui/table";
 import type { Student } from "~/db/schema";
 import { formatDateToString } from "~/lib/utils";
-import { useStudentsLoaderData } from "~/routes/_dashboard.dashboard.students";
+import { DeleteDialog } from "./delete-dialog";
 
 const columns: ColumnDef<Student>[] = [
 	{
@@ -74,7 +72,7 @@ const columns: ColumnDef<Student>[] = [
 		cell: ({ row }) => (
 			<Link
 				className="hover:underline"
-				to={href(`/dashboard/students/:studentId`, {
+				to={href("/dashboard/students/:studentId", {
 					studentId: row.original.studentId,
 				})}
 			>
@@ -121,7 +119,7 @@ const columns: ColumnDef<Student>[] = [
 						<span className="sr-only">Open menu</span>
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent align="end" className="w-32">
+				<PopoverContent align="end" className="max-w-32">
 					<div className="flex flex-col gap-4">
 						<Button
 							type="button"
@@ -130,7 +128,7 @@ const columns: ColumnDef<Student>[] = [
 							asChild
 						>
 							<Link
-								to={href(`/dashboard/students/:studentId/edit`, {
+								to={href("/dashboard/students/:studentId/edit", {
 									studentId: row.original.studentId,
 								})}
 							>
@@ -144,7 +142,30 @@ const columns: ColumnDef<Student>[] = [
 							<DeactivateStudent studentId={row.original.studentId} />
 						)}
 						<DropdownMenuSeparator />
-						<DeleteStudent studentId={row.original.studentId} />
+						<DeleteDialog
+							title="Delete Student"
+							description={
+								<div className="text-sm text-gray-500">
+									Are you sure you want to delete this student?
+									<br />
+									This action cannot be undone.
+								</div>
+							}
+							resourceRoute="/resource/student"
+							hiddenInputs={[
+								{ name: "studentId", value: row.original.studentId },
+								{ name: "intent", value: "delete-student" },
+							]}
+							trigger={
+								<Button
+									type="button"
+									variant="ghost"
+									className="cursor-pointer text-red-500"
+								>
+									Delete
+								</Button>
+							}
+						/>
 					</div>
 				</PopoverContent>
 			</Popover>
