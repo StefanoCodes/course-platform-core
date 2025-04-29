@@ -30,7 +30,7 @@ export function useEditorLoaderData() {
 
 export default function CourseEditorLayout() {
 	return (
-		<div className="flex flex-col-reverse gap-8 md:flex-row h-full overflow-hidden">
+		<div className="flex flex-col-reverse gap-8 md:gap-0 md:flex-row h-full overflow-hidden">
 			<CourseEditSidebar />
 			<div className="flex-1">
 				<Outlet />
