@@ -1,8 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Calendar, Edit, Mail, Phone, User } from "lucide-react";
+import {
+	ArrowLeft,
+	ArrowRight,
+	Calendar,
+	Edit,
+	Mail,
+	Phone,
+	User,
+} from "lucide-react";
 import React, { Suspense } from "react";
 import { useForm } from "react-hook-form";
-import { Link, data, redirect, useFetcher, useLoaderData } from "react-router";
+import {
+	Link,
+	data,
+	href,
+	redirect,
+	useFetcher,
+	useLoaderData,
+} from "react-router";
 import { ActivateStudent } from "~/components/features/students/activate-student";
 import { DeactivateStudent } from "~/components/features/students/deactivate-student";
 import { StatusBadge } from "~/components/features/students/status-badge";
@@ -48,9 +63,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	}
 
 	const { studentId } = params;
-	if (!studentId) {
-		throw redirect("/dashboard/students");
-	}
+
 	const publicCourses = getAllPublicCourses(request);
 	const coursesStudentAssignedTo = getCoursesStudentEnrolledIn(
 		request,
@@ -194,12 +207,6 @@ function StudentStatusCard() {
 						<span className="text-sm font-medium">Account Status</span>
 						<StatusBadge status={student.isActivated} />
 					</div>
-					<div className="flex items-center justify-between">
-						<span className="text-sm font-medium">Last Updated</span>
-						<span className="text-sm text-muted-foreground">
-							{formatDateToString(new Date(student.createdAt))}
-						</span>
-					</div>
 				</div>
 			</CardContent>
 		</Card>
@@ -209,7 +216,6 @@ function StudentStatusCard() {
 function CoursesStudentAssignedTo() {
 	const data = useLoaderData<typeof loader>();
 	const studentId = data.student.studentId;
-
 	const { courses: allPublicCourses } = React.use(data.courses);
 	const { courses: coursesStudentAssignedTo } = React.use(
 		data.coursesStudentAssignedTo,
@@ -229,59 +235,78 @@ function CoursesStudentAssignedTo() {
 		//   ), },
 	];
 
+	const areTherePublicCourses = allPublicCourses.length > 0;
+
 	return (
 		<div className="col-span-3 flex flex-col gap-4 md:gap-6">
-			<h3 className="text-xl md:text-23xl font-medium">
+			<h3 className="text-xl md:text-3xl font-medium">
 				Courses student is assigned to:
 			</h3>
-			<Table>
-				<TableHeader>
-					<TableRow className="bg-muted/50">
-						{columns.map((column) => (
-							<TableHead
-								key={String(column.accessorKey)}
-								className={`h-9 py-2 ${
-									column.accessorKey === "name"
-										? "sticky left-0 bg-muted font-medium xl:static xl:bg-inherit"
-										: ""
-								}`}
-							>
-								{column.header}
-							</TableHead>
-						))}
-						<TableHead>Assign</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{allPublicCourses.map((course) => (
-						<TableRow key={course.id}>
+			{areTherePublicCourses && (
+				<Table>
+					<TableHeader>
+						<TableRow className="bg-muted/50">
 							{columns.map((column) => (
-								<TableCell
+								<TableHead
 									key={String(column.accessorKey)}
-									className={`py-2 ${
+									className={`h-9 py-2 ${
 										column.accessorKey === "name"
-											? "sticky left-0 z-10 bg-muted font-medium xl:static xl:bg-inherit"
+											? "sticky left-0 bg-muted font-medium xl:static xl:bg-inherit"
 											: ""
 									}`}
 								>
-									{column.cell ? (
-										column.cell(course)
-									) : (
-										<>{String(course[column.accessorKey])}</>
-									)}
-								</TableCell>
+									{column.header}
+								</TableHead>
 							))}
-							<TableCell>
-								<StudentCourseAssigmentCheckbox
-									isAssigned={assignedCourseIds.has(course.id)}
-									studentId={studentId}
-									courseId={course.id}
-								/>
-							</TableCell>
+							<TableHead>Assign</TableHead>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+					</TableHeader>
+					<TableBody>
+						{allPublicCourses.map((course) => (
+							<TableRow key={course.id}>
+								{columns.map((column) => (
+									<TableCell
+										key={String(column.accessorKey)}
+										className={`py-2 ${
+											column.accessorKey === "name"
+												? "sticky left-0 z-10 bg-muted font-medium xl:static xl:bg-inherit"
+												: ""
+										}`}
+									>
+										{column.cell ? (
+											column.cell(course)
+										) : (
+											<>{String(course[column.accessorKey])}</>
+										)}
+									</TableCell>
+								))}
+								<TableCell>
+									<StudentCourseAssigmentCheckbox
+										isAssigned={assignedCourseIds.has(course.id)}
+										studentId={studentId}
+										courseId={course.id}
+									/>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			)}
+			{!areTherePublicCourses && (
+				<div className="flex flex-col gap-4 justify-center items-center w-full">
+					<p className="text-sm text-muted-foreground">
+						No public courses available.
+					</p>
+					<Link to={href("/dashboard/courses")}>
+						<Button
+							variant="outline"
+							className="bg-brand-primary text-white cursor-pointer hover:bg-brand-primary/60 hover:text-white"
+						>
+							Go to Courses <ArrowRight className="h-4 w-4 ml-2" />
+						</Button>
+					</Link>
+				</div>
+			)}
 		</div>
 	);
 }

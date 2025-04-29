@@ -60,7 +60,7 @@ export function CreateSegment() {
 				toast.error(fetcher.data.message);
 			}
 		}
-	}, [fetcher.data]);
+	}, [fetcher.data, courseSlug, navigate]);
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger asChild>
