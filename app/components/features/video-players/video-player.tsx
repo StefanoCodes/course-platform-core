@@ -1,15 +1,16 @@
-import { extractVimeoVideoId, extractYoutubeVideoId } from "~/lib/utils";
+import type { VideoPlayerTypes } from "~/lib/types";
+import {
+	extractBunnyVideoId,
+	extractVimeoVideoId,
+	extractYoutubeVideoId,
+} from "~/lib/utils";
 
-interface VideoPlayerProps {
-	type: "Vimeo" | "Youtube";
-	url: string;
-}
-
-export function VideoPlayer({ type, url }: VideoPlayerProps) {
+export function VideoPlayer({ type, url }: VideoPlayerTypes) {
 	return (
 		<div className="video-container">
 			{type === "Youtube" && <YoutubePlayer url={url} />}
 			{type === "Vimeo" && <VimeoPlayer url={url} />}
+			{type === "Bunny" && <BunnyPlayer url={url} />}
 		</div>
 	);
 }
@@ -17,7 +18,7 @@ export function VideoPlayer({ type, url }: VideoPlayerProps) {
 function YoutubePlayer({
 	url,
 }: {
-	url: VideoPlayerProps["url"];
+	url: VideoPlayerTypes["url"];
 }) {
 	return (
 		<>
@@ -34,13 +35,28 @@ function YoutubePlayer({
 function VimeoPlayer({
 	url,
 }: {
-	url: VideoPlayerProps["url"];
+	url: VideoPlayerTypes["url"];
 }) {
 	return (
 		<iframe
 			src={`https://player.vimeo.com/${extractVimeoVideoId(url)}`}
 			frameBorder="0"
 			allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+			title="My Video"
+		/>
+	);
+}
+
+function BunnyPlayer({
+	url,
+}: {
+	url: VideoPlayerTypes["url"];
+}) {
+	return (
+		<iframe
+			src={`https://iframe.mediadelivery.net/embed/${extractBunnyVideoId(url)}`}
+			frameBorder="0"
+			allowFullScreen
 			title="My Video"
 		/>
 	);

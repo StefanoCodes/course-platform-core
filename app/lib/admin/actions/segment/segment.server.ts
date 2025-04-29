@@ -117,7 +117,7 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 		throw redirect("/admin/login");
 	}
 
-	const existingSlug = formData.get("segmentSlug")
+	const existingSlug = formData.get("segmentSlug");
 
 	if (!existingSlug || typeof existingSlug !== "string") {
 		return data(
@@ -156,7 +156,11 @@ export async function handleEditSegment(request: Request, formData: FormData) {
 
 		// check the slug created is unique in all the other courses
 		const slug = titleToSlug(validatedFields.name);
-		const isSlugUnique = await checkSegmentSlugUnique(slug, course.id);
+		const isSlugUnique = await checkSegmentSlugUnique(
+			slug,
+			course.id,
+			validatedFields.segmentSlug,
+		);
 
 		if (!isSlugUnique) {
 			return data(

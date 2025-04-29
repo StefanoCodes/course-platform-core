@@ -1,4 +1,5 @@
 import { Book, Home, Users, type LucideProps } from "lucide-react";
+import type { VideoPlayerTypes } from "~/lib/types";
 
 type DahsboardConfig = {
 	sidebar: {
@@ -15,7 +16,8 @@ type DahsboardConfig = {
 			url: string;
 		}[];
 	};
-	videoPlayer: "Youtube" | "Vimeo";
+	videoPlayer: VideoPlayerTypes["type"];
+	libraryId?: string;
 };
 
 export const dashboardConfig: DahsboardConfig = {
@@ -58,5 +60,6 @@ export const dashboardConfig: DahsboardConfig = {
 			// },
 		],
 	},
-	videoPlayer: "Youtube",
+	videoPlayer: "Bunny",
+	libraryId: "415802",
 };

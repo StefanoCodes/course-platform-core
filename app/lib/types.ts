@@ -3,3 +3,7 @@ export type FetcherResponse = {
 	message: string;
 	redirectTo?: string;
 };
+export type VideoPlayerTypes = {
+	type: "Vimeo" | "Youtube" | "Bunny";
+	url: string;
+};

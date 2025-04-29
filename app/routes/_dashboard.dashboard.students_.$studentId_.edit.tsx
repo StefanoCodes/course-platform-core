@@ -206,7 +206,7 @@ export default function EditStudentPage({ loaderData }: Route.ComponentProps) {
 					</Form>
 					<Link to={`/dashboard/students/${student.studentId}/edit/password`}>
 						<Button variant="link" size="sm">
-							Edit Password
+							Change Student Password
 						</Button>
 					</Link>
 				</CardContent>

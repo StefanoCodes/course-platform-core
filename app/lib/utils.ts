@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { dashboardConfig } from "~/config/dashboard";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -40,6 +41,13 @@ export function extractYoutubeVideoId(url: string) {
 export function extractVimeoVideoId(url: string) {
 	const videoId = url.split("/").pop();
 	return videoId;
+}
+export function extractBunnyVideoId(url: string) {
+	// library id is the first before the last one so we can split by /
+	const libraryId = dashboardConfig.libraryId ?? url.split("/").slice(-2)[0];
+	// video id
+	const videoId = url.split("/").pop();
+	return `${libraryId}/${videoId}`;
 }
 
 // format names displayname function (to display only the first 2 names of the user incase he may have 5 names)

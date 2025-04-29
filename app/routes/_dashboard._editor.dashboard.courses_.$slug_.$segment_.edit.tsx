@@ -43,7 +43,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 	const { success, segment: segmentData } = await getSegmentBySlug(
 		request,
 		segment,
-		courseSlug
+		courseSlug,
 	);
 	if (!success || !segmentData) {
 		throw redirect("/dashboard/courses");
@@ -79,7 +79,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 					href("/dashboard/courses/:slug/:segment", {
 						segment: fetcher.data.redirectTo ?? "",
 						slug: courseSlug,
-					})
+					}),
 				);
 			}
 			if (!fetcher.data.success) {
@@ -87,7 +87,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 				form.reset();
 			}
 		}
-	}, [fetcher.data, courseSlug, form.reset, navigate, segmentData.slug]);
+	}, [fetcher.data, courseSlug, form.reset, navigate]);
 
 	return (
 		<div className="p-4 flex flex-col gap-4">
@@ -137,7 +137,7 @@ export default function EditSegmentPage({ loaderData }: Route.ComponentProps) {
 									{
 										action: "/resource/segment",
 										method: "POST",
-									}
+									},
 								);
 							})}
 						>
