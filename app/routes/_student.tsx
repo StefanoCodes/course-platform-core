@@ -23,6 +23,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	}
 	return { student: studentById };
 }
+
 export function useStudentLayoutData() {
 	const data = useRouteLoaderData<typeof loader>("routes/_student");
 	if (!data) {
@@ -32,6 +33,7 @@ export function useStudentLayoutData() {
 	}
 	return data;
 }
+
 export default function StudentLayout() {
 	const navigation = useNavigation();
 	const isLoading = navigation.state !== "idle";

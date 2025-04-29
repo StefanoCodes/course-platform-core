@@ -76,6 +76,7 @@ export async function isStudentLoggedIn(request: Request) {
 			student: null,
 		};
 	const isStudentLoggedIn = session.role === "user";
+
 	return {
 		isLoggedIn: isStudentLoggedIn,
 		student: session,

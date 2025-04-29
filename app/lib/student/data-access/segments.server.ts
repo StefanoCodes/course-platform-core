@@ -48,6 +48,7 @@ export async function getSegmentBySlug(
 			.where(
 				and(
 					eq(segmentsTable.slug, segmentSlug),
+					eq(segmentsTable.isPublic, true),
 					eq(segmentsTable.courseId, courseId),
 				),
 			)
